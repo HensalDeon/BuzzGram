@@ -1,0 +1,36 @@
+.modal-body {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: linear-gradient(98.63deg, #f9a225 0%, #f95f35 100%);
+    background-color: #131313;
+    border-radius: 0.8rem !important;
+    hr {
+        color: #f95f35;
+    }
+}
+
+.modal-dialog {
+    width: 14rem !important;
+    border-radius: 0.8rem !important;
+    margin-top: 17% !important;
+
+    @media (max-width: 575px) {
+        display: flex;
+        justify-content: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        align-items: center !important;
+    }
+}
+
+.modal-content {
+    border-radius: 0.8rem !important;
+}
+
+.linear-gradient-text {
+    background-image: linear-gradient(to right, #ff6600, #ff3399);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}

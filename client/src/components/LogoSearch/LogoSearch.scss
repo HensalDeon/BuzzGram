@@ -1,0 +1,42 @@
+$inputColor: var(--inputColor);
+$iconGradient: linear-gradient(106.23deg, #f99827, #f95f35 100%);
+
+@mixin icon-styles {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $iconGradient;
+    border-radius: 5px;
+    padding: 4px;
+    color: white;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.LogoSearch {
+    display: flex;
+    gap: 0.75rem;
+
+    img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    .Search {
+        display: flex;
+        background-color: $inputColor;
+        border-radius: 10px;
+        padding: 5px;
+
+        > input {
+            background-color: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .s-icon {
+            @include icon-styles;
+        }
+    }
+}
