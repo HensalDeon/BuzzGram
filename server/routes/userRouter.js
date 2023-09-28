@@ -13,6 +13,8 @@ router.route('/register').post(authController.registerUser); //resiter user
 // router.route('/register-mail').post(registerMail); //send the email
 // router.route('/authenticate').post(controller.verifyUser, (req,res)=> res.end()); //authenticate user
 // router.route('/login').post(controller.verifyUser, controller.login); //login in app
+router.route('/otp-signup').post(authController.signupOtpGenerate); //Otp generation for signup
+router.route('/otp-signup').post(authController.verifyOtp); //Otp verification
 
 
 // /** GET methods */

@@ -6,20 +6,19 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            trim: true,
+            // trim: true,
         },
-        email: {
+        phone: {
             type: String,
             required: true,
             unique: true,
             trim: true,
-            lowercase: true,
         },
         password: {
             type: String,
             required: true,
         },
-        fullName: {
+        fullname: {
             type: String,
             required: true,
             trim: true,
@@ -28,13 +27,13 @@ const userSchema = new mongoose.Schema(
             type: String,
             maxlength: 160,
         },
-        profileImage: {
+        profileimage: {
             type: String,
         },
-        coverImage: {
+        coverimage: {
             type: String,
         },
-        isAdmin: {
+        isadmin: {
             type: Boolean,
             default: false,
         },

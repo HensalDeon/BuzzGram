@@ -1,13 +1,21 @@
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceSid = process.env.TWILIO_SERVICES_SID;
-const client = require("twilio")(accountSid, authToken);
+import twilio from 'twilio';
+
+const client = twilio(accountSid, authToken);
 
 export async function sendOtp(phoneNumber) {
-    const response = await client.verify.v2
-        .services(serviceSid)
-        .verifications.create({ to: "+91" + phoneNumber, channel: "sms" });
-    return response.status === "pending";
+    try {
+        const response = await client.verify.v2
+            .services(serviceSid)
+            .verifications.create({ to: "+91" + phoneNumber, channel: "sms" });
+
+        return response.status === "pending";
+    } catch (error) {
+        console.error("Error sending OTP:", error);
+        throw error; 
+    }
 }
 
 export function verifyOtp(phoneNumber, otp) {
@@ -26,4 +34,3 @@ export function verifyOtp(phoneNumber, otp) {
             console.log(error);
         });
 }
-
