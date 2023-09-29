@@ -5,6 +5,8 @@ import connect from "./database/connection.js";
 import bodyParser from "body-parser";
 import authRouter from "./routes/authRouter.js"
 import userRouter from "./routes/userRouter.js";
+import postRouter from "./routes/postRouter.js";
+import uploadRouter from "./routes/uploadRouter.js";
 // import adminRouter from "./routes/adminRouter.js";
 import dotenv    from "dotenv";
 dotenv.config();
@@ -14,7 +16,8 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("tiny"));
-app.use(bodyParser.json({ limit: "30mb", extended: true }));
+// app.use(bodyParser.json({ limit: "30mb", extended: true }));
+// app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.disable("x-powered-by"); //less hackers know about our stack
 
@@ -27,8 +30,8 @@ app.get("/", (req, res) => {
 /** api routes */
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-// app.use('/posts', postRouter);
-// app.use('/upload', uploadRouter);
+app.use('/posts', postRouter);
+app.use('/upload', uploadRouter);
 // app.use('/message', messageRouter);
 // app.use('/chat', chatRouter);
 // app.use('/admin', adminRouter);
