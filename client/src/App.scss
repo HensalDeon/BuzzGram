@@ -48,6 +48,11 @@
   }
 }
 
+.button:disabled{
+  background: silver;
+  pointer-events: none;
+}
+
 .button{
   @include button-styles;
 }

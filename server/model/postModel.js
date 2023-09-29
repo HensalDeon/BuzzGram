@@ -7,11 +7,11 @@ const postSchema = new mongoose.Schema(
             ref: "User",
             required: true,
         },
-        caption: {
+        description: {
             type: String,
             required: true,
         },
-        content: {
+        image: {
             type: String,
             required: true,
         },

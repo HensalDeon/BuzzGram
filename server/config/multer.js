@@ -18,8 +18,8 @@ const fileFilter = (req, file, cb) => {
   }
 
   // Check file size
-  if (file.size > 1024 * 1024) {
-    const error = new Error('File size exceeds the limit of 1MB!');
+  if (file.size > 2* 1024 * 1024) {
+    const error = new Error('File size exceeds the limit of 2MB!');
     error.status = 400;
     return cb(error, false);
   }

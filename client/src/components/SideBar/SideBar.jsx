@@ -1,6 +1,4 @@
-import blockLoard from "../../img/blocklord-logo.png";
-import logout from "../../img/icon-lock.svg";
-import Profile from "../../img/icon-accounts.svg";
+import logo from "../../img/logo-side.png";
 import "./SideBar.scss";
 export default function SideBar() {
     const toggleSidebar = () => document.body.classList.toggle("open");
@@ -11,11 +9,10 @@ export default function SideBar() {
                 <header className="sidebar-header">
                     <button type="button" className="sidebar-burger" onClick={toggleSidebar}>
                     </button>
-                    <img src={blockLoard} className="sidebar-logo" />
+                    <img src={logo} className="sidebar-logo" />
                 </header>
                 <nav className="sidebar-nav">
                     <button type="button">
-                        {/* <img src={Home} /> */}
                         <i className="material-symbols-outlined"> home </i>
                         <span>Home</span>
                     </button>

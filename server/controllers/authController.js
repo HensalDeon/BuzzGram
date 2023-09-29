@@ -8,8 +8,6 @@ import jwt from "jsonwebtoken";
 export const registerUser = async (req, res) => {
     try {
         const { fullname, username, password, phone } = req.body;
-        console.log(username, "😁😁");
-
         const existingUsername = await UserModel.findOne({ username }).exec();
         if (existingUsername) {
             return res.status(400).send({ error: "Please use a unique username" });
@@ -23,10 +21,11 @@ export const registerUser = async (req, res) => {
             password: hashedPass,
             phone,
         });
-        await newUser.save();
-        res.status(200).json({ message: "user registerd succesfully" });
+        const user = await newUser.save();
+        const token = createAccessToken(user);
+        res.status(200).json({ user, token });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ error });
     }
 };
 
@@ -38,24 +37,15 @@ export const loginUser = async (req, res) => {
     try {
         const user = await UserModel.findOne({ username }).exec();
         if (!user) {
-            return res.status(404).send({ error: "Username not Found" });
+            return res.status(400).send({ error: "Username not Found" });
         }
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) {
             return res.status(400).send({ error: "Password does not Match" });
         }
-        // Create a JWT token
-        const token = jwt.sign(
-            {
-                userId: user._id,
-                username: user.username,
-            },
-            process.env.JWT_SECRET,
-            { expiresIn: "24h" }
-        );
+        const token = createAccessToken(user);
         delete user.password;
         return res.status(200).send({
-            message: "Login Successful...!",
             user,
             token,
         });
@@ -87,7 +77,7 @@ export const signupOtpGenerate = async (req, res) => {
 export const otpVerification = async (req, res) => {
     try {
         const { otp, phone } = req.body;
-        const isVerified = await verifyOtp(phoneNumber, otp);
+        const isVerified = await verifyOtp(phone, otp);
         if (isVerified) {
             return res.status(200).json({ message: "OTP verified successfully" });
         } else {
@@ -99,14 +89,6 @@ export const otpVerification = async (req, res) => {
     }
 };
 
-export const createAccessToken = (payload) => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: "1d",
-    });
-};
-
-export const createRefreshToken = (payload) => {
-    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-        expiresIn: "30d",
-    });
+export const createAccessToken = (user) => {
+    return jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
 };

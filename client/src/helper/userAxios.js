@@ -37,7 +37,6 @@ export async function getUser({ username }) {
 /** register User function */
 export async function registerUser(credentials) {
     try {
-        console.log("jnkjkjb");
         const response = await axios.post(`/register`, credentials);
 
         return Promise.resolve(response.message);

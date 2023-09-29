@@ -2,10 +2,11 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import connect from "./database/connection.js";
-import userRouter from "./routes/userRouter.js";
-import adminRouter from "./routes/adminRouter.js";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
+import authRouter from "./routes/authRouter.js"
+import userRouter from "./routes/userRouter.js";
+// import adminRouter from "./routes/adminRouter.js";
+import dotenv    from "dotenv";
 dotenv.config();
 const app = express();
 
@@ -24,8 +25,13 @@ app.get("/", (req, res) => {
 });
 
 /** api routes */
-app.use('/', userRouter);
-app.use('/admin', adminRouter);
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
+// app.use('/posts', postRouter);
+// app.use('/upload', uploadRouter);
+// app.use('/message', messageRouter);
+// app.use('/chat', chatRouter);
+// app.use('/admin', adminRouter);
 
 /** start server when only we have a valid connection*/
 connect().then(() => {

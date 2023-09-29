@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
-import { reducers } from '../reducers';
+import { reducers } from '../redux/reducers';
 import env from '../../env';
 function saveToLocalStorage(store) {
   try {
