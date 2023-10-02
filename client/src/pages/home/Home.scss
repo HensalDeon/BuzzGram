@@ -1,22 +1,22 @@
-.Home{
+.Home {
     position: relative;
     display: flex;
     flex-direction: row;
-    // float: right;
-    // grid-template-columns: 18rem auto 20rem;
     gap: 1rem;
     @media (min-width: 930px) {
-       padding: 1rem 2rem;
-       margin-left: 4.5rem;
+        padding: 1rem 2rem;
+        margin-left: 4.5rem;
     }
     @media (max-width: 929px) {
-       padding: 1rem 1rem;
-       margin-left: 4.5rem; //need to set the matgin when the screen size is 375 - 430
+        padding: 1rem 1rem;
+        margin-left: 4.5rem;
+    }
+    @media (max-width: 450px) {
+        padding: 1rem 1rem;
+        margin-left: 0;
     }
 }
 
 .component-transition {
     transition: opacity 0.3s ease-in-out, transform 1s ease-in-out;
-    
-  }
-  
+}

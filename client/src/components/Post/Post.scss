@@ -10,10 +10,10 @@
         display: flex;
         justify-content: space-between;
         .contents button {
-                display: flex;
-                align-items: center;
-                gap: 1rem;
-            }
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
         span {
             font-size: 0.8rem;
             font-weight: 500;
@@ -43,3 +43,5 @@
     align-items: flex-start;
     gap: 1.5rem;
 }
+
+

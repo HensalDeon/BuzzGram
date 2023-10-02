@@ -1,9 +1,15 @@
 const postReducer = (
-  state = { posts: [], loading: false, error: false, uploading: false },
+  state = { posts: [], loading: false, error: false, imgError: false, uploading: false },
   action
 ) => {
   switch (action.type) {
     // belongs to PostShare.jsx
+    case "IMG_UPLOAD_START":
+      return { ...state, imgError: false, uploading: true };
+    case "IMG_UPLOAD_SUCCESS":
+      return { ...state, uploading: false, imgError: false };
+    case "IMG_UPLOAD_FAIL":
+      return { ...state, uploading: false, imgError: true };
     case "UPLOAD_START":
       return { ...state, error: false, uploading: true };
     case "UPLOAD_SUCCESS":

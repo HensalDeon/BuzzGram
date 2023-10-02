@@ -1,12 +1,14 @@
 import * as UploadApi from "../../api/UploadRequest";
 
-export const uploadImage = (formdata) => async () => {
+export const uploadImage = (formdata) => async (dispatch) => {
+    dispatch({type: "IMG_UPLOAD_START"});
     try {
-        console.log("Image upload Action start ho gya hy",formdata);
         let res = await UploadApi.uploadImage(formdata);
+        dispatch({ type: "IMG_UPLOAD_SUCCESS"});
         return { url: res.data.url };
     } catch (error) {
         console.log(error);
+        dispatch({ type: "IMG_UPLOAD_FAIL" });
     }
 };
 

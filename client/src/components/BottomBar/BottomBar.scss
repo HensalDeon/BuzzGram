@@ -1,0 +1,71 @@
+$ulwidth:25%;
+
+.bottombar {
+    overflow: hidden;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3.5rem;
+    background: linear-gradient(58.63deg, #f9a225 50%, #f95f35 100%);
+    transition: width 0.4s;
+    position: fixed;
+    z-index: 10;
+    input {
+        display: none;
+    }
+    
+}
+
+.buttons {
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+
+    label {
+        text-align: center;
+        padding: 13px 0;
+        font-size: 30px;
+        cursor: pointer;
+    }
+
+    .underline {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: $ulwidth;
+        height: 5px;
+        background: white;
+        transition: 0.2s;
+    }
+}
+.tabs input:nth-child(1):checked ~ .buttons .underline {
+    translate: 0 0;
+}
+
+.tabs input:nth-child(2):checked ~ .buttons .underline {
+    translate:calc($ulwidth * 4) 0;
+}
+.tabs input:nth-child(3):checked ~ .buttons .underline {
+    translate: calc($ulwidth * 8) 0;
+}
+.tabs input:nth-child(4):checked ~ .buttons .underline {
+    translate: calc($ulwidth * 12) 0;
+}
+
+.tabs input:nth-child(1):checked ~ .buttons label:nth-child(1) {
+    color: aliceblue;
+}
+.tabs input:nth-child(2):checked ~ .buttons label:nth-child(2){
+    color: aliceblue;
+}
+.tabs input:nth-child(3):checked ~ .buttons label:nth-child(3) {
+    color: aliceblue;
+}
+.tabs input:nth-child(4):checked ~ .buttons label:nth-child(4) {
+    color: aliceblue;
+}
+
+.bottombar.initial{
+    width: 0; 
+    transition: width 1s ease-in-out; 
+}

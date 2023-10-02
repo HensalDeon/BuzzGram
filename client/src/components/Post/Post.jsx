@@ -10,10 +10,12 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
+
 const Post = ({ data }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    // console.log(data,'//////',data.image)
     return (
         //Modal for post management
         <div className="Post">
@@ -51,7 +53,7 @@ const Post = ({ data }) => {
                     <img className="dot-image" src={dots} alt="" />
                 </button>
             </div>
-            <img src={data.img} alt="" />
+            <img src={data.image} alt="" />
             <div className="postReact">
                 <img src={data.liked ? Heart : NotLike} alt="" />
                 <img src={Comment} alt="" />
@@ -59,15 +61,13 @@ const Post = ({ data }) => {
             </div>
 
             <span style={{ color: "var(--gray)", fontSize: "12px" }}>{data.likes} likes</span>
-            <div>
-                
-            </div>
+            <div></div>
 
             <div className="detail">
                 <span>
                     <b>{data.name}</b>
                 </span>
-                <span> {data.desc}</span>
+                <span> {data.description}</span>
             </div>
         </div>
     );

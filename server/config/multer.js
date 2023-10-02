@@ -17,17 +17,18 @@ const fileFilter = (req, file, cb) => {
   }
 
   // Check file size
-  if (file.size > 2* 1024 * 1024) {
-    const error = new Error('File size exceeds the limit of 2MB!');
+  if (file.size > 4 * 1024 * 1024) {
+    const error = new Error('File size exceeds the limit of 4MB!');
     error.status = 400;
+    error.clientMessage = 'File size exceeds the limit of 4MB!';
     return cb(error, false);
   }
   cb(null, true);
 };
 
-const upload = multer({
+const upload = multer({ 
   storage: storage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB limit
+  limits: { fileSize: 4 * 1024 * 1024 }, // 4MB limit
   fileFilter: fileFilter,
 });
 

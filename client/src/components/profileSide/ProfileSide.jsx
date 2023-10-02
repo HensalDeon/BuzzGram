@@ -4,7 +4,7 @@ import LogoSearch from '../LogoSearch/LogoSearch'
 import ProfileCard from '../ProfileCard/ProfileCard'
 
 import "./ProfileSide.scss"
-import Notifications from '../MessageList/MessageList'
+// import Notifications from '../MessageList/MessageList'
 const ProfileSide = () => {
   useEffect(() => {
     const ProfileSide = document.querySelector(".ProfileSide");
