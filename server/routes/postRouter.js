@@ -8,4 +8,6 @@ router.route('/').post(postController.createPost);
 
 router.route('/:id/timeline').get(postController.getTimelinePosts);
 
+router.put('/:id/like', postController.likePost)
+
 export default router;

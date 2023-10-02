@@ -5,6 +5,7 @@ import UserModel from "../model/userModel.js";
 // Creat new Post
 export const createPost = async (req, res) => {
     const newPost = new PostModel(req.body);
+    console.log(req.body, "❤️❤️❤️");
     try {
         await newPost.save();
         res.status(200).json(newPost);
@@ -65,15 +66,15 @@ export const deletePost = async (req, res) => {
 // like/dislike a post
 export const likePost = async (req, res) => {
     const id = req.params.id;
-    const { userId } = req.body;
+    const { user } = req.body;
 
     try {
         const post = await PostModel.findById(id);
-        if (!post.likes.includes(userId)) {
-            await post.updateOne({ $push: { likes: userId } });
+        if (!post.likes.includes(user)) {
+            await post.updateOne({ $push: { likes: user } });
             res.status(200).json("Post liked");
         } else {
-            await post.updateOne({ $pull: { likes: userId } });
+            await post.updateOne({ $pull: { likes: user } });
             res.status(200).json("Post Unliked");
         }
     } catch (error) {
@@ -81,11 +82,52 @@ export const likePost = async (req, res) => {
     }
 };
 
-// Get Timeline POsts
+// export const getTimelinePosts = async (req, res) => {
+//     const userId = req.params.id
+//     try {
+//       const currentUserPosts = await PostModel.find({ user: userId });
+
+//       const followingPosts = await UserModel.aggregate([
+//         {
+//           $match: {
+//             _id: new mongoose.Types.ObjectId(userId),
+//           },
+//         },
+//         {
+//           $lookup: {
+//             from: "posts",
+//             localField: "following",
+//             foreignField: "user",
+//             as: "followingPosts",
+//           },
+//         },
+//         {
+//           $project: {
+//             followingPosts: 1,
+//             _id: 0,
+//           },
+//         },
+//       ]);
+
+//       console.log(followingPosts[0],'kkjkj')
+
+//       res.status(200).json(
+//         currentUserPosts
+//           .concat(...followingPosts[0].followingPosts)
+//           .sort((a, b) => {
+//             return new Date(b.createdAt) - new Date(a.createdAt);
+//           })
+//       );
+//     } catch (error) {
+//       res.status(500).json(error);
+//     }
+//   };
+
 export const getTimelinePosts = async (req, res) => {
     const userId = req.params.id;
-
     try {
+        const currentUser = await UserModel.findById(userId);
+        const currentUserPosts = await PostModel.find({ user: userId });
 
         const followingPosts = await UserModel.aggregate([
             {
@@ -102,72 +144,38 @@ export const getTimelinePosts = async (req, res) => {
                 },
             },
             {
-                $unwind: "$followingPosts",
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "followingPosts.user",
-                    foreignField: "_id",
-                    as: "userDetails",
-                },
-            },
-            {
                 $project: {
-                    "followingPosts.user": 0,
+                    followingPosts: 1,
                 },
             },
         ]);
+        const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
+        const followingUsers = await UserModel.find(
+            { _id: { $in: followingUserIds } },
+            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, savedposts:0, phone:0 }
+            // { _id: 1, username: 1, followers: 1, following: 1, posts: 1, profileimage: 1 }
+        );
 
-        // // Map each post to include user details
-        // const timelinePosts = followingPosts.map((item) => {
-        //     const post = item.followingPosts;
-        //     const userDetails = item.userDetails[0];
+        const currentUserPostsModified = currentUserPosts.map((post) => ({
+            ...post.toObject(),
+            userDetails: currentUser,
+        }));
 
-        //     // Include user details in the post
-        //     post.userDetails = userDetails;
+        const timelinePosts = currentUserPostsModified.concat(...followingPosts[0].followingPosts);
 
-        //     return post;
-        // });
-        // console.log(timelinePosts)
-
-        // timelinePosts.sort((a, b) => b.createdAt - a.createdAt);
-        // timelinePosts.push(...currentUserPosts)
-
-        // res.status(200).json(timelinePosts);
-
-        // Fetch the current user's posts and add user details to each post
-        console.log(followingPosts,'/////')
-        const timelinePosts = followingPosts.map((item) => {
-          console.log(userDetails,'❤️❤️❤️❤️')
-          const post = item.followingPosts;
-          const userDetails = item.userDetails[0]; // Assuming there's only one user detail per post
-      
-          // Include user details in the post
-          post.userDetails = userDetails;
-      
-          return post;
-      });
-      
-        const currentUserPosts = await PostModel.find({ user: userId });
-        const currentUserDetails = await UserModel.findById(userId);
-        console.log(currentUserDetails,'iooiuoiuou')
-
-        const currentUserPostsWithDetails = currentUserPosts.map((post) => {
-          console.log(post.userDetails,'/;/;/;')
-            post.userDetails = currentUserDetails;
-            return post;
+        timelinePosts.forEach((post) => {
+            const userDetails = followingUsers.find((user) => user._id.equals(post.user));
+            if (userDetails) {
+                post.userDetails = userDetails;
+            }
+        });
+        timelinePosts.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
-        // Concatenate current user's posts with timeline posts
-        const allPosts = currentUserPostsWithDetails.concat(timelinePosts);
-
-        // Sort all posts by createdAt in descending order
-        allPosts.sort((a, b) => b.createdAt - a.createdAt);
-        console.log(allPosts)
-
-        res.status(200).json(allPosts);
+        res.status(200).json(timelinePosts);
     } catch (error) {
+        console.error("Error:", error);
         res.status(500).json(error);
     }
 };

@@ -33,15 +33,13 @@ const PostShare = () => {
             return toast.error(<b>Please Provide an Image...!</b>);
         }
 
-        
         //post data
         const newPost = {
             user: user._id,
             description: description.current.value,
         };
         const newImage = croppedImage ? croppedBlob : image;
-        
-        
+
         if (newImage && validateImage(newImage)) {
             const formData = new FormData();
             formData.append("file", newImage.file);
@@ -50,7 +48,7 @@ const PostShare = () => {
                 if (response && response.url) {
                     newPost.image = response.url;
                     try {
-                        await dispatch(uploadPost(newPost));
+                        await dispatch(uploadPost( newPost ));
                         if (!error) {
                             resetShare();
                             return toast.success(<b>Post uploaded successfully..!</b>);
@@ -72,18 +70,18 @@ const PostShare = () => {
     };
 
     const validateImage = (file) => {
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
         const maxSize = 4 * 1024 * 1024; // 4MB
         if (!allowedTypes.includes(file.file.type)) {
-          toast.error(<b>Only JPEG, JPG and PNG images are allowed</b>);
-          return false;
+            toast.error(<b>Only JPEG, JPG and PNG images are allowed</b>);
+            return false;
         }
         if (file.file.size > maxSize) {
             toast.error(<b>The image size cannot exceed 2MB</b>);
-          return false;
+            return false;
         }
         return true;
-      }
+    };
 
     // Reset Post Share
     const resetShare = () => {

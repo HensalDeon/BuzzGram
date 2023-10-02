@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
-            // trim: true,
+            trim: true,
         },
         phone: {
             type: String,
@@ -49,12 +49,6 @@ const userSchema = new mongoose.Schema(
                 ref: "User",
             },
         ],
-        posts: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Post",
-            },
-        ],
         savedposts: [
             {
                 type: mongoose.Schema.Types.ObjectId,
@@ -67,6 +61,6 @@ const userSchema = new mongoose.Schema(
     }
 );
 
-const UserModel = mongoose.model("Users", userSchema);
+const UserModel = mongoose.model("User", userSchema);
 
 export default UserModel;

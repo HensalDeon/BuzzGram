@@ -30,6 +30,12 @@ const postSchema = new mongoose.Schema(
                 text: String,
             },
         ],
+        reports: [
+            {
+                type: mongoose.Types.ObjectId,
+                ref: "user",
+            },
+        ],
     },
     {
         timestamps: true,

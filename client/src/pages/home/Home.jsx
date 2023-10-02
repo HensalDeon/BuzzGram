@@ -22,7 +22,6 @@ const Home = () => {
     return (
         <div className="Home">
             {isSmallScreen ? <BottomBar/>:<SideBar />}
-            
             {isLargeScreen && <ProfileSide />}
             <PostSide />
         </div>
