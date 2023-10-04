@@ -1,39 +1,56 @@
+import { useSelector } from "react-redux";
 import Cover from "../../img/cover.jpg";
-import Profile from "../../img/profileImg.jpg";
+import { Link } from "react-router-dom";
+import defProfile from "../../img/icon-accounts.svg";
 import "./ProfileCard.scss";
+import { useState } from "react";
+import PropTypes from "prop-types";
 
-const ProfileCard = () => {
-    const ProfilePage = true;
+const ProfileCard = ({ location }) => {
+    const { user } = useSelector((state) => state.authReducer.authData);
+    const posts = useSelector((state) => state.postReducer.posts);
+    const [expanded, setExpanded] = useState(false);
+
+    const postCount = posts.filter((post) => post.userDetails?._id === user._id).length;
+    console.log(postCount)
+
+    const toggleExpand = () => {
+        setExpanded(!expanded);
+    };
+
+    const bioClassName = `truncate-text ${expanded ? "show-full-text" : ""}`;
     return (
         <div className="ProfileCard">
             <div className="ProfileImages">
-                <img src={Cover} alt="" />
-                <img src={Profile} alt="" />
+                <img src={user.coverimage || Cover} alt="cover image" />
+                <img src={user.profileimage || defProfile} alt="profile image" />
             </div>
 
             <div className="ProfileName">
-                <span>Zendaya MJ</span>
-                <span>Senior UI/UX Designer</span>
+                <span>{user.username}</span>
+                <span className={bioClassName} onClick={toggleExpand}>
+                    {user.bio || "Write about yourself😊"}
+                </span>
             </div>
 
             <div className="followStatus">
                 <hr />
                 <div>
                     <div className="follow">
-                        <span>6,890</span>
-                        <span>Followings</span>
+                        <span>{user.followers.length}</span>
+                        <span>Followers</span>
                     </div>
                     <div className="vl"></div>
                     <div className="follow">
-                        <span>1</span>
-                        <span>Followers</span>
+                        <span>{user.following.length}</span>
+                        <span>Followings</span>
                     </div>
 
-                    {ProfilePage && (
+                    {user && (
                         <>
                             <div className="vl"></div>
                             <div className="follow">
-                                <span>3</span>
+                                <span>{postCount}</span>
                                 <span>Posts</span>
                             </div>
                         </>
@@ -41,10 +58,21 @@ const ProfileCard = () => {
                 </div>
                 <hr />
             </div>
-            {/* {ProfilePage ? "" : <span>My Profile</span>} */}
-            <span>My Profile</span>
+            {location === "profile" ? (
+                ""
+            ) : (
+                <span>
+                    <Link to={`/profile/${user._id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                        My Profile
+                    </Link>
+                </span>
+            )}
         </div>
     );
+};
+
+ProfileCard.propTypes = {
+    location: PropTypes.string.isRequired,
 };
 
 export default ProfileCard;

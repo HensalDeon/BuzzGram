@@ -67,6 +67,12 @@ body.open .sidebar-logo {
 .sidebar-nav {
     padding-top: 10px;
     flex: 1 1 auto;
+
+    .material-symbols-outlined{
+        text-decoration: none;
+        color: inherit;
+    }
+
 }
 
 .sidebar button {

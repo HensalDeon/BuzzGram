@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import "./BottomBar.scss";
+import { useSelector } from "react-redux";
+import {useNavigate } from "react-router-dom";
+import Home from "../../pages/home/Home";
 
 function BottomBar() {
-    const [selectedTab, setSelectedTab] = useState("Home");
+    const navigate = useNavigate();
 
-    const handleTabChange = (tabName) => {
-        console.log(tabName)
-        setSelectedTab(tabName);
-    };
+    const { user } = useSelector((state) => state.authReducer.authData);
 
     useEffect(() => {
         const BottomBar = document.querySelector(".bottombar");
@@ -24,29 +24,13 @@ function BottomBar() {
                     type="radio"
                     name="group"
                     defaultChecked={true}
-                    onChange={() => handleTabChange("Home")}
                 />
-                <input
-                    id="tab-2"
-                    type="radio"
-                    name="group"
-                    onChange={() => handleTabChange("Chat")}
-                />
-                <input
-                    id="tab-3"
-                    type="radio"
-                    name="group"
-                    onChange={() => handleTabChange("Saved")}
-                />
-                <input
-                    id="tab-4"
-                    type="radio"
-                    name="group"
-                    onChange={() => handleTabChange("Profile")}
-                />
+                <input id="tab-2" type="radio" name="group" />
+                <input id="tab-3" type="radio" name="group" />
+                <input id="tab-4" type="radio" name="group" />
 
                 <div className="buttons">
-                    <label className="material-symbols-outlined" htmlFor="tab-1">
+                    <label onClick={() => navigate("../home")} className="material-symbols-outlined" htmlFor="tab-1">
                         Home
                     </label>
                     <label className="material-symbols-outlined" htmlFor="tab-2">
@@ -55,18 +39,16 @@ function BottomBar() {
                     <label className="material-symbols-outlined" htmlFor="tab-3">
                         Bookmark
                     </label>
-                    <label className="material-symbols-outlined" htmlFor="tab-4">
+                    <label
+                        onClick={() => navigate(`/profile/${user._id}`)}
+                        className="material-symbols-outlined"
+                        htmlFor="tab-4"
+                    >
                         Person
                     </label>
                     <div className="underline"></div>
                 </div>
             </div>
-
-            {/* Render the content based on the selected tab */}
-            {selectedTab === "Home" && <>heyyywe</>}
-            {selectedTab === "Chat" && <>heyyy123</>}
-            {selectedTab === "Bookmark" && <>heyyy21</>}
-            {selectedTab === "Person" && <>heyyy5656</>}
         </aside>
     );
 }

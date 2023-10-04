@@ -26,16 +26,31 @@ const userSchema = new mongoose.Schema(
         bio: {
             type: String,
             maxlength: 160,
+            default: "",
         },
         profileimage: {
             type: String,
+            default: "",
         },
         coverimage: {
             type: String,
+            default: "",
         },
         isadmin: {
             type: Boolean,
             default: false,
+        },
+        mobile: {
+            type: String,
+            default: "",
+        },
+        livesin: {
+            type: String,
+            default: "",
+        },
+        country: {
+            type: String,
+            default: "",
         },
         followers: [
             {
@@ -47,12 +62,6 @@ const userSchema = new mongoose.Schema(
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: "User",
-            },
-        ],
-        savedposts: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Post",
             },
         ],
     },

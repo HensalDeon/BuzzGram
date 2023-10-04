@@ -48,13 +48,13 @@ export const updatePost = async (req, res) => {
 // Delete a post
 export const deletePost = async (req, res) => {
     const id = req.params.id;
-    const { userId } = req.body;
+    const user = req.query.user;
 
     try {
         const post = await PostModel.findById(id);
-        if (post.userId === userId) {
+        if (post.user.toString() === user) {
             await post.deleteOne();
-            res.status(200).json("POst deleted successfully");
+            res.status(200).json("Post deleted successfully");
         } else {
             res.status(403).json("Action forbidden");
         }
@@ -81,47 +81,6 @@ export const likePost = async (req, res) => {
         res.status(500).json(error);
     }
 };
-
-// export const getTimelinePosts = async (req, res) => {
-//     const userId = req.params.id
-//     try {
-//       const currentUserPosts = await PostModel.find({ user: userId });
-
-//       const followingPosts = await UserModel.aggregate([
-//         {
-//           $match: {
-//             _id: new mongoose.Types.ObjectId(userId),
-//           },
-//         },
-//         {
-//           $lookup: {
-//             from: "posts",
-//             localField: "following",
-//             foreignField: "user",
-//             as: "followingPosts",
-//           },
-//         },
-//         {
-//           $project: {
-//             followingPosts: 1,
-//             _id: 0,
-//           },
-//         },
-//       ]);
-
-//       console.log(followingPosts[0],'kkjkj')
-
-//       res.status(200).json(
-//         currentUserPosts
-//           .concat(...followingPosts[0].followingPosts)
-//           .sort((a, b) => {
-//             return new Date(b.createdAt) - new Date(a.createdAt);
-//           })
-//       );
-//     } catch (error) {
-//       res.status(500).json(error);
-//     }
-//   };
 
 export const getTimelinePosts = async (req, res) => {
     const userId = req.params.id;

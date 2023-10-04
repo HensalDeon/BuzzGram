@@ -1,13 +1,9 @@
 import { useEffect } from "react";
 import FollowersCard from "../FollowersCard/FollowersCard";
-import LogoSearch from "../LogoSearch/LogoSearch";
-import ProfileCard from "../ProfileCard/ProfileCard";
-import PropTypes from "prop-types";
-
-import "./ProfileSide.scss";
 import InfoCard from "../InfoCard/InfoCard";
-// import Notifications from '../MessageList/MessageList'
-const ProfileSide = ({ location }) => {
+import LogoSearch from "../LogoSearch/LogoSearch";
+import "../profileSide/ProfileSide.scss"
+const ProfileLeft = () => {
     useEffect(() => {
         const ProfileSide = document.querySelector(".ProfileSide");
         ProfileSide.classList.add("initial");
@@ -17,16 +13,11 @@ const ProfileSide = ({ location }) => {
     }, []);
     return (
         <div className="ProfileSide" style={{ animationDelay: "0.5s" }}>
-            {/* <Notifications/> */}
             <LogoSearch />
-            {location === "profile" ?<InfoCard /> : <ProfileCard location={location} />}   
+            <InfoCard />
             <FollowersCard />
         </div>
     );
 };
 
-ProfileSide.propTypes = {
-    location: PropTypes.string.isRequired,
-};
-
-export default ProfileSide;
+export default ProfileLeft;

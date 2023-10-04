@@ -4,7 +4,10 @@ import ProfileSide from "../../components/profileSide/ProfileSide";
 import "./Home.scss";
 import SideBar from "../../components/SideBar/SideBar";
 import BottomBar from "../../components/BottomBar/BottomBar";
-const Home = () => {
+import PropTypes from "prop-types";
+import ProfileCard from "../../components/ProfileCard/ProfileCard";
+// import ProfileLeft from "../../components/ProfileLeft/ProfileLeft";
+const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
 
@@ -21,11 +24,15 @@ const Home = () => {
     }, []);
     return (
         <div className="Home">
-            {isSmallScreen ? <BottomBar/>:<SideBar />}
-            {isLargeScreen && <ProfileSide />}
-            <PostSide />
+            {isSmallScreen ? <BottomBar /> : <SideBar />}
+            {isLargeScreen && <ProfileSide location={location} />}
+            {location === "home" ? <PostSide /> : <ProfileCard location={location} />}
         </div>
     );
+};
+
+Home.propTypes = {
+    location: PropTypes.string.isRequired,
 };
 
 export default Home;

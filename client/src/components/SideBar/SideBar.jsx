@@ -1,8 +1,12 @@
 import { useEffect } from "react";
 import logo from "../../img/logo-side.png";
 import "./SideBar.scss";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function SideBar() {
+    const { user } = useSelector((state) => state.authReducer.authData);
+
     const toggleSidebar = () => document.body.classList.toggle("open");
     useEffect(() => {
         const SideBar = document.querySelector(".sidebar");
@@ -21,7 +25,7 @@ export default function SideBar() {
                 </header>
                 <nav className="sidebar-nav">
                     <button type="button">
-                        <i className="material-symbols-outlined"> home </i>
+                        <Link className="material-symbols-outlined" to={"../home"}> home </Link>
                         <span>Home</span>
                     </button>
                     <button type="button">
@@ -33,7 +37,7 @@ export default function SideBar() {
                         <span style={{ animationDelay: "0.3s" }}>Saved</span>
                     </button>
                     <button type="button">
-                        <i className="material-symbols-outlined"> person </i>
+                        <Link className="material-symbols-outlined" to={`/profile/${user._id}`}> person </Link>
                         <span style={{ animationDelay: "0.5s" }}>Profile</span>
                     </button>
                 </nav>
