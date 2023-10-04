@@ -15,7 +15,6 @@ const Posts = () => {
         if (!posts.length) {
             dispatch(getTimelinePosts(user._id));
         }
-        // dispatch(getTimelinePosts(user._id));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     if (!posts) return "No Posts";

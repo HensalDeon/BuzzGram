@@ -2,12 +2,15 @@ import { Router } from "express";
 const router = Router();
 
 import * as postController from "../controllers/postController.js";
+import Auth from "../middleware/auth.js";
 
-router.route("/").post(postController.createPost);
+router.route("/").post(Auth, postController.createPost);
 
-router.route("/:id/timeline").get(postController.getTimelinePosts);
+router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 
-router.put("/:id/like", postController.likePost);
+router.put("/:id/like", Auth, postController.likePost);
+router.put("/:id", Auth, postController.updatePost);
 
-router.delete("/:id", postController.deletePost);
+router.delete("/:id", Auth, postController.deletePost);
+
 export default router;

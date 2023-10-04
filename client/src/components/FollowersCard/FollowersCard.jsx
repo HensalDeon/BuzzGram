@@ -1,6 +1,6 @@
 import './FollowersCard.scss'
 
-import { Followers } from '../../Data/FollowersData'
+import { Followers } from '../../Data/FollwersData'
 const FollowersCard = () => {
   return (
     <div className="FollowersCard">

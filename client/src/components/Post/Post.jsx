@@ -5,8 +5,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
-import { deletePost } from "../../api/PostsRequests";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 import Comment from "../../img/comment.png";
 import Share from "../../img/share.png";
@@ -14,40 +13,94 @@ import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
-import { getTimelinePosts, likePost } from "../../redux/actions/PostAction";
+import { deletePost, getTimelinePosts, likePost, updatePost } from "../../redux/actions/PostAction";
 
 const Post = ({ data }) => {
     // console.log(data, "//////");
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
+
     const [show, setShow] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [showReport, setShowReport] = useState(false);
     const [liked, setLiked] = useState(data.likes.includes(user._id));
     const [likes, setLikes] = useState(data.likes.length);
+    const [editData, setEditData] = useState({
+        description: data.description,
+    });
+    const [reportData, setReportData] = useState("");
+
     const handleClose = () => setShow(false);
+    const handleReportClose = () => {
+        setShowReport(false);
+    };
+    const handleEditClose = () => {
+        setShowEdit(false);
+        setEditData({ description: data.description });
+    };
     const handleShow = () => setShow(true);
+    const handleReportShow = () => {
+        setShowReport(true);
+        setShow(false);
+    };
+    const handleEditShow = () => {
+        setShowEdit(true);
+        setShow(false);
+    };
 
     const handleLike = () => {
         setLiked((prev) => !prev);
         liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
         dispatch(likePost(data._id, user._id));
     };
-    
 
-    const handleEdit = () => {
-        console.log("edit");
+    const handleEditInput = (e) => {
+        const inputValue = e.target.value;
+        if (inputValue.length <= 30) {
+            setEditData({
+                ...editData,
+                [e.target.name]: inputValue,
+            });
+        }
+    };
+    const handleReportInput = (e) => {
+        const inputValue = e.target.value;
+        if (inputValue.length <= 100) {
+            setReportData(inputValue);
+        }
+    };
+    const handleReport = () => {
+        console.log("heyyyyy",reportData);
+    };
+    
+    const handleEdit = async () => {
+        const loadingToastId = toast.loading("Updating...");
+        try {
+            const updatePromise = await dispatch(updatePost(data._id, user._id, editData));
+            toast.dismiss(loadingToastId);
+            console.log(updatePromise);
+            if (updatePromise.success) {
+                setShowEdit(false);
+                toast.success(<b>Post Updated...!</b>);
+            } else {
+                toast.error(<b>Post Update Failed...!</b>);
+            }
+        } catch (error) {
+            toast.error(<b>Something went wrong while updating!</b>);
+            console.error("Error:", error);
+        }
     };
     const handleDelete = async () => {
         const loadingToastId = toast.loading("Deleting...");
         try {
-            const deletePromise = await deletePost(data._id, user._id);
+            const deletePromise = await dispatch(deletePost(data._id, user._id));
             toast.dismiss(loadingToastId);
-            if (deletePromise.status === 200) {
-                toast.success(<b>{deletePromise.data}</b>);
+            if (deletePromise.success) {
+                toast.success(<b>Post Deleted...!</b>);
                 dispatch(getTimelinePosts(user._id));
             } else {
-                toast.error(<b>{deletePromise.data}</b>);
+                toast.error(<b>Failed to delete...!</b>);
             }
-            console.log("delre");
         } catch (error) {
             toast.error(<b>Something went wrong!</b>);
             console.error("Error:", error);
@@ -58,6 +111,7 @@ const Post = ({ data }) => {
     };
 
     return (
+        //modal for post options
         <div className="Post">
             <Modal show={show} onHide={handleClose} className="background">
                 <Modal.Body>
@@ -65,7 +119,9 @@ const Post = ({ data }) => {
                         <>
                             <span className="linear-gradient-text">Follow User</span>
                             <hr />
-                            <span className="linear-gradient-text">Report Post</span>
+                            <span onClick={handleReportShow} className="linear-gradient-text">
+                                Report Post
+                            </span>
                             <hr />
                         </>
                     )}
@@ -76,7 +132,7 @@ const Post = ({ data }) => {
                     {data.userDetails?._id === user._id && (
                         <>
                             <hr />
-                            <button onClick={handleEdit} className="linear-gradient-text">
+                            <button onClick={handleEditShow} className="linear-gradient-text">
                                 Edit
                             </button>
                             <hr />
@@ -85,6 +141,30 @@ const Post = ({ data }) => {
                             </span>
                         </>
                     )}
+                </Modal.Body>
+            </Modal>
+            {/* modal for post edit/updation */}
+            <Modal show={showEdit} onHide={handleEditClose}>
+                <Modal.Body style={{ width: "17rem" }}>
+                    <label className="pt-2 pb-3 linear-gradient-text">Edit Description?</label>
+                    <div className="Search">
+                        <input type="text" name="description" value={editData.description} onChange={handleEditInput} />
+                        <span onClick={handleEdit} className="material-symbols-outlined">
+                            update
+                        </span>
+                    </div>
+                </Modal.Body>
+            </Modal>
+            {/* modal for post report */}
+            <Modal  show={showReport} onHide={handleReportClose}>
+                <Modal.Body style={{ width: "17rem" }}>
+                    <label className="pt-2 pb-3 linear-gradient-text">Provide Reason!</label>
+                    <div className="Search">
+                        <textarea type="text" name="report" onChange={handleReportInput} />
+                        <span onClick={handleReport} className="material-symbols-outlined">
+                            report
+                        </span>
+                    </div>
                 </Modal.Body>
             </Modal>
 

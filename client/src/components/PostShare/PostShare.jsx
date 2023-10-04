@@ -2,13 +2,14 @@ import Cropper from "react-cropper";
 import toast, { Toaster } from "react-hot-toast";
 import "cropperjs/dist/cropper.css";
 import { useState, useRef } from "react";
-import ProfileImage from "../../img/profileImg.jpg";
+import defProfile from "../../img/icon-accounts.svg";
 import "./PostShare.scss";
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
+import { data } from "autoprefixer";
 // import { UilEdit } from "@iconscout/react-unicons";
 
 const PostShare = () => {
@@ -26,11 +27,13 @@ const PostShare = () => {
     // handle post upload
     const handleUpload = async (e) => {
         e.preventDefault();
-        if (!description.current.value && !imageRef.current.value) {
+        // if (!description.current.value && !imageRef.current.value) {
+        if (!description.current.value && !image) {
             return toast.error(<b>Please Provide the Details!</b>);
         } else if (!description.current.value) {
             return toast.error(<b>Please Provide Description..!</b>);
-        } else if (!imageRef.current.value) {
+            // } else if (!imageRef.current.value) {
+        } else if (!image) {
             return toast.error(<b>Please Provide an Image...!</b>);
         }
 
@@ -49,7 +52,7 @@ const PostShare = () => {
                 if (response && response.url) {
                     newPost.image = response.url;
                     try {
-                        await dispatch(uploadPost( newPost ));
+                        await dispatch(uploadPost(newPost));
                         if (!error) {
                             resetShare();
                             dispatch(getTimelinePosts(user._id));
@@ -93,15 +96,30 @@ const PostShare = () => {
     };
     const onImageChange = (event) => {
         setCroppedImage(null);
+
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
-            setImage({
-                name: img.name,
-                url: URL.createObjectURL(img),
-                file: img,
-            });
+
+            const fileExtension = img.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+            const allowedExtensions = ["jpg", "jpeg", "png"];
+
+            if (allowedExtensions.includes(fileExtension)) {
+                setImage({
+                    name: img.name,
+                    url: URL.createObjectURL(img),
+                    file: img,
+                });
+            } else {
+                setImage(null);
+                return toast.error(<b>Invalid file type. Please select a JPG, JPEG, or PNG image.</b>);
+            }
         }
     };
+
     const cropImage = () => {
         if (typeof cropperRef.current?.cropper !== "undefined") {
             toast.success(<b>Cropped!!</b>);
@@ -118,9 +136,9 @@ const PostShare = () => {
     return (
         <div className="PostShare">
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <img src={ProfileImage} alt="" />
+            <img src={data.profileimage || defProfile} alt="" />
             <div>
-                <input type="text" placeholder="What's happening" ref={description} />
+                <input type="text" name="description" placeholder="What's happening" ref={description} />
                 <div className="postOptions">
                     <div className="option" style={{ color: "var(--photo)" }} onClick={() => imageRef.current.click()}>
                         <UilScenery />

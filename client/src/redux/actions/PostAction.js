@@ -17,8 +17,36 @@ export const likePost = (postId, userId) => async (dispatch) => {
         if (response.status === 200) {
             const actionType = response.data.includes("Post liked") ? "LIKE_POST" : "UNLIKE_POST";
             dispatch({ type: actionType, postId, userId });
-        } 
+        }
     } catch (error) {
-      console.log(error);
+        console.log(error);
+    }
+};
+
+export const updatePost = (postId, userId, editedData) => async (dispatch) => {
+    try {
+        const response = await PostsApi.updatePost(postId, userId, editedData);
+        console.log(response)
+        if (response.status === 200) {
+            dispatch({ type: "EDIT_POST_SUCCESS", postId, editedData });
+            return { success: true };
+        } else {
+            return { success: false };
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const deletePost = (postId, userId) => async (dispatch) => {
+    try {
+        const response = await PostsApi.deletePost(postId, userId);
+        if (response.status === 200) {
+            dispatch({ type: "EDIT_POST_SUCCESS", postId });
+            return { success: true };
+        } else {
+            return { success: false };
+        }
+    } catch (error) {
+        console.log(error);
     }
 };

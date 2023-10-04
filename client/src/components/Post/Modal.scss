@@ -8,7 +8,7 @@
     hr {
         color: #f95f35;
     }
-    span{
+    span {
         cursor: pointer;
     }
 }
@@ -17,18 +17,16 @@
     width: 14rem !important;
     border-radius: 0.8rem !important;
     margin-top: 17% !important;
-
-    @media (max-width: 575px) {
-        display: flex;
-        justify-content: center !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        align-items: center !important;
-    }
+    display: flex;
+    justify-content: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    align-items: center !important;
 }
 
 .modal-content {
     border-radius: 0.8rem !important;
+    width: auto !important;
 }
 
 .linear-gradient-text {
@@ -36,4 +34,25 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    padding: 0 3rem;
+}
+
+.Search {
+    display: flex !important;
+    background-color: rgb(210, 210, 210) !important;
+    border-radius: 10px !important;
+    padding: 5px !important;
+    justify-content: space-between;
+    align-items: center;
+
+    > input {
+        background-color: transparent !important;
+        border: none !important;
+        outline: none !important;
+    }
+
+    > textarea {
+        border: none !important;
+        outline: none !important;
+    }
 }

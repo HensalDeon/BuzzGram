@@ -5,7 +5,6 @@ import UserModel from "../model/userModel.js";
 // Creat new Post
 export const createPost = async (req, res) => {
     const newPost = new PostModel(req.body);
-    console.log(req.body, "❤️❤️❤️");
     try {
         await newPost.save();
         res.status(200).json(newPost);
@@ -30,18 +29,23 @@ export const getPost = async (req, res) => {
 // Update a post
 export const updatePost = async (req, res) => {
     const postId = req.params.id;
-    const { userId } = req.body;
+    const user = req.query.user;
+    const editedData = req.body;
 
     try {
         const post = await PostModel.findById(postId);
-        if (post.userId === userId) {
-            await post.updateOne({ $set: req.body });
-            res.status(200).json("Post Updated");
+        if (!post) {
+            return res.status(404).json("Post not found");
+        }
+
+        if (post.user.toString() === user) {
+            await PostModel.findByIdAndUpdate(postId, { $set: editedData });
+            return res.status(200).json("Post Updated");
         } else {
-            res.status(403).json("Action forbidden");
+            return res.status(403).json("Action forbidden");
         }
     } catch (error) {
-        res.status(500).json(error);
+        return res.status(500).json(error);
     }
 };
 
@@ -111,7 +115,7 @@ export const getTimelinePosts = async (req, res) => {
         const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
         const followingUsers = await UserModel.find(
             { _id: { $in: followingUserIds } },
-            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, savedposts:0, phone:0 }
+            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, savedposts: 0, phone: 0 }
             // { _id: 1, username: 1, followers: 1, following: 1, posts: 1, profileimage: 1 }
         );
 

@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import logo from "../../img/logo-side.png";
 import "./SideBar.scss";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/actions/AuthActions";
 
 export default function SideBar() {
+    const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
 
     const toggleSidebar = () => document.body.classList.toggle("open");
@@ -16,6 +18,10 @@ export default function SideBar() {
         }, 100);
     }, []);
 
+    const handleLogOut = () => {
+        dispatch(logout());
+    };
+
     return (
         <aside className="sidebar">
             <div className="sidebar-inner">
@@ -25,7 +31,10 @@ export default function SideBar() {
                 </header>
                 <nav className="sidebar-nav">
                     <button type="button">
-                        <Link className="material-symbols-outlined" to={"../home"}> home </Link>
+                        <Link className="material-symbols-outlined" to={"../home"}>
+                            {" "}
+                            home{" "}
+                        </Link>
                         <span>Home</span>
                     </button>
                     <button type="button">
@@ -37,12 +46,15 @@ export default function SideBar() {
                         <span style={{ animationDelay: "0.3s" }}>Saved</span>
                     </button>
                     <button type="button">
-                        <Link className="material-symbols-outlined" to={`/profile/${user._id}`}> person </Link>
+                        <Link className="material-symbols-outlined" to={`/profile/${user._id}`}>
+                            {" "}
+                            person{" "}
+                        </Link>
                         <span style={{ animationDelay: "0.5s" }}>Profile</span>
                     </button>
                 </nav>
                 <footer className="sidebar-footer">
-                    <button type="button">
+                    <button type="button" onClick={handleLogOut}>
                         {/* <img src={logout} /> */}
                         <i className="material-symbols-outlined">logout</i>
                         <span>Logout</span>

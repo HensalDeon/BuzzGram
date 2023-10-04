@@ -33,7 +33,6 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
                     return post;
                 }),
             };
-
         case "UNLIKE_POST":
             return {
                 ...state,
@@ -47,6 +46,27 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
                     return post;
                 }),
             };
+        case "EDIT_POST_SUCCESS":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post._id === action.postId) {
+                        return {
+                            ...post,
+                            description: action.editedData.description,
+                        };
+                    }
+                    return post;
+                }),
+            };
+        case "DELETE_POST_SUCCESS":
+            return {
+                ...state,
+                posts: state.posts.filter((post) => post._id !== action.postId),
+            };
+        case "RESET_POST_STATE":
+            return { posts: [], loading: false, error: false, imgError: false, uploading: false };
+
         default:
             return state;
     }

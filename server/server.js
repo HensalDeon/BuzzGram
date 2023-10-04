@@ -7,6 +7,7 @@ import authRouter from "./routes/authRouter.js"
 import userRouter from "./routes/userRouter.js";
 import postRouter from "./routes/postRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
+import reportRouter from "./routes/reportRouter.js";
 // import adminRouter from "./routes/adminRouter.js";
 import dotenv    from "dotenv";
 dotenv.config();
@@ -32,6 +33,7 @@ app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/posts', postRouter);
 app.use('/upload', uploadRouter);
+app.use('/report', reportRouter);
 // app.use('/message', messageRouter);
 // app.use('/chat', chatRouter);
 // app.use('/admin', adminRouter);
