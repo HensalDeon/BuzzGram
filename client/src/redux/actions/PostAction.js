@@ -26,7 +26,6 @@ export const likePost = (postId, userId) => async (dispatch) => {
 export const updatePost = (postId, userId, editedData) => async (dispatch) => {
     try {
         const response = await PostsApi.updatePost(postId, userId, editedData);
-        console.log(response)
         if (response.status === 200) {
             dispatch({ type: "EDIT_POST_SUCCESS", postId, editedData });
             return { success: true };
@@ -41,7 +40,7 @@ export const deletePost = (postId, userId) => async (dispatch) => {
     try {
         const response = await PostsApi.deletePost(postId, userId);
         if (response.status === 200) {
-            dispatch({ type: "EDIT_POST_SUCCESS", postId });
+            dispatch({ type: "DELETE_POST_SUCCESS", postId });
             return { success: true };
         } else {
             return { success: false };

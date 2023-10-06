@@ -14,6 +14,7 @@ import NotLike from "../../img/notlike.png";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import { deletePost, getTimelinePosts, likePost, updatePost } from "../../redux/actions/PostAction";
+import { createReport } from "../../redux/actions/ReportActions";
 
 const Post = ({ data }) => {
     // console.log(data, "//////");
@@ -31,13 +32,16 @@ const Post = ({ data }) => {
     const [reportData, setReportData] = useState("");
 
     const handleClose = () => setShow(false);
+
     const handleReportClose = () => {
         setShowReport(false);
     };
+
     const handleEditClose = () => {
         setShowEdit(false);
         setEditData({ description: data.description });
     };
+
     const handleShow = () => setShow(true);
     const handleReportShow = () => {
         setShowReport(true);
@@ -54,31 +58,46 @@ const Post = ({ data }) => {
         dispatch(likePost(data._id, user._id));
     };
 
+    const maxEditLength = 100;
     const handleEditInput = (e) => {
         const inputValue = e.target.value;
-        if (inputValue.length <= 30) {
+        if (inputValue.length <= maxEditLength) {
             setEditData({
                 ...editData,
                 [e.target.name]: inputValue,
             });
         }
     };
+    const maxReportLength = 100;
     const handleReportInput = (e) => {
         const inputValue = e.target.value;
-        if (inputValue.length <= 100) {
+        if (inputValue.length <= maxReportLength) {
             setReportData(inputValue);
         }
     };
-    const handleReport = () => {
-        console.log("heyyyyy",reportData);
+    const handleReport = async () => {
+        const loadingToastId = toast.loading("Reporting...");
+        console.log(user._id, "post", data._id, reportData);
+        try {
+            const reportPromise = await dispatch(createReport(user._id, "post", data._id, reportData));
+            toast.dismiss(loadingToastId);
+            if (reportPromise.success) {
+                setShowReport(false);
+                toast.success(<b>Post Reported...!</b>);
+            } else {
+                toast.error(<b>Post Report Failed...!</b>);
+            }
+        } catch (error) {
+            toast.error(<b>Something went wrong while updating!</b>);
+            console.error("Error:", error);
+        }
     };
-    
+
     const handleEdit = async () => {
         const loadingToastId = toast.loading("Updating...");
         try {
             const updatePromise = await dispatch(updatePost(data._id, user._id, editData));
             toast.dismiss(loadingToastId);
-            console.log(updatePromise);
             if (updatePromise.success) {
                 setShowEdit(false);
                 toast.success(<b>Post Updated...!</b>);
@@ -153,16 +172,26 @@ const Post = ({ data }) => {
                             update
                         </span>
                     </div>
+                    <div style={{ display: "flex" }}>
+                        <span className="lg-text">
+                            {maxEditLength - editData.description.length} / {maxEditLength}
+                        </span>
+                    </div>
                 </Modal.Body>
             </Modal>
             {/* modal for post report */}
-            <Modal  show={showReport} onHide={handleReportClose}>
+            <Modal show={showReport} onHide={handleReportClose}>
                 <Modal.Body style={{ width: "17rem" }}>
                     <label className="pt-2 pb-3 linear-gradient-text">Provide Reason!</label>
                     <div className="Search">
                         <textarea type="text" name="report" onChange={handleReportInput} />
                         <span onClick={handleReport} className="material-symbols-outlined">
                             report
+                        </span>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                        <span className="lg-text">
+                            {maxReportLength - reportData.length} / {maxReportLength}
                         </span>
                     </div>
                 </Modal.Body>

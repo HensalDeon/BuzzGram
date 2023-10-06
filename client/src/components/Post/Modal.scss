@@ -1,3 +1,6 @@
+$gradient-color-1: #ff6600;
+$gradient-color-2: #ff3399;
+
 .modal-body {
     display: flex;
     flex-direction: column;
@@ -29,12 +32,20 @@
     width: auto !important;
 }
 
-.linear-gradient-text {
-    background-image: linear-gradient(to right, #ff6600, #ff3399);
+@mixin text-gradient($color-1, $color-2) {
+    background-image: linear-gradient(to right, $color-1, $color-2);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+}
+
+.linear-gradient-text {
+    @include text-gradient(#ff6600, #ff3399);
     padding: 0 3rem;
+}
+
+.lg-text {
+    @include text-gradient(#ff6600, #ff3399);
 }
 
 .Search {

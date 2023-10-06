@@ -64,6 +64,11 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
                 ...state,
                 posts: state.posts.filter((post) => post._id !== action.postId),
             };
+        case "FILTER_REPORTED_POSTS":
+            return {
+                ...state,
+                posts: state.posts.filter((post) => post._id !== action.targetId),
+            };
         case "RESET_POST_STATE":
             return { posts: [], loading: false, error: false, imgError: false, uploading: false };
 

@@ -14,6 +14,7 @@ const Posts = () => {
     useEffect(() => {
         if (!posts.length) {
             dispatch(getTimelinePosts(user._id));
+            //get the reports also here 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

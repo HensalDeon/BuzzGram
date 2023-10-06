@@ -32,8 +32,8 @@ const postSchema = new mongoose.Schema(
         ],
         reports: [
             {
-                type: mongoose.Types.ObjectId,
-                ref: "user",
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
             },
         ],
     },

@@ -115,8 +115,7 @@ export const getTimelinePosts = async (req, res) => {
         const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
         const followingUsers = await UserModel.find(
             { _id: { $in: followingUserIds } },
-            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, savedposts: 0, phone: 0 }
-            // { _id: 1, username: 1, followers: 1, following: 1, posts: 1, profileimage: 1 }
+            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, phone: 0 }
         );
 
         const currentUserPostsModified = currentUserPosts.map((post) => ({
@@ -125,18 +124,24 @@ export const getTimelinePosts = async (req, res) => {
         }));
 
         const timelinePosts = currentUserPostsModified.concat(...followingPosts[0].followingPosts);
+        const userIdObjectId = new mongoose.Types.ObjectId(userId);
 
-        timelinePosts.forEach((post) => {
+        const filteredTimelinePosts = timelinePosts.filter((post) => {
+            const reportedByCurrentUser = post.reports.some((reportId) => reportId.equals(userIdObjectId));
+            return !reportedByCurrentUser;
+        });
+
+        filteredTimelinePosts.forEach((post) => {
             const userDetails = followingUsers.find((user) => user._id.equals(post.user));
             if (userDetails) {
                 post.userDetails = userDetails;
             }
         });
-        timelinePosts.sort((a, b) => {
+        filteredTimelinePosts.sort((a, b) => {
             return new Date(b.createdAt) - new Date(a.createdAt);
         });
 
-        res.status(200).json(timelinePosts);
+        res.status(200).json(filteredTimelinePosts);
     } catch (error) {
         console.error("Error:", error);
         res.status(500).json(error);
