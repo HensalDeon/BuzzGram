@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 64 64" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+  <g>
+    <linearGradient id="a" x1="4" x2="60" y1="32.004" y2="32.004" gradientUnits="userSpaceOnUse">
+      <stop stop-opacity="1" stop-color="#ff9c9e" offset="0"></stop>
+      <stop stop-opacity="1" stop-color="#b50086" offset="1"></stop>
+    </linearGradient>
+    <path fill="url(#a)" d="M38.69 55c.17.11.35.22.53.32H7.79A3.796 3.796 0 0 1 4 51.52v-5.05a10.77 10.77 0 0 1 7.36-10.23l10.59-3.52c.04-.01.09-.03.13-.04-12.143-5.703-8.348-23.914 5.26-24.11 14.014.504 17.086 18.193 5.4 24.15l1.99.66a16.34 16.34 0 0 0-.9 1.38A15.15 15.15 0 0 0 38.69 55zM60 42.33a13.105 13.105 0 1 1-13.1-13.1A13.131 13.131 0 0 1 60 42.33zm-7.6.66a2.006 2.006 0 0 0-2-2h-5.73v-4.1a2.22 2.22 0 0 1 4.44 0v1.35a1 1 0 0 0 2 0v-1.35c-.142-5.574-8.296-5.556-8.44 0v4.24a1.993 1.993 0 0 0-1.27 1.86v7a2 2 0 0 0 2 2h7a2.006 2.006 0 0 0 2-2zm-9 0h7v7h-7zm2.5 4.25a1 1 0 0 0 2 0v-1.51a1.003 1.003 0 0 0-1-1c-1.346.05-.943 1.634-1 2.51z" opacity="1" data-original="url(#a)" class=""></path>
+  </g>
+</svg>

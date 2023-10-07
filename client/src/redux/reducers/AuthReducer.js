@@ -7,19 +7,23 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
             return { ...state, authData: action.data, loading: false, error: null };
         case "AUTH_FAIL":
             return { ...state, loading: false, error: action.error };
+        case "ADMIN_AUTH_START":
+            return { ...state, adminLoading: true, adminError: null };
+        case "ADMIN_AUTH_SUCCESS":
+            localStorage.setItem("admin", JSON.stringify({ ...action?.data }));
+            return { ...state, adminAuthData: action.data, adminLoading: false, adminError: null };
+        case "ADMIN_AUTH_FAIL":
+            return { ...state, adminLoading: false, adminError: action.error };
         case "UPDATING_START":
             return { ...state, updateLoading: true, error: null };
         case "UPDATING_SUCCESS":
             localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
             return { ...state, authData: action.data, updateLoading: false, error: null };
-
         case "UPDATING_FAIL":
             return { ...state, updateLoading: true, error: action.error };
-
         case "LOG_OUT":
             localStorage.clear();
             return { ...state, authData: null, loading: false, error: null, updateLoading: false };
-
         case "FOLLOW_USER":
             return {
                 ...state,
@@ -28,7 +32,6 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
                     user: { ...state.authData.user, following: [...state.authData.user.following, action.data] },
                 },
             };
-
         case "UNFOLLOW_USER":
             return {
                 ...state,
@@ -40,7 +43,6 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
                     },
                 },
             };
-
         default:
             return state;
     }

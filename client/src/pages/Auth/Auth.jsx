@@ -20,7 +20,7 @@ const loginValidation = Yup.object().shape({
         .min(8, "Minimum 6 characters required")
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)/, "Password must contain at least one letter", "and one number")
         .required("Password cannot be empty"),
-})
+});
 const validationSchema = Yup.object().shape({
     fullname: Yup.string()
         .trim()
@@ -37,6 +37,10 @@ const validationSchema = Yup.object().shape({
         .min(8, "Minimum 6 characters required")
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)/, "Password must contain at least one letter", "and one number")
         .required("Password cannot be empty"),
+    email: Yup.string()
+        .trim()
+        .email("Invalid email fromat")
+        .required("email cannot be empty"),
     phone: Yup.string()
         .trim()
         .matches(/^[0-9]{10}$/, "Phone must be a 10-digit number")
@@ -99,7 +103,7 @@ function LogIn({ toggleForm }) {
             <form className="infoForm authForm" onSubmit={formik.handleSubmit}>
                 <h3>Log In</h3>
 
-                <div style={{display:"flow"}}>
+                <div style={{ display: "flow" }}>
                     <input
                         {...formik.getFieldProps("username")}
                         type="text"
@@ -112,7 +116,7 @@ function LogIn({ toggleForm }) {
                     )}
                 </div>
 
-                <div style={{display:"flow"}}>
+                <div style={{ display: "flow" }}>
                     <input
                         {...formik.getFieldProps("password")}
                         type="password"
@@ -133,7 +137,7 @@ function LogIn({ toggleForm }) {
                         </button>
                     </span>
                     <button type="submit" className="button infoButton" disabled={loading}>
-                        {loading? "login...": "Login"}
+                        {loading ? "login..." : "Login"}
                     </button>
                 </div>
             </form>
@@ -181,15 +185,15 @@ function SignUp({ toggleForm }) {
             const res = await sendOtpSignup({ phone: phoneInputRef.current.value });
             console.log(res.data);
             if (res.status == 200) {
-                toast.success(<b>{res.data.message}</b>)
+                toast.success(<b>{res.data.message}</b>);
                 setOtpSent(true);
                 setSecondsLeft(10);
                 setResendTimer(true);
-            }else{
-                toast.error(<b>{res.data.error}</b>)
+            } else {
+                toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
-            toast.error(<b>Something went wrong!</b>)
+            toast.error(<b>Something went wrong!</b>);
             console.log(error);
         }
     };
@@ -199,15 +203,15 @@ function SignUp({ toggleForm }) {
         //otp verification logic
         try {
             const res = await verifyOtp(phoneInputRef.current.value, otpInputRef.current.value);
-            if(res.status == 200){
+            if (res.status == 200) {
                 setIsOtpVerified(true);
-                toast.success(<b>{res.data.message}</b>)
-            }else{
-                toast.error(<b>{res.data.error}</b>)
+                toast.success(<b>{res.data.message}</b>);
+            } else {
+                toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
-            toast.error(<b>Something went wrong!</b>)
-            console.log(error)
+            toast.error(<b>Something went wrong!</b>);
+            console.log(error);
         }
     };
 
@@ -216,6 +220,7 @@ function SignUp({ toggleForm }) {
             fullname: "",
             username: "",
             password: "",
+            email: "",
             phone: "",
             verifyOtp: "",
         },
@@ -224,7 +229,7 @@ function SignUp({ toggleForm }) {
         validateOnChange: true,
         onSubmit: async (values) => {
             values = await Object.assign(values);
-            if(!isOtpVerified) return toast.error(<b>Verify Otp first</b>)
+            if (!isOtpVerified) return toast.error(<b>Verify Otp first</b>);
             try {
                 const result = await dispatch(signUp(values));
                 if (result.success) {
@@ -279,6 +284,18 @@ function SignUp({ toggleForm }) {
                     />
                     {formik.touched.password && formik.errors.password && (
                         <div style={{ color: "red" }}>{formik.errors.password}</div>
+                    )}
+                </div>
+                <div style={{ display: "flow" }}>
+                    <input
+                        {...formik.getFieldProps("email")}
+                        type="email"
+                        className="infoInput"
+                        placeholder="email"
+                        name="email"
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                        <div style={{ color: "red" }}>{formik.errors.email}</div>
                     )}
                 </div>
                 <div style={{ display: "flow" }}>

@@ -8,7 +8,7 @@ import userRouter from "./routes/userRouter.js";
 import postRouter from "./routes/postRouter.js";
 import uploadRouter from "./routes/uploadRouter.js";
 import reportRouter from "./routes/reportRouter.js";
-// import adminRouter from "./routes/adminRouter.js";
+import adminRouter from "./routes/adminRouter.js";
 import dotenv    from "dotenv";
 dotenv.config();
 const app = express();
@@ -36,7 +36,7 @@ app.use('/upload', uploadRouter);
 app.use('/report', reportRouter);
 // app.use('/message', messageRouter);
 // app.use('/chat', chatRouter);
-// app.use('/admin', adminRouter);
+app.use('/admin', adminRouter);
 
 /** start server when only we have a valid connection*/
 connect().then(() => {

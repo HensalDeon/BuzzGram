@@ -7,7 +7,7 @@ import jwt from "jsonwebtoken";
 // Registering a new User
 export const registerUser = async (req, res) => {
     try {
-        const { fullname, username, password, phone } = req.body;
+        const { fullname, username, email, password, phone } = req.body;
         const existingUsername = await UserModel.findOne({ username }).exec();
         if (existingUsername) {
             return res.status(400).send({ error: "Please use a unique username" });
@@ -18,6 +18,7 @@ export const registerUser = async (req, res) => {
         const newUser = new UserModel({
             fullname,
             username,
+            email,
             password: hashedPass,
             phone,
         });
@@ -30,7 +31,6 @@ export const registerUser = async (req, res) => {
 };
 
 // login User
-
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
@@ -52,6 +52,32 @@ export const loginUser = async (req, res) => {
     } catch (error) {
         console.error("Error during login:", error);
         return res.status(500).send({ error: "Internal Server Error" });
+    }
+};
+
+// login admin
+
+export const adminLogin = async (req, res) => {
+    try {
+        const { adminName, password } = req.body;
+
+        if (adminName === process.env.ADMIN_NAME && password === process.env.ADMIN_PASSWORD) {
+            // Create a JWT token
+            const token = jwt.sign(
+                {
+                    adminId: process.env.ADMIN_NAME,
+                },
+                process.env.JWT_SECRET,
+                { expiresIn: "1h" }
+            );
+            const admin = { name: adminName };
+            return res.status(200).send({ admin, token });
+        } else {
+            return res.status(401).json({ error: "Invalid credentials" });
+        }
+    } catch (error) {
+        console.error("Error during login:", error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 };
 

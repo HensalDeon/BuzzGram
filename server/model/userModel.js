@@ -14,6 +14,12 @@ const userSchema = new mongoose.Schema(
             unique: true,
             trim: true,
         },
+        email: {
+            type: String,
+            required: true,
+            unique: true,
+            trim: true,
+        },
         password: {
             type: String,
             required: true,
@@ -37,6 +43,10 @@ const userSchema = new mongoose.Schema(
             default: "",
         },
         isadmin: {
+            type: Boolean,
+            default: false,
+        },
+        isblocked: {
             type: Boolean,
             default: false,
         },
