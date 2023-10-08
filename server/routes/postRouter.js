@@ -7,6 +7,7 @@ import Auth from "../middleware/auth.js";
 
 router.route("/").post(Auth, postController.createPost);
 router.route("/like-comment").post(Auth, commentController.likeComment);
+router.route("/:id/update-comment").put(Auth, commentController.updateComment);
 
 router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 router.route("/:id/comments").get(commentController.getComments);

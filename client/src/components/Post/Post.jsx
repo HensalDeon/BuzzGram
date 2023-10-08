@@ -236,7 +236,7 @@ const Post = ({ data }) => {
                 </Modal.Body>
             </Modal>
 
-            <CommentList showCmt={showCmt} handleCmtClose={handleCmtClose} id={data._id} />
+            <CommentList showCmt={showCmt} handleCmtClose={handleCmtClose} data={data} />
 
             <div className="header">
                 <div className="contents">
