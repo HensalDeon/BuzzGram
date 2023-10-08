@@ -7,7 +7,7 @@ const UserInfo = () => {
                 <img src= {avatar} alt="" />
             </div>
             <div className="user-info__name">
-                <span>admin</span>
+                <span>Hensal Deon</span>
             </div>
         </div>
     )

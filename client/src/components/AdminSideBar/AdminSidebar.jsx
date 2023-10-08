@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../img/logo-side.png";
 import AdminSidebarNav from "../../configs/AdminSidebarNav";
 import "./AdminSidebar.scss";
+import { adminLogout } from "../../redux/actions/AuthActions";
+import { useDispatch } from "react-redux";
 
 const AdminSidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0);
     const location = useLocation();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const curPath = window.location.pathname.split("/admin/")[1];
@@ -21,6 +25,11 @@ const AdminSidebar = () => {
             document.body.classList.remove("sidebar-open");
             document.querySelector(".main__content").style = "";
         }, 500);
+    };
+
+    const handleLogout = () => {
+        dispatch(adminLogout());
+        navigate("/admin/auth");
     };
 
     return (
@@ -47,7 +56,9 @@ const AdminSidebar = () => {
                     <div className="adminicon">
                         <i className="bx bx-log-out"></i>
                     </div>
-                    <div className="adminsidebar__menu__item__txt">Logout</div>
+                    <div className="adminsidebar__menu__item__txt" onClick={handleLogout}>
+                        Logout
+                    </div>
                 </div>
             </div>
         </div>

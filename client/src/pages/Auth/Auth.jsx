@@ -87,10 +87,14 @@ function LogIn({ toggleForm }) {
             try {
                 const result = await dispatch(logIn(values));
                 if (result.success) {
-                    toast.success(<b>Login Successfull..!</b>);
-                } else {
-                    toast.error(<b>Login failed. Please check your credentials.</b>);
+                    return toast.success(<b>Login Successfull..!</b>);
                 }
+                if (result.error === "User is blocked.") {
+                    return toast.error(<b>User is blocked! Contact admin for assistance!</b>);
+                } else {
+                    return toast.error(<b>Login failed. Please check your credentials.</b>);
+                }
+
             } catch (error) {
                 toast.error("Somethig went wrong!");
                 console.error("An error occurred:", error);

@@ -7,14 +7,17 @@ import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
 
-import Comment from "../../img/comment.png";
+// import Comment from "../../img/comment.png";
 import Share from "../../img/share.png";
 import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
+import Comment from "../../img/icon-comment.svg";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import { deletePost, getTimelinePosts, likePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
+import { createComment } from "../../redux/actions/CommentActions";
+import CommentList from "./CommentList";
 
 const Post = ({ data }) => {
     // console.log(data, "//////");
@@ -24,13 +27,44 @@ const Post = ({ data }) => {
     const [show, setShow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showReport, setShowReport] = useState(false);
+    const [showCmt, setshowCmt] = useState(false);
     const [liked, setLiked] = useState(data.likes.includes(user._id));
     const [likes, setLikes] = useState(data.likes.length);
     const [editData, setEditData] = useState({
         description: data.description,
     });
     const [reportData, setReportData] = useState("");
+    const [text, setText] = useState("");
 
+    const handleComment = async () => {
+        if (!text.trim()) return toast.error(<b>Comment cannot be empty!</b>);
+        const newComment = {
+            text,
+            user: user._id,
+            postId: data._id,
+            postUserId: data.userDetails._id,
+        };
+
+        try {
+            let result = await dispatch(createComment(newComment));
+            if (result.success) {
+                toast.success(<b>Comment added...!</b>);
+                setText("");
+            } else {
+                toast.error(<b>Failed to add comment...!</b>);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleViewComments = () => {
+        setshowCmt(true);
+    };
+
+    const handleCmtClose = () => {
+        setshowCmt(false);
+    };
     const handleClose = () => setShow(false);
 
     const handleReportClose = () => {
@@ -76,8 +110,8 @@ const Post = ({ data }) => {
         }
     };
     const handleReport = async () => {
+        if (!reportData.trim()) return toast.error(<b>cannot send empty report!</b>);
         const loadingToastId = toast.loading("Reporting...");
-        console.log(user._id, "post", data._id, reportData);
         try {
             const reportPromise = await dispatch(createReport(user._id, "post", data._id, reportData));
             toast.dismiss(loadingToastId);
@@ -94,6 +128,11 @@ const Post = ({ data }) => {
     };
 
     const handleEdit = async () => {
+        const { description } = editData;
+        if (!description.trim()) {
+            toast.error(<b>Description cannot be empty!</b>);
+            return;
+        }
         const loadingToastId = toast.loading("Updating...");
         try {
             const updatePromise = await dispatch(updatePost(data._id, user._id, editData));
@@ -128,7 +167,6 @@ const Post = ({ data }) => {
     const handleSave = () => {
         console.log("save");
     };
-
     return (
         //modal for post options
         <div className="Post">
@@ -179,6 +217,7 @@ const Post = ({ data }) => {
                     </div>
                 </Modal.Body>
             </Modal>
+
             {/* modal for post report */}
             <Modal show={showReport} onHide={handleReportClose}>
                 <Modal.Body style={{ width: "17rem" }}>
@@ -197,6 +236,8 @@ const Post = ({ data }) => {
                 </Modal.Body>
             </Modal>
 
+            <CommentList showCmt={showCmt} handleCmtClose={handleCmtClose} id={data._id} />
+
             <div className="header">
                 <div className="contents">
                     <button>
@@ -211,18 +252,24 @@ const Post = ({ data }) => {
             <img src={data.image} alt="" />
             <div className="postReact">
                 <img src={liked ? Heart : NotLike} alt="" style={{ cursor: "pointer" }} onClick={handleLike} />
-                <img src={Comment} alt="" />
                 <img src={Share} alt="" />
             </div>
-
             <span style={{ color: "var(--gray)", fontSize: "12px" }}>{likes} likes</span>
-
             <div className="detail">
                 <span>
                     <b>{data.userDetails?.username || "noNameAvailable"}</b>
                 </span>
                 <span> {data.description}</span>
             </div>
+            <div className="comment">
+                <input type="text" placeholder="Add a comment..." value={text} onChange={(e) => setText(e.target.value)} />
+                <img src={Comment} onClick={handleComment}></img>
+            </div>
+            {data.comments?.length !== 0 && (
+                <span onClick={handleViewComments} className="lg-text viewCmt">
+                    View all comments
+                </span>
+            )}
         </div>
     );
 };
@@ -232,6 +279,7 @@ Post.propTypes = {
         _id: PropTypes.string.isRequired,
         image: PropTypes.string.isRequired,
         likes: PropTypes.array.isRequired,
+        comments: PropTypes.array.isRequired,
         userDetails: PropTypes.shape({
             username: PropTypes.string,
             profileimage: PropTypes.string,

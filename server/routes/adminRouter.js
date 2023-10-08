@@ -8,6 +8,7 @@ import * as adminController from "../controllers/adminController.js";
 
 // /** GET methods */
 router.route("/userlist").get(Auth, adminController.getUserList);
+router.route("/action").put(adminController.blockUnblockUser);
 
 // /** POST methods */
 // router.route('/search').post(controller.searchUser);

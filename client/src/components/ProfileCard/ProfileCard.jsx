@@ -12,7 +12,6 @@ const ProfileCard = ({ location }) => {
     const [expanded, setExpanded] = useState(false);
 
     const postCount = posts.filter((post) => post.userDetails?._id === user._id).length;
-    console.log(postCount)
 
     const toggleExpand = () => {
         setExpanded(!expanded);

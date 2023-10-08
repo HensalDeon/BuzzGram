@@ -6,6 +6,8 @@ const adminReducer = (state = { userDetails: null, loading: false, error: null }
             return { ...state, userDetails: action.data, loading: false, error: null };
         case "FETCH_USERS_FAIL":
             return { ...state, loading: false, error: action.error };
+        case "RESET_STATE":
+            return { ...state, userDetails: null, loading: false, error: null };
         case "BLOCK_USER":
             return {
                 ...state,

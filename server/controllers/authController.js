@@ -39,12 +39,18 @@ export const loginUser = async (req, res) => {
         if (!user) {
             return res.status(400).send({ error: "Username not Found" });
         }
+
+        if (user.isblocked) {
+            return res.status(400).send({ error: "User is blocked." });
+        }
+
         const passwordCheck = await bcrypt.compare(password, user.password);
         if (!passwordCheck) {
             return res.status(400).send({ error: "Password does not Match" });
         }
         const token = createAccessToken(user);
-        delete user.password;
+        user.password = "";
+        console.log(user);
         return res.status(200).send({
             user,
             token,
@@ -63,13 +69,14 @@ export const adminLogin = async (req, res) => {
 
         if (adminName === process.env.ADMIN_NAME && password === process.env.ADMIN_PASSWORD) {
             // Create a JWT token
-            const token = jwt.sign(
-                {
-                    adminId: process.env.ADMIN_NAME,
-                },
-                process.env.JWT_SECRET,
-                { expiresIn: "1h" }
-            );
+            // const token = jwt.sign(
+            //     {
+            //         adminId: process.env.ADMIN_NAME,
+            //     },
+            //     process.env.JWT_SECRET,
+            //     { expiresIn: "3h" }
+            // );
+            const token = createAccessToken(adminName);
             const admin = { name: adminName };
             return res.status(200).send({ admin, token });
         } else {
@@ -117,4 +124,7 @@ export const otpVerification = async (req, res) => {
 
 export const createAccessToken = (user) => {
     return jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+};
+export const createAdminAccessToken = (admin) => {
+    return jwt.sign({ name: admin }, process.env.JWT_SECRET, { expiresIn: "3h" });
 };

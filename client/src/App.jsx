@@ -13,16 +13,17 @@ import UserList from "./components/UserList/UserList";
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);
+    const Authorized = user && user.user.isblocked !== true;
     return (
         <div className="App">
             <div className="blur" style={{ top: "-18%", right: "0" }}></div>
             <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
             <Routes>
                 {/* User routes */}
-                <Route path="/" element={user ? <Navigate to="home" /> : <Navigate to="auth" />} />
-                <Route path="/home" element={user ? <Home location="home" /> : <Navigate to="../auth" />} />
-                <Route path="/auth" element={user ? <Navigate to="../home" /> : <Auth />} />
-                <Route path="/profile/:id" element={user ? <Home location="profile" /> : <Navigate to="../auth" />} />
+                <Route path="/" element={Authorized ? <Navigate to="home" /> : <Navigate to="auth" />} />
+                <Route path="/home" element={Authorized ? <Home location="home" /> : <Navigate to="../auth" />} />
+                <Route path="/auth" element={Authorized ? <Navigate to="../home" /> : <Auth />} />
+                <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="../auth" />} />
                 <Route path="*" element={<p>just nothing!!</p>} />
 
                 {/* Admin routes */}

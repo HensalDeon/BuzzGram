@@ -59,6 +59,19 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
                     return post;
                 }),
             };
+        case "COMMENT_SUCCESS":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if(post._id === action.postId) {
+                        return {
+                            ...post,
+                            comments:[...post.comments, action.Id]
+                        }
+                    } 
+                    return post
+                })
+            }
         case "DELETE_POST_SUCCESS":
             return {
                 ...state,

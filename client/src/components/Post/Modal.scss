@@ -28,7 +28,7 @@ $gradient-color-2: #ff3399;
 }
 
 .modal-content {
-    border-radius: 0.8rem !important;
+    border-radius: 0.9rem !important;
     width: auto !important;
 }
 
@@ -65,5 +65,18 @@ $gradient-color-2: #ff3399;
     > textarea {
         border: none !important;
         outline: none !important;
+    }
+}
+
+.cover{
+    display: flex;
+    justify-content: space-between;
+    padding: 1 1rem ;
+
+    .modalButton {
+        width: 100%;
+        max-width: 3rem;
+        height: 2rem;
+        align-self: flex-end;
     }
 }

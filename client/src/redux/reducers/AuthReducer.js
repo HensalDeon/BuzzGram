@@ -22,8 +22,10 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
         case "UPDATING_FAIL":
             return { ...state, updateLoading: true, error: action.error };
         case "LOG_OUT":
-            localStorage.clear();
+            // localStorage.clear();
             return { ...state, authData: null, loading: false, error: null, updateLoading: false };
+        case "ADMIN_LOG_OUT":
+            return { ...state, adminAuthData: null, adminLoading: false, adminError: null };
         case "FOLLOW_USER":
             return {
                 ...state,
@@ -40,6 +42,29 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
                     user: {
                         ...state.authData.user,
                         following: [...state.authData.user.following.filter((personId) => personId !== action.data)],
+                    },
+                },
+            };
+        case "BLOCK_USER":
+            return {
+                ...state,
+                authData: {
+                    ...state.authData,
+                    user: {
+                        ...state.authData.user,
+                        isblocked: true,
+                    },
+                },
+            };
+
+        case "UNBLOCK_USER":
+            return {
+                ...state,
+                authData: {
+                    ...state.authData,
+                    user: {
+                        ...state.authData.user,
+                        isblocked: false,
                     },
                 },
             };

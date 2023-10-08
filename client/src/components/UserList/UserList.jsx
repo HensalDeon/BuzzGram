@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../redux/actions/AdminActions";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import List from "./List";
+import { Toaster } from "react-hot-toast";
+
 function UserList() {
     const dispatch = useDispatch();
     const { userDetails, loading } = useSelector((state) => state.adminReducer);
@@ -26,6 +28,7 @@ function UserList() {
 
     return (
         <div className="table-container">
+            <Toaster position="top-center" reverseOrder={false}></Toaster>
             <table className="table">
                 <thead className="table-head">
                     <tr>

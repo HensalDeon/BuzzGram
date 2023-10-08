@@ -29,6 +29,31 @@
         width: 2rem;
         height: 2rem;
     }
+
+    .comment {
+        display: flex;
+        padding-right: 2%;
+        input {
+            border: none;
+            color: inherit;
+            background: transparent;
+            width: 100%;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        img {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+    }
+
+    .viewCmt {
+        cursor: pointer;
+    }
 }
 
 .Post > img {
@@ -44,10 +69,44 @@
     gap: 1.5rem;
 
     img {
-        // width: 24px; 
-        // height: 24px; 
+        // width: 24px;
+        // height: 24px;
         object-fit: cover;
         margin-right: 8px;
         cursor: pointer;
+    }
+}
+
+.cmt-containers {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+
+    .user-details {
+        display: flex;
+        flex-direction: column;
+
+        b {
+            align-self: self-start;
+        }
+        .text {
+            width: 9rem;
+            word-wrap: break-word;
+            align-self: self-start;
+            text-align: left;
+            font-size: 15px;
+            color: aliceblue;
+            opacity: 0.4;
+        }
+    }
+
+    .like-count {
+        align-self: center;
+        padding-left: 2rem;
+
+        img{
+            max-width: 1rem;
+            cursor: pointer;
+        }
     }
 }
