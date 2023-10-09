@@ -19,7 +19,9 @@ export const likePost = (postId, userId) => async (dispatch) => {
             dispatch({ type: actionType, postId, userId });
         }
     } catch (error) {
-        console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch({ type: "LOG_OUT" });
+        }
     }
 };
 

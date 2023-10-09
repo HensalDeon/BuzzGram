@@ -4,6 +4,11 @@
     background-color: var(--cardColor);
     padding: 1rem;
     border-radius: 1rem;
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
 
     > img {
         border-radius: 50%;
@@ -81,15 +86,15 @@
         position: relative;
         z-index: 1;
         color: aliceblue;
-      }
-      
-      .crop-button {
+    }
+
+    .crop-button {
         @extend %button-common;
         float: left;
-      }
-      
-      .close-button {
+    }
+
+    .close-button {
         @extend %button-common;
         float: right;
-      }
+    }
 }

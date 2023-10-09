@@ -13,6 +13,12 @@ $gray: var(--gray);
     width: 100%;
     height: 100vh;
 
+    transition: transform 0.3s ease;
+
+    &:hover {
+        transform: translateY(-3px);
+    }
+
     .ProfileImages {
         position: relative;
         display: flex;
@@ -31,10 +37,10 @@ $gray: var(--gray);
             bottom: -3rem;
             box-shadow: $profileShadow;
 
-            @media (min-width :931px){
+            @media (min-width: 931px) {
                 width: 8rem;
             }
-            @media (min-width :550px){
+            @media (min-width: 550px) {
                 width: 7rem;
             }
         }
@@ -59,11 +65,11 @@ $gray: var(--gray);
             cursor: pointer;
         }
         .show-full-text {
-          white-space: normal;
-          overflow: auto;
-          text-overflow: unset;
-          max-height: none;
-      }
+            white-space: normal;
+            overflow: auto;
+            text-overflow: unset;
+            max-height: none;
+        }
     }
 
     /* Follow Status */

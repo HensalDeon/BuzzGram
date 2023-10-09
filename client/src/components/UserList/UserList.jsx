@@ -1,52 +1,54 @@
 import "./UserList.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../redux/actions/AdminActions";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import List from "./List";
 import { Toaster } from "react-hot-toast";
+import LogoSearch from "../LogoSearch/LogoSearch";
 
 function UserList() {
     const dispatch = useDispatch();
     const { userDetails, loading } = useSelector((state) => state.adminReducer);
-
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
-        // if (!userDetails) {
-        //     dispatch(getUserDetails());
-        // }
         dispatch(getUserDetails());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const filteredUsers = userDetails.filter((user) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const override = {
         display: "block",
         margin: "0 auto",
     };
 
-
     return (
-        <div className="table-container">
-            <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <table className="table">
-                <thead className="table-head">
-                    <tr>
-                        <th style={{ display: "flex", justifyContent: "center" }}>User</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Joined on</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th style={{ display: "flex", justifyContent: "center" }}>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {userDetails && !loading && userDetails.map((user) => <List user={user} key={user._id} />)}
-                </tbody>
-            </table>
-            <PacmanLoader loading={loading} cssOverride={override} color="orange" speedMultiplier={1} />
-        </div>
+        <>
+            <LogoSearch onSearch={(query) => setSearchQuery(query)} location="admin" />
+            <div className="table-container">
+                <Toaster position="top-center" reverseOrder={false}></Toaster>
+                <table className="table">
+                    <thead className="table-head">
+                        <tr>
+                            <th style={{ display: "flex", justifyContent: "center" }}>User</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Joined on</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th style={{ display: "flex", justifyContent: "center" }}>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {userDetails && !loading && filteredUsers.map((user) => <List user={user} key={user._id} />)}
+                        {/* {userDetails && !loading && userDetails.map((user) => <List user={user} key={user._id} />)} */}
+                    </tbody>
+                </table>
+                <PacmanLoader loading={loading} cssOverride={override} color="orange" speedMultiplier={1} />
+            </div>
+        </>
     );
 }
 

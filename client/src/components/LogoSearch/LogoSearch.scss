@@ -25,7 +25,7 @@ $iconGradient: linear-gradient(106.23deg, #f99827, #f95f35 100%);
     }
     .Search {
         display: flex;
-        background-color: $inputColor;
+        background-color: $inputColor !important;
         border-radius: 10px;
         padding: 5px;
 

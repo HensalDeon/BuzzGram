@@ -46,11 +46,13 @@ body.open .sidebar {
     display: grid;
     place-items: center;
     background: url(../../img/icon-burger.svg) no-repeat center center;
+    background-size: 50%;
     transition: 0.3s;
 }
 
 body.open .sidebar-burger {
     background: url(../../img/icon-close.svg) no-repeat center center;
+    background-size: 50%;
 }
 
 .sidebar-logo {
@@ -68,24 +70,27 @@ body.open .sidebar-logo {
     padding-top: 10px;
     flex: 1 1 auto;
 
-    .material-symbols-outlined{
+    .material-symbols-outlined {
         text-decoration: none;
         color: inherit;
-    }
+        transition: transform 0.3s ease;
 
+        &:hover {
+            transform: translateY(-5px) scale(1.1);
+        }
+    }
 }
 
 .sidebar button {
     display: flex;
     gap: 25px;
     align-items: center;
-    height: 50px;
-    width: 72px;
+    height: 60px;
     font-size: 16px;
     font-weight: 200;
     letter-spacing: 2px;
     line-height: 1;
-    padding: 0 25px;
+    padding: 0 20px;
 }
 
 .sidebar button > img {

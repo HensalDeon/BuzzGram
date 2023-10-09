@@ -123,8 +123,8 @@ export const otpVerification = async (req, res) => {
 };
 
 export const createAccessToken = (user) => {
-    return jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    return jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "5h" });
 };
 export const createAdminAccessToken = (admin) => {
-    return jwt.sign({ name: admin }, process.env.JWT_SECRET, { expiresIn: "3h" });
+    return jwt.sign({ name: admin }, process.env.JWT_SECRET, { expiresIn: "5h" });
 };

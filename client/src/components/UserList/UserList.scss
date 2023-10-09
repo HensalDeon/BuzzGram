@@ -1,6 +1,12 @@
 .table-container {
     max-width: 100%;
     overflow-x: auto;
+    transition: transform 0.3s ease;
+    padding-top: 1.6rem;
+
+    &:hover {
+        transform: translateY(-2.5px);
+    }
 }
 
 .table {
