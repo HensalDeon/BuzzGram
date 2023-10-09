@@ -68,7 +68,7 @@ function LogIn() {
                     <input
                         {...formik.getFieldProps("adminName")}
                         type="text"
-                        placeholder="admin name"
+                        placeholder="Admin Name"
                         className="infoInput"
                         name="adminName"
                     />

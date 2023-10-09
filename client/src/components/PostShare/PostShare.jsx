@@ -134,58 +134,60 @@ const PostShare = () => {
     };
 
     return (
-        <div className="PostShare">
+        <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <img src={data.profileimage || defProfile} alt="" />
-            <div>
-                <input type="text" name="description" placeholder="What's happening" ref={description} />
-                <div className="postOptions">
-                    <div className="option" style={{ color: "var(--photo)" }} onClick={() => imageRef.current.click()}>
-                        <UilScenery />
-                        Photo
-                    </div>
-                    <button className="button ps-button" onClick={handleUpload} disabled={uploading}>
-                        {uploading ? "Sharing..." : "Share"}
-                    </button>
-                    <div style={{ display: "none" }}>
-                        <input type="file" name="myImage" ref={imageRef} onChange={onImageChange} />
-                    </div>
-                </div>
-                {image && (
-                    <div>
-                        <button className="crop-button" onClick={cropImage}>
-                            <span className="material-symbols-outlined">screenshot_region</span>
-                        </button>
-                        <button
-                            className="close-button"
-                            onClick={() => {
-                                setImage(null), setCroppedImage(null);
-                            }}
-                        >
-                            <span className="material-symbols-outlined">close </span>
-                        </button>
-                        <Cropper
-                            ref={cropperRef}
-                            src={image.url}
-                            aspectRatio={2}
-                            background={false}
-                            responsive={true}
-                            // autoCropArea={1}
-                        />
-                    </div>
-                )}
-                {croppedImage && (
-                    <>
-                        <span>Preview</span>
-                        <div className="previewImage bg-dark">
-                            <UilTimes onClick={() => setCroppedImage(null)} />
-                            <img src={croppedImage} alt="Cropped" />
-                            {/* <UilEdit  /> */}
+            <div className="PostShare">
+                <img src={data.profileimage || defProfile} alt="" />
+                <div>
+                    <input type="text" name="description" placeholder="What's happening" ref={description} />
+                    <div className="postOptions">
+                        <div className="option" style={{ color: "var(--photo)" }} onClick={() => imageRef.current.click()}>
+                            <UilScenery />
+                            Photo
                         </div>
-                    </>
-                )}
+                        <button className="button ps-button" onClick={handleUpload} disabled={uploading}>
+                            {uploading ? "Sharing..." : "Share"}
+                        </button>
+                        <div style={{ display: "none" }}>
+                            <input type="file" name="myImage" ref={imageRef} onChange={onImageChange} accept="image/*" />
+                        </div>
+                    </div>
+                    {image && (
+                        <div>
+                            <button className="crop-button" onClick={cropImage}>
+                                <span className="material-symbols-outlined">screenshot_region</span>
+                            </button>
+                            <button
+                                className="close-button"
+                                onClick={() => {
+                                    setImage(null), setCroppedImage(null);
+                                }}
+                            >
+                                <span className="material-symbols-outlined">close </span>
+                            </button>
+                            <Cropper
+                                ref={cropperRef}
+                                src={image.url}
+                                aspectRatio={2}
+                                background={false}
+                                responsive={true}
+                                // autoCropArea={1}
+                            />
+                        </div>
+                    )}
+                    {croppedImage && (
+                        <>
+                            <span>Preview</span>
+                            <div className="previewImage bg-dark">
+                                <UilTimes onClick={() => setCroppedImage(null)} />
+                                <img src={croppedImage} alt="Cropped" />
+                                {/* <UilEdit  /> */}
+                            </div>
+                        </>
+                    )}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

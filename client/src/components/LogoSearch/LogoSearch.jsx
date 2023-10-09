@@ -33,9 +33,9 @@ const LogoSearch = ({ onSearch, location }) => {
     );
 };
 
-LogoSearch.propTypes = {
-    onSearch: PropTypes.func.isRequired,
-    location: PropTypes.string.isRequired,
-};
+// LogoSearch.propTypes = {
+//     onSearch: PropTypes.func.isRequired,
+//     location: PropTypes.string.isRequired,
+// };
 
 export default LogoSearch;

@@ -94,7 +94,6 @@ function LogIn({ toggleForm }) {
                 } else {
                     return toast.error(<b>Login failed. Please check your credentials.</b>);
                 }
-
             } catch (error) {
                 toast.error("Somethig went wrong!");
                 console.error("An error occurred:", error);
@@ -162,7 +161,7 @@ function SignUp({ toggleForm }) {
     const [otpSent, setOtpSent] = useState(false);
     const [isOtpVerified, setIsOtpVerified] = useState(false);
     const [resendTimer, setResendTimer] = useState(false);
-    const [secondsLeft, setSecondsLeft] = useState(10);
+    const [secondsLeft, setSecondsLeft] = useState(30);
 
     useEffect(() => {
         let timer;
@@ -191,13 +190,13 @@ function SignUp({ toggleForm }) {
             if (res.status == 200) {
                 toast.success(<b>{res.data.message}</b>);
                 setOtpSent(true);
-                setSecondsLeft(10);
+                setSecondsLeft(30);
                 setResendTimer(true);
             } else {
                 toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
-            toast.error(<b>Something went wrong!</b>);
+            toast.error(<b>{error.response?.data.error ? error.response?.data.error : "Something went wrong!"}</b>);
             console.log(error);
         }
     };
@@ -214,7 +213,7 @@ function SignUp({ toggleForm }) {
                 toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
-            toast.error(<b>Something went wrong!</b>);
+            toast.error(<b>{error.response?.data.error ? error.response?.data.error : "Something went wrong!"}</b>);
             console.log(error);
         }
     };

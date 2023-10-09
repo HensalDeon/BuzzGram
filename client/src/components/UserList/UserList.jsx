@@ -17,7 +17,7 @@ function UserList() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const filteredUsers = userDetails.filter((user) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filteredUsers = userDetails?.filter((user) => user.username.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const override = {
         display: "block",
@@ -26,9 +26,9 @@ function UserList() {
 
     return (
         <>
+            <Toaster position="top-center" reverseOrder={false}></Toaster>
             <LogoSearch onSearch={(query) => setSearchQuery(query)} location="admin" />
             <div className="table-container">
-                <Toaster position="top-center" reverseOrder={false}></Toaster>
                 <table className="table">
                     <thead className="table-head">
                         <tr>

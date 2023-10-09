@@ -68,14 +68,6 @@ export const adminLogin = async (req, res) => {
         const { adminName, password } = req.body;
 
         if (adminName === process.env.ADMIN_NAME && password === process.env.ADMIN_PASSWORD) {
-            // Create a JWT token
-            // const token = jwt.sign(
-            //     {
-            //         adminId: process.env.ADMIN_NAME,
-            //     },
-            //     process.env.JWT_SECRET,
-            //     { expiresIn: "3h" }
-            // );
             const token = createAccessToken(adminName);
             const admin = { name: adminName };
             return res.status(200).send({ admin, token });
