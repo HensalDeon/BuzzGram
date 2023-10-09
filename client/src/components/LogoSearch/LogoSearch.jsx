@@ -6,10 +6,6 @@ import { useState } from "react";
 const LogoSearch = ({ onSearch, location }) => {
     const [query, setQuery] = useState("");
 
-    const handleSearch = () => {
-        onSearch(query);
-    };
-
     const handleInputChange = (e) => {
         const inputValue = e.target.value;
         setQuery(inputValue); 
@@ -21,7 +17,7 @@ const LogoSearch = ({ onSearch, location }) => {
             {location == "admin" ? (
                 <div className="Search">
                     <input type="text" placeholder="#Explore" value={query} onChange={handleInputChange} />
-                    <div className="s-icon" onClick={handleSearch}>
+                    <div className="s-icon" >
                         <UilSearch />
                     </div>
                 </div>
