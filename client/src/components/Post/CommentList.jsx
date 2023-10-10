@@ -63,6 +63,12 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         });
     };
 
+    const handleCmtDelete = () =>{
+        // const loadingToastId = toast.loading("Deleting...");
+        // deleteComment()
+        console.log(data._id,'///',comment)
+    }
+
     const override = {
         position: "absolute",
         top: "49%",
@@ -118,7 +124,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                                 Edit
                             </span>
                             <hr />
-                            <span className="linear-gradient-text">Delete</span>
+                            <span onClick={handleCmtDelete} className="linear-gradient-text">Delete</span>
                         </>
                     )}
                 </Modal.Body>

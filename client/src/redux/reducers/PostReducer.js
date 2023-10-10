@@ -63,15 +63,28 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
             return {
                 ...state,
                 posts: state.posts.map((post) => {
-                    if(post._id === action.postId) {
+                    if (post._id === action.postId) {
                         return {
                             ...post,
-                            comments:[...post.comments, action.Id]
-                        }
-                    } 
-                    return post
-                })
-            }
+                            comments: [...post.comments, action.Id],
+                        };
+                    }
+                    return post;
+                }),
+            };
+        case "COMMENT_DELETED":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post.comments.includes(action.commentId)) {
+                        return {
+                            ...post,
+                            comments: post.comments.filter((comment) => comment !== action.commentId),
+                        };
+                    }
+                    return post;
+                }),
+            };
         case "DELETE_POST_SUCCESS":
             return {
                 ...state,

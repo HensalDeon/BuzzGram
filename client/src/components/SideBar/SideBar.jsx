@@ -5,6 +5,7 @@ import CHAT from "../../img/icon-flatChat.svg";
 import SAVED from "../../img/icon-flatSaved.svg";
 import PROFILE from "../../img/icon-flatProfile.svg";
 import LOGOUT from "../../img/icon-flatLogout.svg";
+import EXPLORE from "../../img/icon-flatExplore.svg";
 import "./SideBar.scss";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -39,21 +40,21 @@ export default function SideBar() {
                         <Link className="material-symbols-outlined" to={"../home"}>
                             <img style={{ width: "2rem" }} src={HOME} alt="home"></img>
                         </Link>
-                        {/* <Link className="material-symbols-outlined" to={"../home"}>
-                            {" "}
-                            home{" "}
-                        </Link> */}
                         <span>Home</span>
                     </button>
                     <button type="button">
-                        {/* <i className="material-symbols-outlined"> chat </i> */}
                         <Link className="material-symbols-outlined">
                             <img style={{ width: "2rem" }} src={CHAT} alt="chat" />
                         </Link>
                         <span style={{ animationDelay: "0.1s" }}>Messages</span>
                     </button>
                     <button type="button">
-                        {/* <i className="material-symbols-outlined"> bookmark </i> */}
+                        <Link className="material-symbols-outlined">
+                            <img style={{ width: "2rem" }} src={EXPLORE} alt="explore" />
+                        </Link>
+                        <span style={{ animationDelay: "0.1s" }}>Explore</span>
+                    </button>
+                    <button type="button">
                         <Link className="material-symbols-outlined">
                             <img style={{ width: "2rem" }} src={SAVED} alt="saved" />
                         </Link>
@@ -63,16 +64,11 @@ export default function SideBar() {
                         <Link className="material-symbols-outlined" to={`/profile/${user._id}`}>
                             <img style={{ width: "2rem" }} src={PROFILE} alt="profile" />
                         </Link>
-                        {/* <Link className="material-symbols-outlined" to={`/profile/${user._id}`}>
-                            {" "}
-                            person{" "}
-                        </Link> */}
                         <span style={{ animationDelay: "0.5s" }}>Profile</span>
                     </button>
                 </nav>
                 <footer className="sidebar-footer">
                     <button type="button" onClick={handleLogOut}>
-                        {/* <img src={logout} /> */}
                         <i className="material-symbols-outlined">
                             <img style={{ width: "1.8rem" }} src={LOGOUT} alt="logout" />
                         </i>

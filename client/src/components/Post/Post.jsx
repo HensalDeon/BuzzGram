@@ -46,11 +46,14 @@ const Post = ({ data }) => {
         };
 
         try {
+            const loadingToastId = toast.loading("Commenting...");
             let result = await dispatch(createComment(newComment));
             if (result.success) {
+                toast.dismiss(loadingToastId);
                 toast.success(<b>Comment added...!</b>);
                 setText("");
             } else {
+                toast.dismiss(loadingToastId);
                 toast.error(<b>Failed to add comment...!</b>);
             }
         } catch (error) {

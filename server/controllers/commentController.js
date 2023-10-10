@@ -51,7 +51,7 @@ export const updateComment = async (req, res) => {
         const { text } = req.body;
         const id = req.params.id;
         console.log(req.body, "////", req.params);
-        await CommentModel.findOneAndUpdate({ _id:id }, { text });
+        await CommentModel.findOneAndUpdate({ _id: id }, { text });
         res.status(200).json({ msg: "updated successfully." });
     } catch (error) {
         return res.status(500).json({ error: "Internal server error" });
@@ -80,5 +80,24 @@ export const likeComment = async (req, res) => {
     } catch (error) {
         console.error("Error toggling comment like:", error);
         return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const deleteComment = async (req, res) => {
+    try {
+        const comment = await CommentModel.findOneAndDelete({
+            _id: req.params.id,
+            $or: [{ user: req.user._id }, { postUserId: req.user._id }],
+        });
+
+        await PostModel.findOneAndUpdate(
+            { _id: comment.postId },
+            {
+                $pull: { comments: req.params.id },
+            }
+        );
+        res.json({ message: "Comment deleted successfully." });
+    } catch (error) {
+        return res.status(500).json({ error: "Internal server error!" });
     }
 };

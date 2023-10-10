@@ -1,6 +1,7 @@
 import PostModel from "../model/postModel.js";
 import mongoose from "mongoose";
 import UserModel from "../model/userModel.js";
+import CommentModel from "../model/commentModel.js";
 
 // Creat new Post
 export const createPost = async (req, res) => {
@@ -56,7 +57,11 @@ export const deletePost = async (req, res) => {
 
     try {
         const post = await PostModel.findById(id);
+        if (!post) {
+            return res.status(404).json("Post not found");
+        }
         if (post.user.toString() === user) {
+            await CommentModel.deleteMany({ postId: id });
             await post.deleteOne();
             res.status(200).json("Post deleted successfully");
         } else {

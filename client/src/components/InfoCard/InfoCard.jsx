@@ -58,7 +58,12 @@ const InfoCard = () => {
       </div>
 
       <div className="info">
-        {/* */}
+        <span>
+          <b>Fullname : </b>
+        </span>
+        <span>{profileUser.relationship}</span>
+      </div>
+      <div className="info">
         <span>
           <b>Username : </b>
         </span>
@@ -66,18 +71,22 @@ const InfoCard = () => {
       </div>
       <div className="info">
         <span>
-          <b>Lives in </b>
+          <b>Lives in :</b>
         </span>
         <span>{profileUser.livesIn}</span>
       </div>
       <div className="info">
         <span>
-          <b>Works at </b>
+          <b>Works at :</b>
         </span>
         <span>{profileUser.worksAt}</span>
       </div>
-
-      <button className="button logout-button" onClick={handleLogOut}>Log Out</button>
+      <div className="info">
+        <span>
+          <b>Bio :</b>
+        </span>
+        <span>{profileUser.worksAt}</span>
+      </div>
     </div>
   );
 };

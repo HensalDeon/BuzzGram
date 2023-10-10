@@ -1,6 +1,6 @@
-import { createAxiosInstance } from "../utils/axiosInstance";
+import { adminAxiosInstance } from "../utils/axiosInstance";
 
-const API = createAxiosInstance()
+const API = adminAxiosInstance()
 
 // API function to fetch user details
 export const getUserDetails = () => API.get(`/admin/userlist`);

@@ -13,3 +13,16 @@ export const createComment = (formData) => async (dispatch) => {
         return { success: false };
     }
 };
+export const deleteComment = (id) => async (dispatch) => {
+    try {
+        const { data } = await CommentApi.deleteComment(id);
+        if (data.error) {
+            return { success: false, error: data.error };
+        }
+        dispatch({ type: "COMMENT_DELETED", commentId: id });
+        return { success: true };
+    } catch (error) {
+        console.log(error);
+        return { success: false };
+    }
+};
