@@ -3,16 +3,15 @@
     display: flex;
     flex-direction: row;
     gap: 1rem;
+    padding: 1rem 1rem;
+    justify-content: space-around;
     @media (min-width: 930px) {
-        padding: 1rem 2rem;
         margin-left: 4.5rem;
     }
     @media (max-width: 929px) {
-        padding: 1rem 1rem;
         margin-left: 4.5rem;
     }
     @media (max-width: 450px) {
-        padding: 1rem 1rem;
         margin-left: 0;
         margin-bottom: 3.6rem;
     }

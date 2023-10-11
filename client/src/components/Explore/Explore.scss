@@ -1,0 +1,55 @@
+.explore {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    @media (max-width: 768px) {
+        justify-content: space-around;
+    }
+
+    img {
+        flex: 1;
+        max-width: calc(34.1% - 1rem);
+        height: 14rem;
+        object-fit: cover;
+        border-radius: 0.2rem;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.5s;
+        cursor: pointer;
+
+        @media (max-width: 768px) {
+            max-width: calc(50% - 0.5rem);
+            height: 12rem;
+        }
+        @media (max-width: 676px) {
+            max-width: 100%;
+            height: 10rem;
+        }
+        &:hover {
+            transform: scale(1.05); /* Slight zoom when hovering */
+        }
+    }
+}
+
+.modal-bodywidth {
+    width: 100vh;
+    @media (max-width: 1199px) {
+        width: 100vh; 
+    }
+
+    @media (max-width: 991px) {
+        width: 68vh; 
+    }
+    @media (max-width: 800px) {
+        width: 60vh; 
+    }
+
+    @media (max-width: 575px) {
+        width: 45vh; 
+    }
+
+    @media (max-width: 500px){
+        width: 44vh;
+    }
+}

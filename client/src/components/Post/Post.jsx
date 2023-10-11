@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
 
-// import Comment from "../../img/comment.png";
 import Share from "../../img/share.png";
 import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
@@ -20,7 +19,6 @@ import { createComment } from "../../redux/actions/CommentActions";
 import CommentList from "./CommentList";
 
 const Post = ({ data }) => {
-    // console.log(data, "//////");
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
 
@@ -173,7 +171,7 @@ const Post = ({ data }) => {
     return (
         //modal for post options
         <div className="Post">
-            <Modal show={show} onHide={handleClose} className="background">
+            <Modal show={show} onHide={handleClose} className="modal-postion">
                 <Modal.Body>
                     {data.userDetails?._id !== user._id && (
                         <>
@@ -204,7 +202,7 @@ const Post = ({ data }) => {
                 </Modal.Body>
             </Modal>
             {/* modal for post edit/updation */}
-            <Modal show={showEdit} onHide={handleEditClose}>
+            <Modal show={showEdit} onHide={handleEditClose} className="modal-postion">
                 <Modal.Body style={{ width: "17rem" }}>
                     <label className="pt-2 pb-3 linear-gradient-text">Edit Description?</label>
                     <div className="Search">
@@ -222,7 +220,7 @@ const Post = ({ data }) => {
             </Modal>
 
             {/* modal for post report */}
-            <Modal show={showReport} onHide={handleReportClose}>
+            <Modal show={showReport} onHide={handleReportClose} className="modal-postion">
                 <Modal.Body style={{ width: "17rem" }}>
                     <label className="pt-2 pb-3 linear-gradient-text">Provide Reason!</label>
                     <div className="Search">

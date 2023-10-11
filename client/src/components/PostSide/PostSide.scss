@@ -5,4 +5,13 @@
     height: 100vh;
     overflow: auto;
     width: 100%;
+
+    @media (min-width:1300px){
+        padding: 0 5rem;
+        max-width: calc(63.8% - 1rem);
+    }
+    @media (min-width:1080px){
+        padding: 0 4rem;
+    }
+    
 }

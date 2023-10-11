@@ -20,7 +20,6 @@ export const getPost = async (req, res) => {
 
     try {
         const post = await PostModel.findById(id);
-        console.log(post, "/////");
         res.status(200).json(post);
     } catch (error) {
         res.status(500).json(error);
@@ -91,6 +90,7 @@ export const likePost = async (req, res) => {
     }
 };
 
+// get timline posts
 export const getTimelinePosts = async (req, res) => {
     const userId = req.params.id;
     try {
@@ -150,5 +150,24 @@ export const getTimelinePosts = async (req, res) => {
     } catch (error) {
         console.error("Error:", error);
         res.status(500).json(error);
+    }
+};
+
+// get all posts
+export const getAllPosts = async (req, res) => {
+    try {
+        const posts = await PostModel.find().populate({
+            path: "user",
+            select: "-password",
+        });
+
+        if (!posts) {
+            return res.status(404).json({ error: "No posts found." });
+        }
+
+        return res.status(200).json(posts);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
     }
 };

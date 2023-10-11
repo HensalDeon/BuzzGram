@@ -7,10 +7,12 @@ import dots from "../../img/icon-threeDots.svg";
 import like from "../../img/like.png";
 import unLike from "../../img/notlike.png";
 import PacmanLoader from "react-spinners/PacmanLoader";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { logout } from "../../redux/actions/AuthActions";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
+    const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState([]);
@@ -63,11 +65,11 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         });
     };
 
-    const handleCmtDelete = () =>{
+    const handleCmtDelete = () => {
         // const loadingToastId = toast.loading("Deleting...");
         // deleteComment()
-        console.log(data._id,'///',comment)
-    }
+        console.log(data._id, "///", comment);
+    };
 
     const override = {
         position: "absolute",
@@ -90,7 +92,12 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         });
 
         setComments(updatedcmt);
-        likeComment(commentId, user._id);
+        likeComment(commentId, user._id).catch((error) => {
+            console.log(error);
+            if (error.response.status === 401) {
+                dispatch(logout());
+            }
+        });
     };
 
     useEffect(() => {
@@ -112,7 +119,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
     return (
         <>
             <PacmanLoader loading={loading} cssOverride={override} color="orange" speedMultiplier={1} />
-            <Modal show={showAction} onHide={handleActionClose}>
+            <Modal show={showAction} onHide={handleActionClose} className="modal-postion">
                 <Modal.Body style={{ background: "#232323" }}>
                     {selectedComment !== user._id ? (
                         <>
@@ -124,13 +131,15 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                                 Edit
                             </span>
                             <hr />
-                            <span onClick={handleCmtDelete} className="linear-gradient-text">Delete</span>
+                            <span onClick={handleCmtDelete} className="linear-gradient-text">
+                                Delete
+                            </span>
                         </>
                     )}
                 </Modal.Body>
             </Modal>
             {/* modal for post edit comment */}
-            <Modal show={showCmtEdit} onHide={handleCmtEditClose}>
+            <Modal show={showCmtEdit} onHide={handleCmtEditClose} className="modal-postion">
                 <Modal.Body style={{ width: "17rem", background: "#232323" }}>
                     <label className="pt-2 pb-3 linear-gradient-text">Edit Comment?</label>
                     <div className="Search">

@@ -1,4 +1,7 @@
-const postReducer = (state = { posts: [], loading: false, error: false, imgError: false, uploading: false }, action) => {
+const postReducer = (
+    state = { posts: [], allPosts: [], loading: false, error: false, imgError: false, uploading: false },
+    action
+) => {
     switch (action.type) {
         // belongs to PostShare.jsx
         case "IMG_UPLOAD_START":
@@ -19,6 +22,12 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
         case "RETREIVING_SUCCESS":
             return { ...state, posts: action.data, loading: false, error: false };
         case "RETREIVING_FAIL":
+            return { ...state, loading: false, error: true };
+        case "GET_POSTS_START":
+            return { ...state, loading: true, error: false };
+        case "GET_POSTS_SUCCESS":
+            return { ...state, allPosts: action.data, loading: false, error: false };
+        case "GET_POSTS_FAIL":
             return { ...state, loading: false, error: true };
         case "LIKE_POST":
             return {
@@ -96,7 +105,7 @@ const postReducer = (state = { posts: [], loading: false, error: false, imgError
                 posts: state.posts.filter((post) => post._id !== action.targetId),
             };
         case "RESET_POST_STATE":
-            return { posts: [], loading: false, error: false, imgError: false, uploading: false };
+            return { posts: [], allPosts: [], loading: false, error: false, imgError: false, uploading: false };
 
         default:
             return state;

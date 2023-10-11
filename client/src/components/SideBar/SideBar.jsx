@@ -49,7 +49,7 @@ export default function SideBar() {
                         <span style={{ animationDelay: "0.1s" }}>Messages</span>
                     </button>
                     <button type="button">
-                        <Link className="material-symbols-outlined">
+                        <Link className="material-symbols-outlined" to={"/explore"}>
                             <img style={{ width: "2rem" }} src={EXPLORE} alt="explore" />
                         </Link>
                         <span style={{ animationDelay: "0.1s" }}>Explore</span>

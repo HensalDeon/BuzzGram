@@ -1,15 +1,6 @@
-import axios from "axios";
-import env from "../../env";
+import { userAxiosInstance } from "../utils/axiosInstance";
 
-const API = axios.create({ baseURL: env.REACT_APP_SERVER_DOMAIN });
-
-API.interceptors.request.use((req) => {
-    if (localStorage.getItem("profile")) {
-        req.headers.Authorization = `Bearer ${JSON.parse(localStorage.getItem("profile")).token}`;
-    }
-
-    return req;
-});
+const API = userAxiosInstance()
 
 export const likeComment = (commentId, user) => API.post(`/posts/like-comment`, { commentId, user });
 export const createComment = (formData) => API.post(`/posts/comment`, formData);

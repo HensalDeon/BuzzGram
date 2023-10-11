@@ -6,6 +6,7 @@ import SideBar from "../../components/SideBar/SideBar";
 import BottomBar from "../../components/BottomBar/BottomBar";
 import PropTypes from "prop-types";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
+import Explore from "../../components/Explore/Explore";
 // import ProfileLeft from "../../components/ProfileLeft/ProfileLeft";
 const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
@@ -24,9 +25,17 @@ const Home = ({ location }) => {
     }, []);
     return (
         <div className="Home">
-            {isSmallScreen ? <BottomBar /> : <SideBar />}
+            {/* {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && <ProfileSide location={location} />}
             {location === "home" ? <PostSide /> : <ProfileCard location={location} />}
+            {location === "explore" && <Explore /> } */}
+
+            {isSmallScreen ? <BottomBar /> : <SideBar />}
+            {isLargeScreen && location !== "explore" && <ProfileSide location={location} />}
+
+            {location === "home" && <PostSide />}
+            {location === "explore" && <Explore />}
+            {location === "profile" && <ProfileCard location={location} />}
         </div>
     );
 };

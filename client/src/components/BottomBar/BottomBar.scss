@@ -1,4 +1,4 @@
-$ulwidth:25%;
+$ulwidth:20%;
 
 .bottombar {
     overflow: hidden;
@@ -43,13 +43,16 @@ $ulwidth:25%;
 }
 
 .tabs input:nth-child(2):checked ~ .buttons .underline {
-    translate:calc($ulwidth * 4) 0;
+    translate:calc($ulwidth * 5) 0;
 }
 .tabs input:nth-child(3):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 8) 0;
+    translate: calc($ulwidth * 10) 0;
 }
 .tabs input:nth-child(4):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 12) 0;
+    translate: calc($ulwidth * 15) 0;
+}
+.tabs input:nth-child(5):checked ~ .buttons .underline {
+    translate: calc($ulwidth * 20) 0;
 }
 
 .tabs input:nth-child(1):checked ~ .buttons label:nth-child(1) {
@@ -62,6 +65,9 @@ $ulwidth:25%;
     color: aliceblue;
 }
 .tabs input:nth-child(4):checked ~ .buttons label:nth-child(4) {
+    color: aliceblue;
+}
+.tabs input:nth-child(5):checked ~ .buttons label:nth-child(5) {
     color: aliceblue;
 }
 

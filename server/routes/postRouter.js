@@ -6,6 +6,7 @@ import * as commentController from "../controllers/commentController.js";
 import Auth from "../middleware/auth.js";
 
 router.route("/").post(Auth, postController.createPost);
+router.route("/all").get( postController.getAllPosts);
 router.route("/like-comment").post(Auth, commentController.likeComment);
 router.route("/:id/update-comment").put(Auth, commentController.updateComment);
 router.route("/comment").post(Auth, commentController.createComment);
