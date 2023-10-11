@@ -34,22 +34,27 @@
 
 .modal-bodywidth {
     width: 100vh;
+    padding: 0 !important;
     @media (max-width: 1199px) {
-        width: 100vh; 
+        width: 100vh;
     }
 
     @media (max-width: 991px) {
-        width: 68vh; 
+        width: 68vh;
     }
     @media (max-width: 800px) {
-        width: 60vh; 
+        width: 60vh;
     }
 
     @media (max-width: 575px) {
-        width: 45vh; 
+        width: 45vh;
     }
 
-    @media (max-width: 500px){
+    @media (max-width: 500px) {
         width: 44vh;
     }
+}
+
+.lg-bg{
+    background: rgb(235, 234, 234)
 }

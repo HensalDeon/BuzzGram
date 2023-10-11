@@ -114,7 +114,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                     console.error("Error fetching comments:", error);
                 });
         }
-    }, [showCmt, data._id]);
+    }, [showCmt, data?._id]);
 
     return (
         <>
@@ -196,7 +196,10 @@ CommentList.propTypes = {
     handleCmtClose: PropTypes.func.isRequired,
     data: PropTypes.shape({
         _id: PropTypes.string.isRequired,
-    }).isRequired,
+    }),
 };
 
+CommentList.defaultProps = {
+    data: null,
+};
 export default CommentList;

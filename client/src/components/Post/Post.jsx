@@ -289,4 +289,6 @@ Post.propTypes = {
         description: PropTypes.string.isRequired,
     }).isRequired,
 };
+
+
 export default Post;
