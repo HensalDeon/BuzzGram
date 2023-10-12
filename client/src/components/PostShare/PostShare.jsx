@@ -8,7 +8,7 @@ import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
-import { getTimelinePosts } from "../../redux/actions/PostAction";
+import { getAllPosts, getTimelinePosts } from "../../redux/actions/PostAction";
 import { data } from "autoprefixer";
 // import { UilEdit } from "@iconscout/react-unicons";
 
@@ -56,6 +56,7 @@ const PostShare = () => {
                         if (!error) {
                             resetShare();
                             dispatch(getTimelinePosts(user._id));
+                            dispatch(getAllPosts(user._id));
                             return toast.success(<b>Post uploaded successfully..!</b>);
                         } else {
                             toast.error(<b>Failed to upload post</b>);

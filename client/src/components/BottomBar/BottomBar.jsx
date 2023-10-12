@@ -1,11 +1,12 @@
-import { useEffect} from "react";
+import { useEffect } from "react";
 import "./BottomBar.scss";
 import { useSelector } from "react-redux";
-import {useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // import Home from "../../pages/home/Home";
 
 function BottomBar() {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const { user } = useSelector((state) => state.authReducer.authData);
 
@@ -19,25 +20,20 @@ function BottomBar() {
     return (
         <aside className="bottombar">
             <div className="tabs">
-                <input
-                    id="tab-1"
-                    type="radio"
-                    name="group"
-                    defaultChecked={true}
-                />
+                <input id="tab-1" type="radio" name="group" defaultChecked={location.pathname.includes("/home")} />
                 <input id="tab-2" type="radio" name="group" />
-                <input id="tab-3" type="radio" name="group" />
+                <input id="tab-3" type="radio" name="group" defaultChecked={location.pathname.includes("/explore")} />
                 <input id="tab-4" type="radio" name="group" />
-                <input id="tab-5" type="radio" name="group" />
+                <input id="tab-5" type="radio" name="group" defaultChecked={location.pathname.includes("/profile")} />
 
                 <div className="buttons">
-                    <label onClick={() => navigate("../home")} className="material-symbols-outlined" htmlFor="tab-1">
+                    <label onClick={() => navigate("/home")} className="material-symbols-outlined" htmlFor="tab-1">
                         Home
                     </label>
                     <label className="material-symbols-outlined" htmlFor="tab-2">
                         Chat
                     </label>
-                    <label className="material-symbols-outlined" htmlFor="tab-3">
+                    <label onClick={() => navigate("/explore")} className="material-symbols-outlined" htmlFor="tab-3">
                         Explore
                     </label>
                     <label className="material-symbols-outlined" htmlFor="tab-4">

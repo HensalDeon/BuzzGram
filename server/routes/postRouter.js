@@ -5,18 +5,26 @@ import * as postController from "../controllers/postController.js";
 import * as commentController from "../controllers/commentController.js";
 import Auth from "../middleware/auth.js";
 
+/**GET Requests */
+router.route("/:id/all").get(Auth, postController.getAllPosts);
+router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
+router.route("/:id/comments").get(Auth, commentController.getComments);
+
+/**POST Requests */
 router.route("/").post(Auth, postController.createPost);
-router.route("/all").get( postController.getAllPosts);
 router.route("/like-comment").post(Auth, commentController.likeComment);
-router.route("/:id/update-comment").put(Auth, commentController.updateComment);
 router.route("/comment").post(Auth, commentController.createComment);
 
-router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
-router.route("/:id/comments").get(commentController.getComments);
+/**PUT Requests */
+router.route("/:id/update-comment").put(Auth, commentController.updateComment);
+router.route("/:id/like").put(Auth, postController.likePost);
+router.route("/:id").put(Auth, postController.updatePost);
 
-router.put("/:id/like", Auth, postController.likePost);
-router.put("/:id", Auth, postController.updatePost);
+/**PATCH Requests */
+router.route("/:id/:postId/:isSaved").patch(Auth, postController.savePost);
 
-router.delete("/:id", Auth, postController.deletePost);
+/**DELETE Requests */
+router.route("/:id").delete(Auth, postController.deletePost);
+router.route("/:id/comment").delete(Auth, commentController.deleteComment);
 
 export default router;

@@ -156,7 +156,15 @@ export const getTimelinePosts = async (req, res) => {
 // get all posts
 export const getAllPosts = async (req, res) => {
     try {
-        const posts = await PostModel.find().populate({
+        const userId = req.params.id;
+        const userIdObjectId = new mongoose.Types.ObjectId(userId);
+        const reportedPosts = await PostModel.find({
+            reports: { $in: [userIdObjectId] },
+        });
+
+        const posts = await PostModel.find({
+            _id: { $nin: reportedPosts.map((post) => post._id) },
+        }).populate({
             path: "user",
             select: "-password",
         });
@@ -169,5 +177,42 @@ export const getAllPosts = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+// save and unsave post 
+export const savePost = async (req, res) => {
+    const { id, postId, isSaved } = req.params;
+    try {
+        if (!id || !postId) return res.status(400).json({ error: "params is empty!" });
+
+        const user = await UserModel.findOne({ _id: id });
+
+        const savedPosts = user.saved || [];
+        if (isSaved === "true") {
+            const index = savedPosts.indexOf(postId);
+            if (index !== -1) {
+                savedPosts.splice(index, 1);
+            }
+        } else {
+            savedPosts.push(postId);
+        }
+
+        const updatedUser = await UserModel.findOneAndUpdate(
+            { _id: id },
+            {
+                saved: savedPosts,
+            },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(400).json({ error: "User does not exist." });
+        }
+
+        res.status(200).json({ message: isSaved === "true" ? "Post unsaved successfully." : "Post saved successfully." });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: "Internal server error" });
     }
 };

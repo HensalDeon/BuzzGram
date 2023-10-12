@@ -37,7 +37,7 @@ export default function SideBar() {
                 </header>
                 <nav className="sidebar-nav">
                     <button type="button">
-                        <Link className="material-symbols-outlined" to={"../home"}>
+                        <Link className="material-symbols-outlined" to={"/home"}>
                             <img style={{ width: "2rem" }} src={HOME} alt="home"></img>
                         </Link>
                         <span>Home</span>

@@ -3,10 +3,13 @@ import * as ReportApi from "../../api/ReportRequests";
 // Action Creators
 export const createReport = (reporterId, targetType, targetId, reason) => async (dispatch) => {
     try {
-        const response = await ReportApi.createReport(reporterId, targetType, targetId, reason);
-        if (response.data) {
-            dispatch({ type: "CREATE_REPORT_SUCCESS", payload: response.data });
-            dispatch({ type: "FILTER_REPORTED_POSTS", targetId });
+        const { data } = await ReportApi.createReport(reporterId, targetType, targetId, reason);
+        console.log(data);
+        if (data) {
+            dispatch({ type: "CREATE_REPORT_SUCCESS", payload: data });
+            if (data.targetType === "post") {
+                dispatch({ type: "FILTER_REPORTED_POSTS", targetId });
+            }
             return { success: true };
         }
         return { success: false };

@@ -25,16 +25,11 @@ const Home = ({ location }) => {
     }, []);
     return (
         <div className="Home">
-            {/* {isSmallScreen ? <BottomBar /> : <SideBar />}
-            {isLargeScreen && <ProfileSide location={location} />}
-            {location === "home" ? <PostSide /> : <ProfileCard location={location} />}
-            {location === "explore" && <Explore /> } */}
-
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location !== "explore" && <ProfileSide location={location} />}
-
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
+            {location === "saved" && <Explore />}
             {location === "profile" && <ProfileCard location={location} />}
         </div>
     );

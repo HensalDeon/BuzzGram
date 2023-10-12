@@ -23,6 +23,7 @@ function App() {
                 <Route path="/" element={Authorized ? <Navigate to="home" /> : <Navigate to="auth" />} />
                 <Route path="/home" element={Authorized ? <Home location="home" /> : <Navigate to="../auth" />} />
                 <Route path="/explore" element={Authorized ? <Home location="explore" /> : <Navigate to="../auth" />} />
+                <Route path="/saved" element={Authorized ? <Home location="saved" /> : <Navigate to="../auth" />} />
                 <Route path="/auth" element={Authorized ? <Navigate to="../home" /> : <Auth />} />
                 <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="../auth" />} />
                 <Route path="*" element={<p>just nothing!!</p>} />

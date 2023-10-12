@@ -23,6 +23,7 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
             return { ...state, updateLoading: true, error: action.error };
         case "LOG_OUT":
             // localStorage.clear();
+            localStorage.removeItem("profile");
             return { ...state, authData: null, loading: false, error: null, updateLoading: false };
         case "ADMIN_LOG_OUT":
             return { ...state, adminAuthData: null, adminLoading: false, adminError: null };
@@ -68,6 +69,20 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
                     },
                 },
             };
+        case "UPDATE_SAVED":
+            return {
+                ...state,
+                authData: {
+                    ...state.authData,
+                    user: {
+                        ...state.authData.user,
+                        saved: action.isSaved
+                            ? state.authData.user.saved.filter((postId) => postId !== action.postId)
+                            : [...state.authData.user.saved, action.postId],
+                    },
+                },
+            };
+
         default:
             return state;
     }

@@ -50,7 +50,6 @@ export const updateComment = async (req, res) => {
     try {
         const { text } = req.body;
         const id = req.params.id;
-        console.log(req.body, "////", req.params);
         await CommentModel.findOneAndUpdate({ _id: id }, { text });
         res.status(200).json({ msg: "updated successfully." });
     } catch (error) {
@@ -87,7 +86,6 @@ export const deleteComment = async (req, res) => {
     try {
         const comment = await CommentModel.findOneAndDelete({
             _id: req.params.id,
-            $or: [{ user: req.user._id }, { postUserId: req.user._id }],
         });
 
         await PostModel.findOneAndUpdate(
@@ -98,6 +96,7 @@ export const deleteComment = async (req, res) => {
         );
         res.json({ message: "Comment deleted successfully." });
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: "Internal server error!" });
     }
 };

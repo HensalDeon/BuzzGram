@@ -14,6 +14,12 @@ const commentSchema = new mongoose.Schema(
         likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
         postId: mongoose.Schema.Types.ObjectId,
         postUserId: mongoose.Schema.Types.ObjectId,
+        reports: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
     },
     {
         timestamps: true,

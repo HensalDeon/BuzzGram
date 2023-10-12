@@ -1,7 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import { getComments, likeComment, updateComment } from "../../api/CommentRequests";
+import { deleteComment, getComments, likeComment, updateComment } from "../../api/CommentRequests";
 import avatar from "../../img/icon-accounts.svg";
 import dots from "../../img/icon-threeDots.svg";
 import like from "../../img/like.png";
@@ -10,6 +10,7 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { logout } from "../../redux/actions/AuthActions";
+import { createReport } from "../../redux/actions/ReportActions";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
     const dispatch = useDispatch();
@@ -20,10 +21,16 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
     const [showCmtEdit, setshowCmtEdit] = useState(false);
     const [showAction, setShowAction] = useState(false);
     const [selectedComment, setSelectedComment] = useState(null);
+    const [showReport, setShowReport] = useState(false);
     const [editCmt, setEditCmt] = useState("");
+    const [reportData, setReportData] = useState("");
 
     const handleActionClose = () => {
         setShowAction(false);
+    };
+
+    const handleReportClose = () => {
+        setShowReport(false);
     };
 
     const handleCmtEditClose = () => {
@@ -42,33 +49,64 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         setShowAction(false);
     };
 
+    const handleReportShow = () => {
+        setShowReport(true);
+        handleActionClose()
+    };
+
     const handleCmtEditInput = (e) => {
         const inputValue = e.target.value;
         setEditCmt(inputValue);
     };
 
+    const maxReportLength = 100;
+    const handleReportInput = (e) => {
+        const inputValue = e.target.value;
+        if (inputValue.length <= maxReportLength) {
+            setReportData(inputValue);
+        }
+    };
+
     const handleCmtEdit = () => {
         const loadingToastId = toast.loading("Commenting...");
-        updateComment(comment._id, editCmt).then((res) => {
-            toast.dismiss(loadingToastId);
-            toast.success(<b>{res.data.msg}</b>);
-            handleActionClose();
-            handleCmtEditClose();
+        updateComment(comment._id, editCmt)
+            .then((res) => {
+                toast.dismiss(loadingToastId);
+                toast.success(<b>{res.data.msg}</b>);
+                handleActionClose();
+                handleCmtEditClose();
 
-            const updatedComments = comments.map((cmt) => {
-                if (cmt._id === comment._id) {
-                    return { ...cmt, text: editCmt };
-                }
-                return cmt;
+                const updatedComments = comments.map((cmt) => {
+                    if (cmt._id === comment._id) {
+                        return { ...cmt, text: editCmt };
+                    }
+                    return cmt;
+                });
+                setComments(updatedComments);
+            })
+            .catch((error) => {
+                toast.dismiss(loadingToastId);
+                console.error("Error editing comment:", error);
+                toast.error(<b>Error editing comment</b>);
             });
-            setComments(updatedComments);
-        });
     };
 
     const handleCmtDelete = () => {
-        // const loadingToastId = toast.loading("Deleting...");
-        // deleteComment()
-        console.log(data._id, "///", comment);
+        const loadingToastId = toast.loading("Deleting...");
+        deleteComment(comment._id)
+            .then((res) => {
+                toast.dismiss(loadingToastId);
+                toast.success(<b>{res.data.message}</b>);
+                handleActionClose();
+
+                const updatedComments = comments.filter((cmt) => cmt._id !== comment._id);
+                setComments(updatedComments);
+            })
+            .catch((error) => {
+                toast.dismiss(loadingToastId);
+                console.error("Error deleting comment:", error);
+                toast.error(<b>Error deleting comment</b>);
+            });
     };
 
     const override = {
@@ -77,7 +115,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         left: "40%",
         display: "block",
         margin: "0 auto",
-        zIndex: "100",
+        zIndex: "1066",
     };
 
     const handleCmtLike = async (commentId) => {
@@ -98,6 +136,25 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                 dispatch(logout());
             }
         });
+    };
+
+    const handleCmtReport = async() => {
+        if (!reportData.trim()) return toast.error(<b>cannot send empty report!</b>);
+        const loadingToastId = toast.loading("Reporting...");
+        try {
+            const reportPromise = await dispatch(createReport(user._id, "comment", comment._id, reportData));
+            console.log(reportPromise,'//');
+            toast.dismiss(loadingToastId);
+            if (reportPromise.success) {
+                setShowReport(false);
+                toast.success(<b>Comment Reported...!</b>);
+            } else {
+                toast.error(<b>Comment Reporting Failed...!</b>);
+            }
+        } catch (error) {
+            toast.error(<b>Something went wrong while updating!</b>);
+            console.error("Error:", error);
+        }
     };
 
     useEffect(() => {
@@ -123,7 +180,9 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                 <Modal.Body style={{ background: "#232323" }}>
                     {selectedComment !== user._id ? (
                         <>
-                            <span className="linear-gradient-text">Report</span>
+                            <span onClick={handleReportShow} className="linear-gradient-text">
+                                Report
+                            </span>
                         </>
                     ) : (
                         <>
@@ -138,6 +197,25 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                     )}
                 </Modal.Body>
             </Modal>
+
+            {/* modal for post report */}
+            <Modal show={showReport} onHide={handleReportClose} className="modal-postion">
+                <Modal.Body style={{ width: "17rem" }}>
+                    <label className="pt-2 pb-3 linear-gradient-text">Provide Reason!</label>
+                    <div className="Search">
+                        <textarea type="text" name="report" onChange={handleReportInput} />
+                        <span onClick={handleCmtReport} className="material-symbols-outlined">
+                            report
+                        </span>
+                    </div>
+                    <div style={{ display: "flex" }}>
+                        <span className="lg-text">
+                            {maxReportLength - reportData.length} / {maxReportLength}
+                        </span>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
             {/* modal for post edit comment */}
             <Modal show={showCmtEdit} onHide={handleCmtEditClose} className="modal-postion">
                 <Modal.Body style={{ width: "17rem", background: "#232323" }}>

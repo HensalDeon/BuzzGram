@@ -10,10 +10,10 @@ export const getTimelinePosts = (id) => async (dispatch) => {
         dispatch({ type: "RETREIVING_FAIL" });
     }
 };
-export const getAllPosts = () => async (dispatch) => {
+export const getAllPosts = (user) => async (dispatch) => {
     dispatch({ type: "GET_POSTS_START" });
     try {
-        const { data } = await PostsApi.getAllPosts();
+        const { data } = await PostsApi.getAllPosts(user);
         dispatch({ type: "GET_POSTS_SUCCESS", data: data });
     } catch (error) {
         console.log(error);
@@ -59,5 +59,20 @@ export const deletePost = (postId, userId) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error);
+    }
+};
+
+export const savePost = (id, postId, isSaved) => async (dispatch) => {
+    try {
+        const response = await PostsApi.savePost(id, postId, isSaved);
+        if (response.status === 200) {
+            dispatch({ type: "UPDATE_SAVED", postId, isSaved });
+            return { success: true, message: response.data.message };
+        } else {
+            return { success: false, error: response.data.error };
+        }
+    } catch (error) {
+        console.log(error);
+        return { success: false, error: error.response.data.error };
     }
 };

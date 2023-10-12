@@ -13,7 +13,7 @@ import NotLike from "../../img/notlike.png";
 import Comment from "../../img/icon-comment.svg";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
-import { deletePost, getTimelinePosts, likePost, updatePost } from "../../redux/actions/PostAction";
+import { deletePost, getTimelinePosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
 import { createComment } from "../../redux/actions/CommentActions";
 import CommentList from "./CommentList";
@@ -33,6 +33,7 @@ const Post = ({ data }) => {
     });
     const [reportData, setReportData] = useState("");
     const [text, setText] = useState("");
+    const [isSaved, setIsSaved] = useState(user?.saved.includes(data._id));
 
     const handleComment = async () => {
         if (!text.trim()) return toast.error(<b>Comment cannot be empty!</b>);
@@ -165,8 +166,23 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
-    const handleSave = () => {
-        console.log("save");
+    const handleSave = async () => {
+        const loadingToastId = toast.loading("Saving...");
+        try {
+            const savePromise = await dispatch(savePost(user._id, data._id, isSaved));
+            toast.dismiss(loadingToastId);
+            if (savePromise.success) {
+                setIsSaved(!isSaved);
+                toast.success(<b>{savePromise.message}</b>);
+            } else {
+                toast.error(<b>{savePromise.error}</b>);
+            }
+            handleClose();
+        } catch (error) {
+            handleClose();
+            toast.error(<b>Something went wrong while saving!</b>);
+            console.error("Error:", error);
+        }
     };
     return (
         //modal for post options
@@ -184,7 +200,7 @@ const Post = ({ data }) => {
                         </>
                     )}
                     <span className="linear-gradient-text" onClick={handleSave}>
-                        Save
+                        {isSaved ? "Unsaved" : "Save"}
                     </span>
 
                     {data.userDetails?._id === user._id && (
@@ -289,6 +305,5 @@ Post.propTypes = {
         description: PropTypes.string.isRequired,
     }).isRequired,
 };
-
 
 export default Post;
