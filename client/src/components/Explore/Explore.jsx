@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 import PostView from "./PostView";
+import { useLocation } from "react-router-dom";
 
 function Explore() {
     let { allPosts, loading } = useSelector((state) => state.postReducer);
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
+    const location = useLocation();
 
     const override = {
         display: "block",
@@ -28,7 +30,13 @@ function Explore() {
 
             {!loading && (
                 <div className="Post">
-                    <div className="explore">
+                    <b style={{ fontSize: "large" }} className="lg-text">
+                        Explore Posts
+                    </b>
+                    <div
+                        className="explore"
+                        style={location.pathname.includes("/explore") ? { justifyContent: "space-between" } : {}}
+                    >
                         {allPosts.map((post) => (
                             <PostView postDtl={post} key={post._id} />
                         ))}

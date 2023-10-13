@@ -180,7 +180,7 @@ export const getAllPosts = async (req, res) => {
     }
 };
 
-// save and unsave post 
+// save and unsave post
 export const savePost = async (req, res) => {
     const { id, postId, isSaved } = req.params;
     try {
@@ -214,5 +214,29 @@ export const savePost = async (req, res) => {
     } catch (error) {
         console.log(error);
         return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const getSavedPosts = async (req, res) => {
+    const { id } = req.params;
+    console.log(id);
+    try {
+        if (!id) return res.status(400).json({ error: "params value is undefined!" });
+
+        const user = await UserModel.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const savedPostIds = user.saved;
+        const savedPosts = await PostModel.find({ _id: { $in: savedPostIds } })
+            .populate("user", "username profileimage _id")
+            .populate("comments")
+            .exec();
+        console.log(savedPosts);
+        res.status(200).json(savedPosts);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal server error occured" });
     }
 };

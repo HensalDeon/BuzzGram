@@ -5,7 +5,7 @@ import { getUserDetails } from "../../redux/actions/AdminActions";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import List from "./List";
 import { Toaster } from "react-hot-toast";
-import LogoSearch from "../LogoSearch/LogoSearch";
+import AdminSearch from "../LogoSearch/AdminSearch";
 
 function UserList() {
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function UserList() {
     return (
         <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <LogoSearch onSearch={(query) => setSearchQuery(query)} location="admin" />
+            <AdminSearch onSearch={(query) => setSearchQuery(query)} location="admin" />
             <div className="table-container">
                 <table className="table">
                     <thead className="table-head">

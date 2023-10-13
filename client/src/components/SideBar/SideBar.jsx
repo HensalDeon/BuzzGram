@@ -37,7 +37,7 @@ export default function SideBar() {
                 </header>
                 <nav className="sidebar-nav">
                     <button type="button">
-                        <Link className="material-symbols-outlined" to={"/home"}>
+                        <Link className="material-symbols-outlined" to={"../home"}>
                             <img style={{ width: "2rem" }} src={HOME} alt="home"></img>
                         </Link>
                         <span>Home</span>
@@ -55,7 +55,7 @@ export default function SideBar() {
                         <span style={{ animationDelay: "0.1s" }}>Explore</span>
                     </button>
                     <button type="button">
-                        <Link className="material-symbols-outlined">
+                        <Link className="material-symbols-outlined" to={"/saved"}>
                             <img style={{ width: "2rem" }} src={SAVED} alt="saved" />
                         </Link>
                         <span style={{ animationDelay: "0.3s" }}>Saved</span>

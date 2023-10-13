@@ -7,12 +7,17 @@ import BottomBar from "../../components/BottomBar/BottomBar";
 import PropTypes from "prop-types";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import Explore from "../../components/Explore/Explore";
-// import ProfileLeft from "../../components/ProfileLeft/ProfileLeft";
+import SavedPosts from "../../components/SavedPosts/SavedPosts";
+import { useDispatch } from "react-redux";
+import { getUserDetails } from "../../redux/actions/AdminActions";
+
 const Home = ({ location }) => {
+    const dispatch = useDispatch();
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
 
     useEffect(() => {
+        dispatch(getUserDetails());
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 930);
             setIsSmallScreen(window.innerWidth <= 450);
@@ -22,14 +27,15 @@ const Home = ({ location }) => {
         return () => {
             window.removeEventListener("resize", handleResize);
         };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <div className="Home">
             {isSmallScreen ? <BottomBar /> : <SideBar />}
-            {isLargeScreen && location !== "explore" && <ProfileSide location={location} />}
+            {isLargeScreen && location !== "explore" && location !== "saved" && <ProfileSide location={location} />}
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
-            {location === "saved" && <Explore />}
+            {location === "saved" && <SavedPosts />}
             {location === "profile" && <ProfileCard location={location} />}
         </div>
     );

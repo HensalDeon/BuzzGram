@@ -200,7 +200,7 @@ const Post = ({ data }) => {
                         </>
                     )}
                     <span className="linear-gradient-text" onClick={handleSave}>
-                        {isSaved ? "Unsaved" : "Save"}
+                        {isSaved ? "Unsave" : "Save"}
                     </span>
 
                     {data.userDetails?._id === user._id && (

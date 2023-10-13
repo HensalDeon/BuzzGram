@@ -17,26 +17,48 @@ $iconGradient: linear-gradient(106.23deg, #f99827, #f95f35 100%);
 
 .LogoSearch {
     display: flex;
+    flex-direction: column;
     gap: 0.75rem;
-
-    img {
-        width: 2.5rem;
-        height: 2.5rem;
-    }
-    .Search {
+    position: relative;
+    .contents {
         display: flex;
-        background-color: $inputColor !important;
-        border-radius: 10px;
-        padding: 5px;
 
-        > input {
-            background-color: transparent;
-            border: none;
-            outline: none;
+        img {
+            width: 2.5rem;
+            height: 2.5rem;
         }
+        .Search {
+            display: flex;
+            background-color: $inputColor !important;
+            border-radius: 10px;
+            padding: 5px;
 
-        .s-icon {
-            @include icon-styles;
+            > input {
+                background-color: transparent;
+                border: none;
+                outline: none;
+            }
+
+            .s-icon {
+                @include icon-styles;
+            }
+        }
+    }
+    .results {
+        background:white;
+        position: absolute;
+        top: 3.2rem;
+        z-index: 100;
+        padding: 0.3rem 0;
+        width: 18rem;
+        border-radius: 1rem;
+        right: -12px;
+        overflow-y: auto;
+
+        .follower:hover{
+            background: var(--buttonBg);
+            border-radius: 0.5rem;
+            cursor: pointer;
         }
     }
 }

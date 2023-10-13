@@ -19,7 +19,7 @@ const ProfileSide = ({ location }) => {
         <div className="ProfileSide" style={{ animationDelay: "0.5s" }}>
             {/* <Notifications/> */}
             <LogoSearch />
-            {location === "profile" ?<InfoCard /> : <ProfileCard location={location} />}   
+            {location === "profile" ? <InfoCard /> : <ProfileCard location={location} />}
             <FollowersCard />
         </div>
     );

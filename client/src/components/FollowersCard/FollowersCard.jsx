@@ -1,29 +1,27 @@
-import './FollowersCard.scss'
+import "./FollowersCard.scss";
+import { Followers } from "../../Data/FollwersData";
 
-import { Followers } from '../../Data/FollwersData'
 const FollowersCard = () => {
-  return (
-    <div className="FollowersCard">
-        <h3>People you may know!</h3>
+    return (
+        <div className="FollowersCard">
+            <h3>People you may know!</h3>
 
-        {Followers. map((follower)=>{
-            return(
-                <div className="follower" key={follower.id}>
-                    <div>
-                        <img src={follower.img} alt="" className='followerImage' />
-                        <div className="name">
-                            <span>{follower.name}</span>
-                            <span>@{follower.username}</span>
+            {Followers.map((follower) => {
+                return (
+                    <div className="follower" key={follower.id}>
+                        <div>
+                            <img src={follower.img} alt="" className="followerImage" />
+                            <div className="name">
+                                <span>{follower.name}</span>
+                                <span>@{follower.username}</span>
+                            </div>
                         </div>
+                        <button className="button fc-button">Follow</button>
                     </div>
-                    <button className='button fc-button'>
-                        Follow
-                    </button>
-                </div>
-            )
-        })}
-    </div>
-  )
-}
+                );
+            })}
+        </div>
+    );
+};
 
-export default FollowersCard
+export default FollowersCard;

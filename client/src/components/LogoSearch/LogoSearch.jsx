@@ -1,41 +1,43 @@
 import Logo from "../../img/logo.png";
-import { UilSearch } from "@iconscout/react-unicons";
 import "./LogoSearch.scss";
-import PropTypes from "prop-types";
 import { useState } from "react";
-const LogoSearch = ({ onSearch, location }) => {
+import SerachResults from "./SerachResults";
+import { useSelector } from "react-redux";
+
+const LogoSearch = () => {
     const [query, setQuery] = useState("");
+    const { userDetails } = useSelector((state) => state.adminReducer);
+
+    const filteredUsers = userDetails?.filter(
+        (user) =>
+            user.username.toLowerCase().includes(query.toLowerCase()) ||
+            user.fullname.toLowerCase().includes(query.toLowerCase())
+    );
 
     const handleInputChange = (e) => {
         const inputValue = e.target.value;
-        setQuery(inputValue); 
-        onSearch(inputValue); 
+        setQuery(inputValue);
     };
     return (
         <div className="LogoSearch">
-            <img src={Logo} alt="" />
-            {location == "admin" ? (
-                <div className="Search">
+            <div className="contents">
+                <img src={Logo} alt="" />
+                <div className="Search" style={{ width: "14rem" }}>
                     <input type="text" placeholder="#Explore" value={query} onChange={handleInputChange} />
-                    <div className="s-icon" >
-                        <UilSearch />
-                    </div>
+                    {query.trim() !== "" && (
+                        <div onClick={() => setQuery("")} className="s-icon">
+                            <span className="material-symbols-outlined">cancel</span>
+                        </div>
+                    )}
                 </div>
-            ) : (
-                <div className="Search">
-                    <input type="text" placeholder="#Explore" />
-                    <div className="s-icon">
-                        <UilSearch />
-                    </div>
+            </div>
+            {query.trim() !== "" && (
+                <div className="results">
+                    <SerachResults users={filteredUsers} />
                 </div>
             )}
         </div>
     );
 };
-
-// LogoSearch.propTypes = {
-//     onSearch: PropTypes.func.isRequired,
-//     location: PropTypes.string.isRequired,
-// };
 
 export default LogoSearch;

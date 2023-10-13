@@ -1,7 +1,7 @@
 .explore {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    // justify-content: space-between;  
     gap: 0.5rem;
 
     @media (max-width: 768px) {
@@ -27,7 +27,8 @@
             height: 10rem;
         }
         &:hover {
-            transform: scale(1.05); /* Slight zoom when hovering */
+            transform: scale(1.05);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
     }
 }
@@ -55,6 +56,7 @@
     }
 }
 
-.lg-bg{
-    background: rgb(235, 234, 234)
+.lg-bg {
+    background: rgb(235, 234, 234);
 }
+

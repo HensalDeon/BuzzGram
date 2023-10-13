@@ -50,7 +50,6 @@ export const loginUser = async (req, res) => {
         }
         const token = createAccessToken(user);
         user.password = "";
-        console.log(user);
         return res.status(200).send({
             user,
             token,
@@ -62,7 +61,6 @@ export const loginUser = async (req, res) => {
 };
 
 // login admin
-
 export const adminLogin = async (req, res) => {
     try {
         const { adminName, password } = req.body;
