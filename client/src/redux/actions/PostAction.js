@@ -1,4 +1,5 @@
 import * as PostsApi from "../../api/PostsRequests";
+import { logout } from "./AuthActions";
 
 export const getTimelinePosts = (id) => async (dispatch) => {
     dispatch({ type: "RETREIVING_START" });
@@ -7,6 +8,9 @@ export const getTimelinePosts = (id) => async (dispatch) => {
         dispatch({ type: "RETREIVING_SUCCESS", data: data });
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         dispatch({ type: "RETREIVING_FAIL" });
     }
 };
@@ -17,6 +21,9 @@ export const getAllPosts = (user) => async (dispatch) => {
         dispatch({ type: "GET_POSTS_SUCCESS", data: data });
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         dispatch({ type: "GET_POSTS_FAIL" });
     }
 };
@@ -30,7 +37,7 @@ export const likePost = (postId, userId) => async (dispatch) => {
         }
     } catch (error) {
         if (error.response.data.error === "Token has expired") {
-            dispatch({ type: "LOG_OUT" });
+            dispatch(logout());
         }
     }
 };
@@ -46,6 +53,9 @@ export const updatePost = (postId, userId, editedData) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
     }
 };
 export const deletePost = (postId, userId) => async (dispatch) => {
@@ -59,6 +69,9 @@ export const deletePost = (postId, userId) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
     }
 };
 
@@ -73,6 +86,9 @@ export const savePost = (id, postId, isSaved) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         return { success: false, error: error.response.data.error };
     }
 };

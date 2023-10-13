@@ -21,7 +21,7 @@ function SavedPosts() {
             })
             .catch((error) => {
                 setLoading(false);
-                console.log(error);
+                console.log(error,'///');
                 toast.error(<b>Error loading saved Posts!</b>);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps

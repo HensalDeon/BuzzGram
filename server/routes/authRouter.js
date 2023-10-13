@@ -3,6 +3,7 @@ const router = Router();
 
 import * as authController from '../controllers/authController.js'
 
+/** POST Requests */
 router.route('/register').post(authController.registerUser); //resiter user
 router.route('/login').post(authController.loginUser); //login user
 router.route('/admin-login').post(authController.adminLogin); //login admin

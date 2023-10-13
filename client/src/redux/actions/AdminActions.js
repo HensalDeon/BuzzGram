@@ -1,4 +1,5 @@
 import * as AdminApi from "../../api/AdminRequests";
+import { logout } from "./AuthActions";
 
 export const getUserDetails = () => async (dispatch) => {
     dispatch({ type: "FETCH_USERS_START" });
@@ -6,7 +7,9 @@ export const getUserDetails = () => async (dispatch) => {
         const { data } = await AdminApi.getUserDetails();
         dispatch({ type: "FETCH_USERS_SUCCESS", data: data });
     } catch (error) {
-        console.error(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         dispatch({ type: "FETCH_USERS_FAIL", error: error });
     }
 };
@@ -20,5 +23,8 @@ export const blockUnblockUser = (userId) => async (dispatch) => {
         }
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
     }
 };

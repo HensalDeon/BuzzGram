@@ -233,7 +233,6 @@ export const getSavedPosts = async (req, res) => {
             .populate("user", "username profileimage _id")
             .populate("comments")
             .exec();
-        console.log(savedPosts);
         res.status(200).json(savedPosts);
     } catch (error) {
         console.log(error);

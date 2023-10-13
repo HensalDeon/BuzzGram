@@ -14,6 +14,7 @@ function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);
     const Authorized = user && user.user.isblocked !== true;
+
     return (
         <div className="App">
             <div className="blur" style={{ top: "-18%", right: "0" }}></div>

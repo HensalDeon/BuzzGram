@@ -1,4 +1,5 @@
 import * as CommentApi from "../../api/CommentRequests";
+import { logout } from "./AuthActions";
 
 export const createComment = (formData) => async (dispatch) => {
     try {
@@ -10,6 +11,9 @@ export const createComment = (formData) => async (dispatch) => {
         return { success: true };
     } catch (error) {
         console.log(error);
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         return { success: false };
     }
 };

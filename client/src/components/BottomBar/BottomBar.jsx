@@ -23,7 +23,7 @@ function BottomBar() {
                 <input id="tab-1" type="radio" name="group" defaultChecked={location.pathname.includes("/home")} />
                 <input id="tab-2" type="radio" name="group" />
                 <input id="tab-3" type="radio" name="group" defaultChecked={location.pathname.includes("/explore")} />
-                <input id="tab-4" type="radio" name="group" />
+                <input id="tab-4" type="radio" name="group" defaultChecked={location.pathname.includes("/saved")} />
                 <input id="tab-5" type="radio" name="group" defaultChecked={location.pathname.includes("/profile")} />
 
                 <div className="buttons">
@@ -36,7 +36,7 @@ function BottomBar() {
                     <label onClick={() => navigate("/explore")} className="material-symbols-outlined" htmlFor="tab-3">
                         Explore
                     </label>
-                    <label className="material-symbols-outlined" htmlFor="tab-4">
+                    <label onClick={() => navigate("/saved")} className="material-symbols-outlined" htmlFor="tab-4">
                         Bookmark
                     </label>
                     <label

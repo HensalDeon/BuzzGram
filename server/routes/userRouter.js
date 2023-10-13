@@ -1,28 +1,10 @@
 import { Router } from "express";
 const router = Router();
-// import { registerMail } from "../controllers/mailer.js";
-// import Auth, {localVariables} from "../middleware/auth.js";
 
+import * as userCotroller from "../controllers/userController.js";
+import Auth from "../middleware/auth.js";
 
-// /** import all controllers */
-// import * as userController from '../controllers/userController.js'
-
-// /** POST methods */
-
-// router.route('/register-mail').post(registerMail); //send the email
-// router.route('/authenticate').post(controller.verifyUser, (req,res)=> res.end()); //authenticate user
-// router.route('/login').post(controller.verifyUser, controller.login); //login in app
-
-
-// /** GET methods */
-// router.route('/user/:username').get(controller.getUser); //user with username
-// router.route('/generateOTP').get(controller.verifyUser, localVariables, controller.generateOTP); //generate random OTP
-// router.route('/verifyOTP').get(controller.verifyUser, controller.verifyOTP); // verify generated OTP
-// router.route('/create-resetSession').get(controller.createResetSession); //reset all the variable
-
-
-// /** PUT methods */
-// router.route('/update-user').put(Auth, controller.updateUser); //is use to update the user profile
-// router.route('/reset-password').put(controller.verifyUser, controller.resetPassword); //use to reset password
+/** GET Requests */
+router.route("/search").get(Auth, userCotroller.searchResult);
 
 export default router;

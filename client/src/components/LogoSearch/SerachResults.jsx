@@ -1,12 +1,15 @@
 import avatar from "../../img/icon-accounts.svg";
 import PropTypes from "prop-types";
 function SerachResults({ users }) {
+    const handleUserView = (user) => {
+        console.log(user, "///");
+    };
     return (
         <div className="FollowersCard" style={{ gap: "0rem" }}>
             {users.map((user) => {
                 return (
                     <div className="follower py-2 mx-2 px-2" key={user._id}>
-                        <div>
+                        <div onClick={() => handleUserView(user)}>
                             <img
                                 src={avatar}
                                 alt="avatar"
@@ -20,7 +23,6 @@ function SerachResults({ users }) {
                     </div>
                 );
             })}
-            {!users.length > 0 && <span style={{textAlign:"center"}}>No Users Found!</span>}
         </div>
     );
 }

@@ -1,4 +1,5 @@
 import * as UserApi from "../api/UserRequests";
+import { logout } from "./AuthActions";
 
 
 export const updateUser=(id, formData)=> async(dispatch)=> {
@@ -9,6 +10,9 @@ export const updateUser=(id, formData)=> async(dispatch)=> {
         dispatch({type: "UPDATING_SUCCESS", data: data})
     }   
     catch(error){
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         dispatch({type: "UPDATING_FAIL"})
     }
 }

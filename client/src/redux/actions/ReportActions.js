@@ -1,4 +1,5 @@
 import * as ReportApi from "../../api/ReportRequests";
+import { logout } from "./AuthActions";
 
 // Action Creators
 export const createReport = (reporterId, targetType, targetId, reason) => async (dispatch) => {
@@ -14,6 +15,9 @@ export const createReport = (reporterId, targetType, targetId, reason) => async 
         }
         return { success: false };
     } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         console.error("Error creating report:", error);
     }
 };
@@ -23,6 +27,9 @@ export const getReports = () => async (dispatch) => {
         const response = await ReportApi.getReports();
         dispatch({ type: "GET_REPORTS_SUCCESS", payload: response.data });
     } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         console.error("Error getting reports:", error);
     }
 };
@@ -32,6 +39,9 @@ export const getReport = (reportId) => async (dispatch) => {
         const response = await ReportApi.getReport(reportId);
         dispatch({ type: "GET_REPORT_SUCCESS", payload: response.data });
     } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         console.error("Error getting report:", error);
     }
 };
@@ -41,6 +51,9 @@ export const updateReport = (reportId, updatedData) => async (dispatch) => {
         const response = await ReportApi.updateReport(reportId, updatedData);
         dispatch({ type: "UPDATE_REPORT_SUCCESS", payload: response.data });
     } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         console.error("Error updating report:", error);
     }
 };
@@ -50,6 +63,9 @@ export const deleteReport = (reportId) => async (dispatch) => {
         const response = await ReportApi.deleteReport(reportId);
         dispatch({ type: "DELETE_REPORT_SUCCESS", payload: reportId });
     } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
         console.error("Error deleting report:", error);
     }
 };

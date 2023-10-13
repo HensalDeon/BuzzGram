@@ -9,7 +9,7 @@ import Auth from "../middleware/auth.js";
 router.route("/:id/all").get(Auth, postController.getAllPosts);
 router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 router.route("/:id/comments").get(Auth, commentController.getComments);
-router.route("/:id/saved").get(postController.getSavedPosts);
+router.route("/:id/saved").get(Auth, postController.getSavedPosts);
 
 /**POST Requests */
 router.route("/").post(Auth, postController.createPost);

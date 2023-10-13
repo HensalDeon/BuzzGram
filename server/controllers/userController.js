@@ -1,5 +1,6 @@
 import UserModel from "../model/userModel.js";
 import bcrypt from "bcrypt";
+
 // get a User
 export const getUser = async (req, res) => {
   const id = req.params.id;
@@ -113,3 +114,15 @@ export const UnFollowUser = async (req, res) => {
     }
   }
 };
+
+export const searchResult = async (req, res) => {
+  const query = req.query.q;
+    const users = await UserModel.find({
+        $or: [
+            { username: { $regex: query, $options: "i" } },
+            { fullname: { $regex: query, $options: "i" } },
+        ],
+    }).select("-password");
+
+    res.status(200).json(users);
+}

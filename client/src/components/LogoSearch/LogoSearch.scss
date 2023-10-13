@@ -45,7 +45,7 @@ $iconGradient: linear-gradient(106.23deg, #f99827, #f95f35 100%);
         }
     }
     .results {
-        background:white;
+        background: white;
         position: absolute;
         top: 3.2rem;
         z-index: 100;
@@ -55,10 +55,19 @@ $iconGradient: linear-gradient(106.23deg, #f99827, #f95f35 100%);
         right: -12px;
         overflow-y: auto;
 
-        .follower:hover{
+        @media (max-width: 929px) {
+            right: auto;
+        }
+
+        .follower:hover {
             background: var(--buttonBg);
             border-radius: 0.5rem;
             cursor: pointer;
+        }
+
+        .noResult {
+            display: flex;
+            justify-content: center;
         }
     }
 }
