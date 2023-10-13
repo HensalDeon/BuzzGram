@@ -50,18 +50,6 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        mobile: {
-            type: String,
-            default: "",
-        },
-        livesin: {
-            type: String,
-            default: "",
-        },
-        country: {
-            type: String,
-            default: "",
-        },
         followers: [
             {
                 type: mongoose.Schema.Types.ObjectId,
