@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 48 48" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+  <g>
+    <linearGradient id="b" x1="24" x2="24" y1="1" y2="46.785" gradientUnits="userSpaceOnUse">
+      <stop stop-opacity="1" stop-color="#ffeef1" offset="0"></stop>
+      <stop stop-opacity="1" stop-color="#e8c6ff" offset="1"></stop>
+    </linearGradient>
+    <linearGradient id="a" x1="22" x2="22" y1="9.128" y2="38.423" gradientUnits="userSpaceOnUse">
+      <stop stop-opacity="1" stop-color="#d58cff" offset="0"></stop>
+      <stop stop-opacity="1" stop-color="#6446fd" offset="1"></stop>
+    </linearGradient>
+    <linearGradient xlink:href="#a" id="c" x1="21.83" x2="21.83" y1="9.128" y2="38.423"></linearGradient>
+    <linearGradient xlink:href="#a" id="d" x1="31" x2="31" y1="9.128" y2="38.423"></linearGradient>
+    <path fill="url(#b)" d="M46.406 10.717a9.683 9.683 0 0 0-9.124-9.124 235.401 235.401 0 0 0-26.564 0 9.684 9.684 0 0 0-9.124 9.124 235.412 235.412 0 0 0 0 26.565 9.684 9.684 0 0 0 9.124 9.124 234.815 234.815 0 0 0 26.564 0 9.683 9.683 0 0 0 9.124-9.124 235.412 235.412 0 0 0 0-26.565z" data-name="Layer 2" opacity="1" data-original="url(#b)" class=""></path>
+    <g data-name="Layer 3">
+      <circle cx="22" cy="16" r="6.75" fill="url(#a)" opacity="1" data-original="url(#a)" class=""></circle>
+      <path fill="url(#c)" d="M12 33.75h11.8a4.573 4.573 0 0 1-.05-.75A7.255 7.255 0 0 1 31 25.75a6.618 6.618 0 0 1 1.41.15 6.807 6.807 0 0 0-4.35-4.32 8.223 8.223 0 0 1-12.13 0A6.753 6.753 0 0 0 11.25 28v5a.755.755 0 0 0 .75.75z" opacity="1" data-original="url(#c)" class=""></path>
+      <path fill="url(#d)" d="M25.25 33a5.75 5.75 0 1 0 7.42-5.5 5.797 5.797 0 0 0-7.42 5.5zm8.401-2.651a.75.75 0 0 1 0 1.06L32.06 33l1.59 1.59a.75.75 0 0 1 0 1.061.76.76 0 0 1-1.06 0L31 34.061l-1.59 1.59a.76.76 0 0 1-1.061 0 .75.75 0 0 1 0-1.06L29.94 33l-1.59-1.59a.75.75 0 0 1 1.06-1.061L31 31.94l1.59-1.59a.75.75 0 0 1 1.061-.001z" opacity="1" data-original="url(#d)" class=""></path>
+    </g>
+  </g>
+</svg>

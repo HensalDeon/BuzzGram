@@ -21,7 +21,7 @@ function SavedPosts() {
             })
             .catch((error) => {
                 setLoading(false);
-                console.log(error,'///');
+                console.log(error, "///");
                 toast.error(<b>Error loading saved Posts!</b>);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,11 +37,19 @@ function SavedPosts() {
             {!loading && (
                 <>
                     <div className="Post">
-                <b style={{fontSize:"large"}} className="lg-text">Saved Posts</b>
+                        <b style={{ fontSize: "large" }} className="lg-text">
+                            Saved Posts
+                        </b>
                         <div className="explore">
                             {savedPosts?.map((post) => (
                                 <PostView postDtl={post} key={post._id} />
                             ))}
+                            {savedPosts?.length < 1 && (
+                                <b className="d-flex flex-row">
+                                    You haven&#39;t saved any posts!{" "}
+                                    <span className="material-symbols-outlined">photo_camera</span>
+                                </b>
+                            )}
                         </div>
                     </div>
                 </>

@@ -239,3 +239,24 @@ export const getSavedPosts = async (req, res) => {
         res.status(500).json({ error: "Internal server error occured" });
     }
 };
+
+export const getUserPosts = async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (!id) return res.status(400).json({ error: "params value is undefined!" });
+        const user = await UserModel.findById(id).select("-password -phone -isadmin -isblocked -saved");
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        const posts = await PostModel.find({ user: id })
+            .populate({
+                path: "user",
+                select: "-password -phone -isadmin -isblocked -saved",
+            })
+            .exec();
+        res.status(200).json({ user, posts });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Internal server error occured" });
+    }
+};

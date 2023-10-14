@@ -6,6 +6,7 @@ import * as commentController from "../controllers/commentController.js";
 import Auth from "../middleware/auth.js";
 
 /**GET Requests */
+router.route("/:id").get(postController.getUserPosts);
 router.route("/:id/all").get(Auth, postController.getAllPosts);
 router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 router.route("/:id/comments").get(Auth, commentController.getComments);

@@ -1,15 +1,19 @@
+import { useNavigate } from "react-router-dom";
 import avatar from "../../img/icon-accounts.svg";
 import PropTypes from "prop-types";
+
 function SerachResults({ users }) {
+    const navigate = useNavigate();
     const handleUserView = (user) => {
         console.log(user, "///");
+        navigate(`/profile/${user._id}`);
     };
     return (
         <div className="FollowersCard" style={{ gap: "0rem" }}>
             {users.map((user) => {
                 return (
-                    <div className="follower py-2 mx-2 px-2" key={user._id}>
-                        <div onClick={() => handleUserView(user)}>
+                    <div onClick={() => handleUserView(user)} className="follower py-2 mx-2 px-2" key={user._id}>
+                        <div>
                             <img
                                 src={avatar}
                                 alt="avatar"
