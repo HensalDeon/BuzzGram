@@ -15,6 +15,7 @@ import PostView from "../Explore/PostView";
 import Modal from "react-bootstrap/Modal";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
+import { getTimelinePosts } from "../../redux/actions/PostAction";
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -45,7 +46,6 @@ const ProfileCard = ({ location }) => {
             getUserPosts(id || user._id)
                 .then((res) => {
                     setLoading(false);
-                    console.log(res.data);
                     setCurrUser(res.data);
                 })
                 .catch(() => {
@@ -58,8 +58,8 @@ const ProfileCard = ({ location }) => {
         const loadingToastId = toast.loading("Following...");
         try {
             const response = await dispatch(followUser(id, user._id));
-            console.log(response);
             if (response.success) {
+                dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {
@@ -77,8 +77,8 @@ const ProfileCard = ({ location }) => {
         handleClose();
         try {
             const response = await dispatch(unfollowUser(id, user._id));
-            console.log(response);
             if (response.success) {
+                dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {

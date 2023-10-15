@@ -12,12 +12,16 @@ import Comment from "../../img/icon-comment.svg";
 import defProfile from "../../img/icon-accounts.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { deletePost, getAllPosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
+import { deletePost, getAllPosts, getTimelinePosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
+import { followUser, unfollowUser } from "../../redux/actions/UserAction";
+import { useNavigate } from "react-router-dom";
 
 function ExplorePost({ postDtl }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [showUnfollow, setshowUnfollow] = useState(false);
     const [showPost, setShowPost] = useState(false);
     const [liked, setLiked] = useState(postDtl?.likes.includes(user._id));
     const [isSaved, setIsSaved] = useState(user?.saved.includes(postDtl._id));
@@ -31,10 +35,15 @@ function ExplorePost({ postDtl }) {
         description: postDtl.description,
     });
     const [reportData, setReportData] = useState("");
-
+    const [isFollowed, setIsFollowed] = useState(user?.following.includes(postDtl.user._id));
     const handlePostClose = () => setShowPost(false);
 
     const handleClose = () => setShow(false);
+    const handleUfModalClose = () => setshowUnfollow(false);
+    const handleUfModalShow = () => {
+        setshowUnfollow(true);
+        handleClose();
+    };
 
     const handleEditClose = () => {
         setShowEdit(false);
@@ -154,6 +163,7 @@ function ExplorePost({ postDtl }) {
 
     const handleSave = async () => {
         const loadingToastId = toast.loading("Saving...");
+        handleClose();
         try {
             const savePromise = await dispatch(savePost(user._id, postDtl._id, isSaved));
             toast.dismiss(loadingToastId);
@@ -163,10 +173,50 @@ function ExplorePost({ postDtl }) {
             } else {
                 toast.error(<b>{savePromise.error}</b>);
             }
-            handleClose();
         } catch (error) {
-            handleClose();
             toast.error(<b>Something went wrong while saving!</b>);
+            console.error("Error:", error);
+        }
+    };
+
+    const handleFollow = async () => {
+        const loadingToastId = toast.loading("Following...");
+        handleClose();
+        try {
+            const response = await dispatch(followUser(postDtl.user._id, user._id));
+            console.log(response);
+            if (response.success) {
+                dispatch(getTimelinePosts(user._id));
+                toast.success(<b>{response.message}</b>);
+                setIsFollowed(!isFollowed);
+            } else {
+                toast.error(<b>{response.error}</b>);
+            }
+            toast.dismiss(loadingToastId);
+        } catch (error) {
+            toast.dismiss(loadingToastId);
+            toast.error(<b>Cannot follow at the moment!</b>);
+            console.error("Error:", error);
+        }
+    };
+
+    const handleUnFollow = async () => {
+        const loadingToastId = toast.loading("Unfollowing...");
+        handleUfModalClose();
+        handleClose();
+        try {
+            const response = await dispatch(unfollowUser(postDtl.user._id, user._id));
+            if (response.success) {
+                dispatch(getTimelinePosts(user._id));
+                toast.success(<b>{response.message}</b>);
+                setIsFollowed(!isFollowed);
+            } else {
+                toast.error(<b>{response.error}</b>);
+            }
+            toast.dismiss(loadingToastId);
+        } catch (error) {
+            toast.dismiss(loadingToastId);
+            toast.error(<b>Can&#39;t Unfollow at the moment!</b>);
             console.error("Error:", error);
         }
     };
@@ -197,12 +247,27 @@ function ExplorePost({ postDtl }) {
             <Toaster position="top-center" reverseOrder={false}></Toaster>
 
             <img onClick={() => handlePostView(postDtl)} src={postDtl.image} alt="" key={postDtl._id} />
-
+            <Modal show={showUnfollow} onHide={handleUfModalClose}>
+                <Modal.Body style={{ width: "10rem" }}>
+                    <img src={postDtl.user.profileimage || defProfile} alt="" />
+                    <span className="lg-text pb-2">{isFollowed ? "Unfollow this user?" : "Follow this User?"}</span>
+                    <div className="cover">
+                        <button className="button modalButton" onClick={handleUfModalClose}>
+                            No!
+                        </button>
+                        <button className="button modalButton" onClick={handleUnFollow}>
+                            Yes!
+                        </button>
+                    </div>
+                </Modal.Body>
+            </Modal>
             <Modal show={show} onHide={handleClose} className="modal-postion">
                 <Modal.Body>
                     {postDtl.user?._id !== user._id && (
                         <>
-                            <span className="linear-gradient-text">Follow User</span>
+                            <span onClick={isFollowed ? handleUfModalShow : handleFollow} className="linear-gradient-text">
+                                {isFollowed ? "Unfollow" : "Follow"}
+                            </span>
                             <hr />
                             <span onClick={handleReportShow} className="linear-gradient-text">
                                 Report Post
@@ -271,7 +336,7 @@ function ExplorePost({ postDtl }) {
                         <div className="Post lg-bg" style={{ textAlign: "left" }}>
                             <div className="header">
                                 <div className="contents">
-                                    <button>
+                                    <button onClick={() => navigate(`/profile/${postDtl?.user._id}`)}>
                                         <img
                                             className="image"
                                             src={postDtl?.user.profileimage || defProfile}

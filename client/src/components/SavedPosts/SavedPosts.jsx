@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 function SavedPosts() {
     const { user } = useSelector((state) => state.authReducer.authData);
     const [savedPosts, setSavedPosts] = useState([]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         setLoading(true);
@@ -19,9 +19,8 @@ function SavedPosts() {
                 setLoading(false);
                 setSavedPosts(res.data);
             })
-            .catch((error) => {
+            .catch(() => {
                 setLoading(false);
-                console.log(error, "///");
                 toast.error(<b>Error loading saved Posts!</b>);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,7 +43,7 @@ function SavedPosts() {
                             {savedPosts?.map((post) => (
                                 <PostView postDtl={post} key={post._id} />
                             ))}
-                            {savedPosts?.length < 1 && (
+                            {savedPosts?.length < 1 && !loading && (
                                 <b className="d-flex flex-row">
                                     You haven&#39;t saved any posts!{" "}
                                     <span className="material-symbols-outlined">photo_camera</span>

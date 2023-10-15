@@ -1,5 +1,13 @@
 const postReducer = (
-    state = { posts: [], allPosts: [], loading: false, error: false, imgError: false, uploading: false },
+    state = {
+        posts: [],
+        allPosts: [],
+        loading: false,
+        timeLineloading: false,
+        error: false,
+        imgError: false,
+        uploading: false,
+    },
     action
 ) => {
     switch (action.type) {
@@ -16,11 +24,11 @@ const postReducer = (
         case "UPLOAD_FAIL":
             return { ...state, uploading: false, error: true };
         case "RETREIVING_START":
-            return { ...state, loading: true, error: false };
+            return { ...state, timeLineloading: true, error: false };
         case "RETREIVING_SUCCESS":
-            return { ...state, posts: action.data, loading: false, error: false };
+            return { ...state, posts: action.data, timeLineloading: false, error: false };
         case "RETREIVING_FAIL":
-            return { ...state, loading: false, error: true };
+            return { ...state, timeLineloading: false, error: true };
         case "GET_POSTS_START":
             return { ...state, loading: true, error: false };
         case "GET_POSTS_SUCCESS":

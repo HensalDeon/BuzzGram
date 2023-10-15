@@ -8,7 +8,7 @@ import PacmanLoader from "react-spinners/PacmanLoader";
 const Posts = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
-    let { posts, loading } = useSelector((state) => state.postReducer);
+    let { posts, timeLineloading } = useSelector((state) => state.postReducer);
 
     const override = {
         display: "block",
@@ -26,8 +26,8 @@ const Posts = () => {
 
     return (
         <div className="Posts">
-            <PacmanLoader loading={loading} cssOverride={override} color="orange" speedMultiplier={1} />
-            {!loading &&
+            <PacmanLoader loading={timeLineloading} cssOverride={override} color="orange" speedMultiplier={1} />
+            {!timeLineloading &&
                 posts.map((post) => {
                     return <Post data={post} key={post._id} />;
                 })}

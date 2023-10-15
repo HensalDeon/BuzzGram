@@ -17,12 +17,16 @@ import { deletePost, getTimelinePosts, likePost, savePost, updatePost } from "..
 import { createReport } from "../../redux/actions/ReportActions";
 import { createComment } from "../../redux/actions/CommentActions";
 import CommentList from "./CommentList";
+import { useNavigate } from "react-router-dom";
+import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 
 const Post = ({ data }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user } = useSelector((state) => state.authReducer.authData);
 
     const [show, setShow] = useState(false);
+    const [showUnfollow, setshowUnfollow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showReport, setShowReport] = useState(false);
     const [showCmt, setshowCmt] = useState(false);
@@ -34,6 +38,7 @@ const Post = ({ data }) => {
     const [reportData, setReportData] = useState("");
     const [text, setText] = useState("");
     const [isSaved, setIsSaved] = useState(user?.saved.includes(data._id));
+    const [isFollowed, setIsFollowed] = useState(user?.following.includes(data.userDetails._id));
 
     const handleComment = async () => {
         if (!text.trim()) return toast.error(<b>Comment cannot be empty!</b>);
@@ -68,6 +73,11 @@ const Post = ({ data }) => {
         setshowCmt(false);
     };
     const handleClose = () => setShow(false);
+    const handleUfModalClose = () => setshowUnfollow(false);
+    const handleUfModalShow = () => {
+        setshowUnfollow(true);
+        handleClose()
+    }
 
     const handleReportClose = () => {
         setShowReport(false);
@@ -184,14 +194,70 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
+    const handleFollow = async () => {
+        const loadingToastId = toast.loading("Following...");
+        try {
+            const response = await dispatch(followUser(data.userDetails._id, user._id));
+            console.log(response);
+            if (response.success) {
+                dispatch(getTimelinePosts(user._id));
+                toast.success(<b>{response.message}</b>);
+                setIsFollowed(!isFollowed);
+            } else {
+                toast.error(<b>{response.error}</b>);
+            }
+            toast.dismiss(loadingToastId);
+        } catch (error) {
+            toast.dismiss(loadingToastId);
+            toast.error(<b>Cannot follow at the moment!</b>);
+            console.error("Error:", error);
+        }
+    };
+
+    const handleUnFollow = async () => {
+        const loadingToastId = toast.loading("Unfollowing...");
+        handleUfModalClose();
+        try {
+            const response = await dispatch(unfollowUser(data.userDetails._id, user._id));
+            console.log(response);
+            if (response.success) {
+                dispatch(getTimelinePosts(user._id));
+                toast.success(<b>{response.message}</b>);
+                setIsFollowed(!isFollowed);
+            } else {
+                toast.error(<b>{response.error}</b>);
+            }
+            toast.dismiss(loadingToastId);
+        } catch (error) {
+            toast.dismiss(loadingToastId);
+            toast.error(<b>Can&#39;t Unfollow at the moment!</b>);
+            console.error("Error:", error);
+        }
+    };
     return (
         //modal for post options
         <div className="Post">
+            <Modal show={showUnfollow} onHide={handleUfModalClose}>
+                <Modal.Body style={{ width: "10rem" }}>
+                    <img src={data.userDetails.profileimage || defProfile} alt="" />
+                    <span className="lg-text pb-2">{isFollowed ? "Unfollow this user?" : "Follow this User?"}</span>
+                    <div className="cover">
+                        <button className="button modalButton" onClick={handleUfModalClose}>
+                            No!
+                        </button>
+                        <button className="button modalButton" onClick={handleUnFollow}>
+                            Yes!
+                        </button>
+                    </div>
+                </Modal.Body>
+            </Modal>
             <Modal show={show} onHide={handleClose} className="modal-postion">
                 <Modal.Body>
                     {data.userDetails?._id !== user._id && (
                         <>
-                            <span className="linear-gradient-text">Follow User</span>
+                            <span onClick={isFollowed ? handleUfModalShow : handleFollow} className="linear-gradient-text">
+                                {isFollowed ? "Unfollow User" : "Follow User"}
+                            </span>
                             <hr />
                             <span onClick={handleReportShow} className="linear-gradient-text">
                                 Report Post
@@ -257,7 +323,7 @@ const Post = ({ data }) => {
 
             <div className="header">
                 <div className="contents">
-                    <button>
+                    <button onClick={() => navigate(`/profile/${user._id}`)}>
                         <img className="image" src={data.userDetails?.profileimage || defProfile} alt="profile" />
                         <span>{data.userDetails?.username || "noNameAvailable"}</span>
                     </button>

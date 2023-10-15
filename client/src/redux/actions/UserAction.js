@@ -17,9 +17,7 @@ export const updateUser = (id, formData) => async (dispatch) => {
 
 export const followUser = (id, curUserId) => async (dispatch) => {
     try {
-        console.log(curUserId,'////');
         const response = await UserApi.followUser(id, curUserId);
-        console.log(response);
         if (response.status === 201) {
             dispatch({ type: "FOLLOW_USER", data: id });
             return { success: true, message: response.data.message };
