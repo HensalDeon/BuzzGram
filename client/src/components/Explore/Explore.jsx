@@ -4,9 +4,9 @@ import { getAllPosts } from "../../redux/actions/PostAction";
 import { useDispatch, useSelector } from "react-redux";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PostView from "./PostView";
-import loadingImg from "../../img/icon-flatLoadMore.svg";
-import noMore from "../../img/icon-flatNoMore.svg";
-
+import debounce from "lodash/debounce";
+// import loadingImg from "../../img/icon-flatLoadMore.svg";
+// import noMore from "../../img/icon-flatNoMore.svg";
 function Explore() {
     const { allPosts, loading, hasMorePosts } = useSelector((state) => state.postReducer);
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -14,18 +14,35 @@ function Explore() {
     const storedPage = localStorage.getItem("expPage");
     const initialPage = storedPage ? parseInt(storedPage, 10) : 1;
     const [page, setPage] = useState(initialPage);
+    const [scrolling, setScrolling] = useState(false);
+
+    const handelInfiniteScroll = async () => {
+        if (!scrolling) {
+            setScrolling(true);
+            try {
+                if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+                    if (hasMorePosts) {
+                        setPage((prev) => prev + 1);
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+
+    const debouncedInfiniteScroll = debounce(handelInfiniteScroll, 1000);
 
     const override = {
         display: "block",
         margin: "auto",
     };
-
-    const handleLoadMore = () => {
-        if (hasMorePosts) {
-            setPage((prev) => prev + 1);
-        }
-    };
-
+    console.log(hasMorePosts);
+    // const handleLoadMore = () => {
+    //     if (hasMorePosts) {
+    //         setPage((prev) => prev + 1);
+    //     }
+    // };
     useEffect(() => {
         const currentPage = localStorage.getItem("expPage");
         if (currentPage !== String(page)) {
@@ -34,6 +51,15 @@ function Explore() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page, dispatch, user._id]);
+
+    useEffect(() => {
+        window.addEventListener("scroll", debouncedInfiniteScroll);
+        return () => {
+            window.removeEventListener("scroll", debouncedInfiniteScroll);
+            setScrolling(false);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [scrolling]);
 
     return (
         <>
@@ -46,7 +72,7 @@ function Explore() {
                         <PostView postDtl={post} key={post._id} />
                     ))}
                 </div>
-                <div
+                {/* <div
                     className="d-flex justify-content-center"
                     style={{ cursor: "pointer" }}
                     onClick={hasMorePosts ? handleLoadMore : null}
@@ -61,7 +87,7 @@ function Explore() {
                             />
                         </b>
                     )}
-                </div>
+                </div> */}
                 <PropagateLoader loading={loading} cssOverride={override} color="orange" />
             </div>
         </>
