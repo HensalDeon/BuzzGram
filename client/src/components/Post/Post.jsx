@@ -38,7 +38,7 @@ const Post = ({ data }) => {
     const [reportData, setReportData] = useState("");
     const [text, setText] = useState("");
     const [isSaved, setIsSaved] = useState(user?.saved.includes(data._id));
-    const [isFollowed, setIsFollowed] = useState(user?.following.includes(data.userDetails._id));
+    const [isFollowed, setIsFollowed] = useState(user?.following.includes(data?.userDetails?._id));
 
     const handleComment = async () => {
         if (!text.trim()) return toast.error(<b>Comment cannot be empty!</b>);
@@ -239,7 +239,7 @@ const Post = ({ data }) => {
         <div className="Post">
             <Modal show={showUnfollow} onHide={handleUfModalClose}>
                 <Modal.Body style={{ width: "10rem" }}>
-                    <img src={data.userDetails.profileimage || defProfile} alt="" />
+                    <img src={data?.userDetails?.profileimage || defProfile} alt="" />
                     <span className="lg-text pb-2">{isFollowed ? "Unfollow this user?" : "Follow this User?"}</span>
                     <div className="cover">
                         <button className="button modalButton" onClick={handleUfModalClose}>
@@ -323,7 +323,7 @@ const Post = ({ data }) => {
 
             <div className="header">
                 <div className="contents">
-                    <button onClick={() => navigate(`/profile/${user._id}`)}>
+                    <button onClick={() => navigate(`/profile/${data.userDetails._id}`)}>
                         <img className="image" src={data.userDetails?.profileimage || defProfile} alt="profile" />
                         <span>{data.userDetails?.username || "noNameAvailable"}</span>
                     </button>

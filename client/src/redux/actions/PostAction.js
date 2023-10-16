@@ -1,6 +1,5 @@
 import * as PostsApi from "../../api/PostsRequests";
 import { logout } from "./AuthActions";
-
 export const getTimelinePosts = (id) => async (dispatch) => {
     dispatch({ type: "RETREIVING_START" });
     try {
@@ -14,10 +13,11 @@ export const getTimelinePosts = (id) => async (dispatch) => {
         dispatch({ type: "RETREIVING_FAIL" });
     }
 };
-export const getAllPosts = (user) => async (dispatch) => {
+
+export const getAllPosts = (user, page) => async (dispatch) => {
     dispatch({ type: "GET_POSTS_START" });
     try {
-        const { data } = await PostsApi.getAllPosts(user);
+        const { data } = await PostsApi.getAllPosts(user, page);
         dispatch({ type: "GET_POSTS_SUCCESS", data: data });
     } catch (error) {
         console.log(error);

@@ -15,19 +15,21 @@ function App() {
     const admin = useSelector((state) => state.authReducer.adminAuthData);
     const Authorized = user && user.user.isblocked !== true;
 
+
     return (
         <div className="App">
             <div className="blur" style={{ top: "-18%", right: "0" }}></div>
             <div className="blur" style={{ top: "36%", left: "-8rem" }}></div>
             <Routes>
                 {/* User routes */}
+                <Route path="/check" element={<Blank />} />
                 <Route path="/" element={Authorized ? <Navigate to="home" /> : <Navigate to="auth" />} />
-                <Route path="/home" element={Authorized ? <Home location="home" /> : <Navigate to="../auth" />} />
-                <Route path="/explore" element={Authorized ? <Home location="explore" /> : <Navigate to="../auth" />} />
-                <Route path="/saved" element={Authorized ? <Home location="saved" /> : <Navigate to="../auth" />} />
+                <Route path="/home" element={Authorized ? <Home location="home" /> : <Navigate to="/auth" />} />
+                <Route path="/explore" element={Authorized ? <Home location="explore" /> : <Navigate to="/auth" />} />
+                <Route path="/saved" element={Authorized ? <Home location="saved" /> : <Navigate to="/auth" />} />
                 <Route path="/auth" element={Authorized ? <Navigate to="../home" /> : <Auth />} />
-                <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="../auth" />} />
-                <Route path="*" element={<p>just nothing!!</p>} />
+                <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="/auth" />} />
+                <Route path="*" element={<p>Not Found</p>} />
 
                 {/* Admin routes */}
                 <Route path="/admin/" element={admin ? <Admin /> : <Navigate to="auth" />}>

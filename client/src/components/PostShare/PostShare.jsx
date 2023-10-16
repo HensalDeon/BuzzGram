@@ -8,8 +8,8 @@ import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
-import { getAllPosts, getTimelinePosts } from "../../redux/actions/PostAction";
-import { data } from "autoprefixer";
+import { getTimelinePosts } from "../../redux/actions/PostAction";
+// import { data } from "autoprefixer";
 // import { UilEdit } from "@iconscout/react-unicons";
 
 const PostShare = () => {
@@ -56,7 +56,6 @@ const PostShare = () => {
                         if (!error) {
                             resetShare();
                             dispatch(getTimelinePosts(user._id));
-                            dispatch(getAllPosts(user._id));
                             return toast.success(<b>Post uploaded successfully..!</b>);
                         } else {
                             toast.error(<b>Failed to upload post</b>);
@@ -138,7 +137,7 @@ const PostShare = () => {
         <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             <div className="PostShare">
-                <img src={data.profileimage || defProfile} alt="" />
+                <img src={user.profileimage || defProfile} alt="" />
                 <div>
                     <input type="text" name="description" placeholder="What's happening" ref={description} />
                     <div className="postOptions">

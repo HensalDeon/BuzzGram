@@ -1,6 +1,7 @@
 const postReducer = (
     state = {
         posts: [],
+        hasMorePosts: true,
         allPosts: [],
         loading: false,
         timeLineloading: false,
@@ -20,7 +21,7 @@ const postReducer = (
         case "UPLOAD_START":
             return { ...state, error: false, uploading: true };
         case "UPLOAD_SUCCESS":
-            return { ...state, posts: [action.data, ...state.posts], uploading: false, error: false };
+            return { ...state, posts: [action.data, ...state.posts], uploading: false, error: false, hasMorePosts: true };
         case "UPLOAD_FAIL":
             return { ...state, uploading: false, error: true };
         case "RETREIVING_START":
@@ -32,7 +33,14 @@ const postReducer = (
         case "GET_POSTS_START":
             return { ...state, loading: true, error: false };
         case "GET_POSTS_SUCCESS":
-            return { ...state, allPosts: action.data, loading: false, error: false };
+            // return { ...state, allPosts: action.data, loading: false, error: false };
+            return {
+                ...state,
+                allPosts: action.data.length > 0 ? [...state.allPosts, ...action.data] : state.allPosts,
+                loading: false,
+                error: false,
+                hasMorePosts: action.data.length > 0,
+            };
         case "GET_POSTS_FAIL":
             return { ...state, loading: false, error: true };
         case "LIKE_POST":

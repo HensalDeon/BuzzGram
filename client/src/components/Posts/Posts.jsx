@@ -10,6 +10,8 @@ const Posts = () => {
     const { user } = useSelector((state) => state.authReducer.authData);
     let { posts, timeLineloading } = useSelector((state) => state.postReducer);
 
+    console.log(posts);
+
     const override = {
         display: "block",
         margin: "0 auto",

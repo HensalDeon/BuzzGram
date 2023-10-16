@@ -3,9 +3,9 @@
     flex-wrap: wrap;
     gap: 0.5rem;
 
-    @media (max-width: 768px) {
-        justify-content: space-around;
-    }
+    // @media (max-width: 768px) {
+    //     justify-content: space-around;
+    // }
 
     img {
         flex: 1;

@@ -24,6 +24,7 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
         case "LOG_OUT":
             // localStorage.clear();
             localStorage.removeItem("profile");
+            localStorage.removeItem("expPage");
             return { ...state, authData: null, loading: false, error: null, updateLoading: false };
         case "ADMIN_LOG_OUT":
             return { ...state, adminAuthData: null, adminLoading: false, adminError: null };

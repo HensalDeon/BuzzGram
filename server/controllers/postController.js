@@ -161,13 +161,21 @@ export const getAllPosts = async (req, res) => {
         const reportedPosts = await PostModel.find({
             reports: { $in: [userIdObjectId] },
         });
+        const { page } = req.query;
+        const limitValue = 3;
+        const pageValue = parseInt(page, 10) || 1;
+
+        const skipCount = (pageValue - 1) * limitValue;
 
         const posts = await PostModel.find({
             _id: { $nin: reportedPosts.map((post) => post._id) },
-        }).populate({
-            path: "user",
-            select: "-password",
-        });
+        })
+            .populate({
+                path: "user",
+                select: "-password",
+            })
+            .skip(skipCount)
+            .limit(limitValue);
 
         if (!posts) {
             return res.status(404).json({ error: "No posts found." });

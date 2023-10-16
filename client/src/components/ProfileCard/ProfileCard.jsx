@@ -22,9 +22,9 @@ const ProfileCard = ({ location }) => {
     const { id } = useParams();
     const [currUser, setCurrUser] = useState([]);
     const [expanded, setExpanded] = useState(false);
+    const [followers, setFollowers] = useState(null);
     const [loading, setLoading] = useState(true);
     const [show, setShow] = useState(false);
-
     const [isFollowed, setIsFollowed] = useState(user?.following.includes(id));
 
     const toggleExpand = () => {
@@ -45,8 +45,10 @@ const ProfileCard = ({ location }) => {
         if (id || user._id) {
             getUserPosts(id || user._id)
                 .then((res) => {
+                    console.log(res);
                     setLoading(false);
                     setCurrUser(res.data);
+                    setFollowers(res.data.user.followers.length);
                 })
                 .catch(() => {
                     setLoading(false);
@@ -62,6 +64,7 @@ const ProfileCard = ({ location }) => {
                 dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
+                setFollowers((prev) => prev + 1);
             } else {
                 toast.error(<b>{response.error}</b>);
             }
@@ -81,6 +84,7 @@ const ProfileCard = ({ location }) => {
                 dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
+                setFollowers((prev) => prev - 1);
             } else {
                 toast.error(<b>{response.error}</b>);
             }
@@ -153,12 +157,13 @@ const ProfileCard = ({ location }) => {
                         <hr />
                         <div>
                             <div className="follow">
-                                <span>{currUser.user?.followers.length}</span>
+                                {/* <span>{currUser.user?.followers.length}</span> */}
+                                <span>{followers}</span>
                                 <span>Followers</span>
                             </div>
                             <div className="vl"></div>
                             <div className="follow">
-                                <span>{user?.following.length}</span>
+                                <span>{currUser.user?.following.length}</span>
                                 <span>Followings</span>
                             </div>
 
