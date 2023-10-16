@@ -45,7 +45,6 @@ const ProfileCard = ({ location }) => {
         if (id || user._id) {
             getUserPosts(id || user._id)
                 .then((res) => {
-                    console.log(res);
                     setLoading(false);
                     setCurrUser(res.data);
                     setFollowers(res.data.user.followers.length);

@@ -5,8 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PostView from "./PostView";
 import debounce from "lodash/debounce";
-// import loadingImg from "../../img/icon-flatLoadMore.svg";
-// import noMore from "../../img/icon-flatNoMore.svg";
+
 function Explore() {
     const { allPosts, loading, hasMorePosts } = useSelector((state) => state.postReducer);
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -37,12 +36,7 @@ function Explore() {
         display: "block",
         margin: "auto",
     };
-    console.log(hasMorePosts);
-    // const handleLoadMore = () => {
-    //     if (hasMorePosts) {
-    //         setPage((prev) => prev + 1);
-    //     }
-    // };
+
     useEffect(() => {
         const currentPage = localStorage.getItem("expPage");
         if (currentPage !== String(page)) {
@@ -72,22 +66,6 @@ function Explore() {
                         <PostView postDtl={post} key={post._id} />
                     ))}
                 </div>
-                {/* <div
-                    className="d-flex justify-content-center"
-                    style={{ cursor: "pointer" }}
-                    onClick={hasMorePosts ? handleLoadMore : null}
-                >
-                    {!loading && (
-                        <b className="lg-text">
-                            {hasMorePosts ? "Load More" : "Nothing to show more!"}
-                            <img
-                                style={{ width: "1.5rem", paddingLeft: "3px" }}
-                                src={hasMorePosts ? loadingImg : noMore}
-                                alt="load"
-                            />
-                        </b>
-                    )}
-                </div> */}
                 <PropagateLoader loading={loading} cssOverride={override} color="orange" />
             </div>
         </>

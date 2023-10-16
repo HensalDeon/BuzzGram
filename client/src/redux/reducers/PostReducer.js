@@ -2,6 +2,7 @@ const postReducer = (
     state = {
         posts: [],
         hasMorePosts: true,
+        moreTimelinePosts: true,
         allPosts: [],
         loading: false,
         timeLineloading: false,
@@ -27,7 +28,14 @@ const postReducer = (
         case "RETREIVING_START":
             return { ...state, timeLineloading: true, error: false };
         case "RETREIVING_SUCCESS":
-            return { ...state, posts: action.data, timeLineloading: false, error: false };
+            // return { ...state, posts: action.data, timeLineloading: false, error: false };
+            return {
+                ...state,
+                posts: action.data.length > 0 ? [...state.posts, ...action.data] : state.posts,
+                timeLineloading: false,
+                error: false,
+                moreTimelinePosts: action.data.length > 0,
+            };
         case "RETREIVING_FAIL":
             return { ...state, timeLineloading: false, error: true };
         case "GET_POSTS_START":
@@ -144,7 +152,17 @@ const postReducer = (
                 allPosts: state.allPosts.filter((post) => post._id !== action.targetId),
             };
         case "RESET_POST_STATE":
-            return { posts: [], allPosts: [], loading: false, error: false, imgError: false, uploading: false };
+            return {
+                posts: [],
+                allPosts: [],
+                timeLineloading: false,
+                loading: false,
+                error: false,
+                imgError: false,
+                uploading: false,
+                hasMorePosts: true,
+                moreTimelinePosts: true,
+            };
 
         default:
             return state;

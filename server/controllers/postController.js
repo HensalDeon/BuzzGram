@@ -2,6 +2,7 @@ import PostModel from "../model/postModel.js";
 import mongoose from "mongoose";
 import UserModel from "../model/userModel.js";
 import CommentModel from "../model/commentModel.js";
+import ReportModel from "../model/reportModel.js";
 
 // Creat new Post
 export const createPost = async (req, res) => {
@@ -93,60 +94,88 @@ export const likePost = async (req, res) => {
 // get timline posts
 export const getTimelinePosts = async (req, res) => {
     const userId = req.params.id;
+    const page = req.query.page || 1;
+    const limit = 3;
     try {
-        const currentUser = await UserModel.findById(userId);
-        const currentUserPosts = await PostModel.find({ user: userId });
+        // const currentUser = await UserModel.findById(userId);
+        // const currentUserPosts = await PostModel.find({ user: userId });
 
-        const followingPosts = await UserModel.aggregate([
-            {
-                $match: {
-                    _id: new mongoose.Types.ObjectId(userId),
-                },
-            },
-            {
-                $lookup: {
-                    from: "posts",
-                    localField: "following",
-                    foreignField: "user",
-                    as: "followingPosts",
-                },
-            },
-            {
-                $project: {
-                    followingPosts: 1,
-                },
-            },
-        ]);
-        const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
-        const followingUsers = await UserModel.find(
-            { _id: { $in: followingUserIds } },
-            { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, phone: 0 }
-        );
+        // const followingPosts = await UserModel.aggregate([
+        //     {
+        //         $match: {
+        //             _id: new mongoose.Types.ObjectId(userId),
+        //         },
+        //     },
+        //     {
+        //         $lookup: {
+        //             from: "posts",
+        //             localField: "following",
+        //             foreignField: "user",
+        //             as: "followingPosts",
+        //         },
+        //     },
+        //     {
+        //         $project: {
+        //             followingPosts: 1,
+        //         },
+        //     },
+        // ]);
+        // const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
+        // const followingUsers = await UserModel.find(
+        //     { _id: { $in: followingUserIds } },
+        //     { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, phone: 0 }
+        // );
 
-        const currentUserPostsModified = currentUserPosts.map((post) => ({
-            ...post.toObject(),
-            userDetails: currentUser,
-        }));
+        // const currentUserPostsModified = currentUserPosts.map((post) => ({
+        //     ...post.toObject(),
+        //     userDetails: currentUser,
+        // }));
 
-        const timelinePosts = currentUserPostsModified.concat(...followingPosts[0].followingPosts);
-        const userIdObjectId = new mongoose.Types.ObjectId(userId);
+        // const timelinePosts = currentUserPostsModified.concat(...followingPosts[0].followingPosts);
+        // const userIdObjectId = new mongoose.Types.ObjectId(userId);
 
-        const filteredTimelinePosts = timelinePosts.filter((post) => {
-            const reportedByCurrentUser = post.reports.some((reportId) => reportId.equals(userIdObjectId));
-            return !reportedByCurrentUser;
+        // const filteredTimelinePosts = timelinePosts.filter((post) => {
+        //     const reportedByCurrentUser = post.reports.some((reportId) => reportId.equals(userIdObjectId));
+        //     return !reportedByCurrentUser;
+        // });
+
+        // filteredTimelinePosts.forEach((post) => {
+        //     const userDetails = followingUsers.find((user) => user._id.equals(post.user));
+        //     if (userDetails) {
+        //         post.userDetails = userDetails;
+        //     }
+        // });
+        // filteredTimelinePosts.sort((a, b) => {
+        //     return new Date(b.createdAt) - new Date(a.createdAt);
+        // });
+
+        // res.status(200).json(filteredTimelinePosts);
+        const currentUser = await UserModel.findById(userId).populate("following").exec();
+        const followingUsers = currentUser.following;
+        const followingUserIds = followingUsers.map((user) => user._id);
+        followingUserIds.push(userId);
+
+        const reportsByCurrentUser = await ReportModel.find({
+            reporterId: userId,
+            targetType: "post",
         });
 
-        filteredTimelinePosts.forEach((post) => {
-            const userDetails = followingUsers.find((user) => user._id.equals(post.user));
-            if (userDetails) {
-                post.userDetails = userDetails;
-            }
-        });
-        filteredTimelinePosts.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        });
+        const reportedPostIds = reportsByCurrentUser.map((report) => report.targetId);
 
-        res.status(200).json(filteredTimelinePosts);
+        const skip = (page - 1) * limit;
+
+        const timelinePosts = await PostModel.find({
+            user: { $in: followingUserIds },
+            _id: { $nin: reportedPostIds },
+        })
+            .populate("user")
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .exec();
+            console.log(timelinePosts.length);
+
+        res.status(200).json(timelinePosts);
     } catch (error) {
         console.error("Error:", error);
         res.status(500).json(error);
