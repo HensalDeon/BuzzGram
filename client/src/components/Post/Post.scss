@@ -96,7 +96,7 @@
             text-align: left;
             font-size: 15px;
             color: aliceblue;
-            opacity: 0.4;
+            opacity: 1;
         }
         .dots{
             opacity: 0;
@@ -104,7 +104,7 @@
         }
 
         &:hover .dots{
-            opacity: 1;
+            opacity: 0.6;
         }
     }
 

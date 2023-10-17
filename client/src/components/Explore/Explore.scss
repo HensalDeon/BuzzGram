@@ -3,10 +3,6 @@
     flex-wrap: wrap;
     gap: 0.5rem;
 
-    // @media (max-width: 768px) {
-    //     justify-content: space-around;
-    // }
-
     img {
         flex: 1;
         max-width: calc(34.1% - 1rem);
@@ -58,4 +54,3 @@
 .lg-bg {
     background: rgb(235, 234, 234);
 }
-

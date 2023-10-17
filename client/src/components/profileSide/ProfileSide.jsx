@@ -5,7 +5,6 @@ import ProfileCard from "../ProfileCard/ProfileCard";
 import PropTypes from "prop-types";
 
 import "./ProfileSide.scss";
-import InfoCard from "../InfoCard/InfoCard";
 const ProfileSide = ({ location }) => {
 
     useEffect(() => {
@@ -19,7 +18,7 @@ const ProfileSide = ({ location }) => {
         <div className="ProfileSide" style={{ animationDelay: "0.5s" }}>
             {/* <Notifications/> */}
             <LogoSearch />
-            {location === "profile" ? <InfoCard /> : <ProfileCard location={location} />}
+            <ProfileCard location={location}/>
             <FollowersCard />
         </div>
     );

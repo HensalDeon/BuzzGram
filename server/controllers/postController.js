@@ -97,60 +97,7 @@ export const getTimelinePosts = async (req, res) => {
     const page = req.query.page || 1;
     const limit = 3;
     try {
-        // const currentUser = await UserModel.findById(userId);
-        // const currentUserPosts = await PostModel.find({ user: userId });
-
-        // const followingPosts = await UserModel.aggregate([
-        //     {
-        //         $match: {
-        //             _id: new mongoose.Types.ObjectId(userId),
-        //         },
-        //     },
-        //     {
-        //         $lookup: {
-        //             from: "posts",
-        //             localField: "following",
-        //             foreignField: "user",
-        //             as: "followingPosts",
-        //         },
-        //     },
-        //     {
-        //         $project: {
-        //             followingPosts: 1,
-        //         },
-        //     },
-        // ]);
-        // const followingUserIds = followingPosts[0].followingPosts.map((post) => post.user);
-        // const followingUsers = await UserModel.find(
-        //     { _id: { $in: followingUserIds } },
-        //     { password: 0, createdAt: 0, updatedAt: 0, isAdmin: 0, phone: 0 }
-        // );
-
-        // const currentUserPostsModified = currentUserPosts.map((post) => ({
-        //     ...post.toObject(),
-        //     userDetails: currentUser,
-        // }));
-
-        // const timelinePosts = currentUserPostsModified.concat(...followingPosts[0].followingPosts);
-        // const userIdObjectId = new mongoose.Types.ObjectId(userId);
-
-        // const filteredTimelinePosts = timelinePosts.filter((post) => {
-        //     const reportedByCurrentUser = post.reports.some((reportId) => reportId.equals(userIdObjectId));
-        //     return !reportedByCurrentUser;
-        // });
-
-        // filteredTimelinePosts.forEach((post) => {
-        //     const userDetails = followingUsers.find((user) => user._id.equals(post.user));
-        //     if (userDetails) {
-        //         post.userDetails = userDetails;
-        //     }
-        // });
-        // filteredTimelinePosts.sort((a, b) => {
-        //     return new Date(b.createdAt) - new Date(a.createdAt);
-        // });
-
-        // res.status(200).json(filteredTimelinePosts);
-        const currentUser = await UserModel.findById(userId).populate("following").exec();
+            const currentUser = await UserModel.findById(userId).populate("following").exec();
         const followingUsers = currentUser.following;
         const followingUserIds = followingUsers.map((user) => user._id);
         followingUserIds.push(userId);

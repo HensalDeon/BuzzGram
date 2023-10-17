@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import defProfile from "../../img/icon-accounts.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import follow from "../../img/icon-flatFollow.svg";
+import editIcon from "../../img/icon-flatEdit.svg";
 import avatar from "../../img/icon-accounts.svg";
 import "./ProfileCard.scss";
 import { useEffect, useState } from "react";
@@ -27,11 +28,17 @@ const ProfileCard = ({ location }) => {
     const [show, setShow] = useState(false);
     const [isFollowed, setIsFollowed] = useState(user?.following.includes(id));
 
+    
+
     const toggleExpand = () => {
         setExpanded(!expanded);
     };
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleEditProfile = () => {
+        console.log("hey");
+
+    };
 
     const override = {
         display: "block",
@@ -96,7 +103,10 @@ const ProfileCard = ({ location }) => {
     };
 
     return (
-        <div className="ProfileCard" style={location === "profile" ? { overflowY: "auto" } : {}}>
+        <div
+            className="ProfileCard"
+            style={location === "profile" ? { overflowY: "auto", boxShadow: " rgb(208,86,155,0.3) 0px 0px 100px" } : {}}
+        >
             <div className="ProfileImages">
                 <img src={currUser.user?.coverimage || Cover} alt="cover image" />
                 <img
@@ -127,7 +137,7 @@ const ProfileCard = ({ location }) => {
                             <span style={location === "profile" ? { fontSize: "20px", padding: "0 14px" } : {}}>
                                 {currUser.user?.username}
                             </span>
-                            {user._id !== currUser.user._id && (
+                            {user._id !== currUser.user._id ? (
                                 <>
                                     {isFollowed ? (
                                         <img
@@ -141,10 +151,17 @@ const ProfileCard = ({ location }) => {
                                             onClick={handleFollow}
                                             style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
                                             src={follow}
-                                            alt="unfollow"
+                                            alt="follow"
                                         />
                                     )}
                                 </>
+                            ) : (
+                                <img
+                                    onClick={handleEditProfile}
+                                    style={{ width: "2.1em", position: "absolute", cursor: "pointer" }}
+                                    src={editIcon}
+                                    alt="edit"
+                                />
                             )}
                         </span>
                         <p>{currUser.user?.fullname}</p>
@@ -185,7 +202,7 @@ const ProfileCard = ({ location }) => {
                             </span>
                         )}
                         {location === "profile" && (
-                            <div className="Post">
+                            <div className="Post mb-3">
                                 <div className="explore">
                                     {currUser?.posts.map((post) => (
                                         <PostView postDtl={post} key={post._id} />

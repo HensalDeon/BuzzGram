@@ -8,8 +8,7 @@ import { updateUser } from "../../actions/UserAction";
 
 const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
   const theme = useMantineTheme();
-  const { password, ...other } = data;
-  const [formData, setFormData] = useState(other);
+  const [formData, setFormData] = useState(data);
   const [profileImage, setProfileImage] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const dispatch = useDispatch();
@@ -94,48 +93,6 @@ const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
             className="infoInput"
           />
         </div>
-
-        <div>
-          <input
-            value={formData.worksAt}
-            onChange={handleChange}
-            type="text"
-            placeholder="Works at"
-            name="worksAt"
-            className="infoInput"
-          />
-        </div>
-
-        <div>
-          <input
-            value={formData.livesIn}
-            onChange={handleChange}
-            type="text"
-            placeholder="Lives in"
-            name="livesIn"
-            className="infoInput"
-          />
-          <input
-            value={formData.country}
-            onChange={handleChange}
-            type="text"
-            placeholder="Country"
-            name="country"
-            className="infoInput"
-          />
-        </div>
-
-        <div>
-          <input
-            value={formData.relationship}
-            onChange={handleChange}
-            type="text"
-            className="infoInput"
-            placeholder="Relationship status"
-            name="relationship"
-          />
-        </div>
-
         <div>
           Profile image
           <input type="file" name="profileImage" onChange={onImageChange} />

@@ -14,7 +14,7 @@ $gray: var(--gray);
     height: 100vh;
 
     @media (min-width: 992px) {
-        margin: 0 3%;
+        margin: 0 6%;
     }
 
     transition: transform 0.3s ease;
@@ -102,6 +102,7 @@ $gray: var(--gray);
                 gap: 0.4rem;
                 align-items: center;
                 justify-content: center;
+                cursor: pointer;
 
                 > span:nth-of-type(1) {
                     font-weight: bold;
@@ -132,4 +133,8 @@ $gray: var(--gray);
     @media (max-width: 1300px) {
         width: 9rem !important;
     }
+}
+
+.pr-bxShadow{
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
