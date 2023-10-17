@@ -7,9 +7,11 @@ import ReportModel from "../model/reportModel.js";
 // Creat new Post
 export const createPost = async (req, res) => {
     const newPost = new PostModel(req.body);
+    console.log(req.body);
     try {
         await newPost.save();
-        res.status(200).json(newPost);
+        const post = await PostModel.findById(newPost._id).populate("user").exec();
+        res.status(200).json(post);
     } catch (error) {
         res.status(500).json(error);
     }
@@ -97,7 +99,7 @@ export const getTimelinePosts = async (req, res) => {
     const page = req.query.page || 1;
     const limit = 3;
     try {
-            const currentUser = await UserModel.findById(userId).populate("following").exec();
+        const currentUser = await UserModel.findById(userId).populate("following").exec();
         const followingUsers = currentUser.following;
         const followingUserIds = followingUsers.map((user) => user._id);
         followingUserIds.push(userId);
@@ -120,7 +122,7 @@ export const getTimelinePosts = async (req, res) => {
             .skip(skip)
             .limit(limit)
             .exec();
-            console.log(timelinePosts.length);
+        console.log(timelinePosts.length);
 
         res.status(200).json(timelinePosts);
     } catch (error) {
@@ -138,7 +140,7 @@ export const getAllPosts = async (req, res) => {
             reports: { $in: [userIdObjectId] },
         });
         const { page } = req.query;
-        const limitValue = 3;
+        const limitValue = 6;
         const pageValue = parseInt(page, 10) || 1;
 
         const skipCount = (pageValue - 1) * limitValue;

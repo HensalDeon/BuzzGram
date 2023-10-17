@@ -4,7 +4,9 @@ import defProfile from "../../img/icon-accounts.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import follow from "../../img/icon-flatFollow.svg";
 import editIcon from "../../img/icon-flatEdit.svg";
+import editProfile from "../../img/icon-flatEditProfile.svg";
 import avatar from "../../img/icon-accounts.svg";
+import editCover from "../../img/icon-flatEditCoverImg.svg";
 import "./ProfileCard.scss";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
@@ -14,6 +16,7 @@ import { getUserPosts } from "../../api/PostsRequests";
 import BeatLoader from "react-spinners/BeatLoader";
 import PostView from "../Explore/PostView";
 import Modal from "react-bootstrap/Modal";
+import ProfileModal from "./ProfileModal";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
@@ -27,8 +30,7 @@ const ProfileCard = ({ location }) => {
     const [loading, setLoading] = useState(true);
     const [show, setShow] = useState(false);
     const [isFollowed, setIsFollowed] = useState(user?.following.includes(id));
-
-    
+    const [editOpened, setEditOpened] = useState(false);
 
     const toggleExpand = () => {
         setExpanded(!expanded);
@@ -37,7 +39,7 @@ const ProfileCard = ({ location }) => {
     const handleShow = () => setShow(true);
     const handleEditProfile = () => {
         console.log("hey");
-
+        setEditOpened(true);
     };
 
     const override = {
@@ -109,12 +111,19 @@ const ProfileCard = ({ location }) => {
         >
             <div className="ProfileImages">
                 <img src={currUser.user?.coverimage || Cover} alt="cover image" />
+                {location === "profile" && (
+                    <span>
+                        <img src={editCover} className="editCover-icon" alt="coverEdit" />
+                    </span>
+                )}
                 <img
                     className={location === "profile" ? "profileImg" : ""}
                     src={currUser.user?.profileimage || defProfile}
                     alt="profile image"
                 />
+                {location === "profile" && <img className="editProfile-icon" src={editProfile} alt="porfileEdit" />}
             </div>
+            {/* modal for confirm unfollow action */}
             <Modal show={show} onHide={handleClose}>
                 <Modal.Body style={{ width: "10rem" }}>
                     <img src={user.profileimage || avatar} alt="" />
@@ -130,6 +139,9 @@ const ProfileCard = ({ location }) => {
                 </Modal.Body>
             </Modal>
 
+            {/* modal for edit profile */}
+            {currUser?.user && <ProfileModal editOpened={editOpened} setEditOpened={setEditOpened} data={currUser?.user} />}
+
             {!loading ? (
                 <>
                     <div className="ProfileName">
@@ -137,7 +149,7 @@ const ProfileCard = ({ location }) => {
                             <span style={location === "profile" ? { fontSize: "20px", padding: "0 14px" } : {}}>
                                 {currUser.user?.username}
                             </span>
-                            {user._id !== currUser.user._id ? (
+                            {user._id !== currUser.user._id && (
                                 <>
                                     {isFollowed ? (
                                         <img
@@ -155,10 +167,11 @@ const ProfileCard = ({ location }) => {
                                         />
                                     )}
                                 </>
-                            ) : (
+                            )}
+                            {user._id == currUser.user._id && location === "profile" && (
                                 <img
                                     onClick={handleEditProfile}
-                                    style={{ width: "2.1em", position: "absolute", cursor: "pointer" }}
+                                    style={{ width: "2em", position: "absolute", cursor: "pointer" }}
                                     src={editIcon}
                                     alt="edit"
                                 />

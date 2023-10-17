@@ -5,11 +5,8 @@ export default async function Auth(req, res, next) {
     try {
         const token = req.headers.authorization.split(" ")[1];
         if (!token) {
-            return res.status(403).send("Access Denied");
+            return res.status(401).send("Access Denied");
         }
-        // const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        // req.user = decodedToken;
-        // next();
         try {
             const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
             req.user = decodedToken;

@@ -48,6 +48,20 @@ $gray: var(--gray);
                 width: 7rem;
             }
         }
+        .editProfile-icon {
+            width: 1.8rem;
+            top: 2.3rem;
+            left: 3.3rem;
+            position: relative;
+            cursor: pointer;
+        }
+        .editCover-icon {
+            width: 1.8rem;
+            top: 1.3rem;
+            right: 1.2rem;
+            position: absolute;
+            cursor: pointer;
+        }
     }
 
     .ProfileName {
@@ -135,6 +149,6 @@ $gray: var(--gray);
     }
 }
 
-.pr-bxShadow{
+.pr-bxShadow {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }

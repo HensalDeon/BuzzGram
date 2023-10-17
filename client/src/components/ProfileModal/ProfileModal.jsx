@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Modal, useMantineTheme } from "@mantine/core";
-import "./ProfileModal.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { uploadImage } from "../../actions/UploadAction";
-import { updateUser } from "../../actions/UserAction";
+import { uploadImage } from "../../redux/actions/UploadAction";
+import { updateUser } from "../../redux/actions/UserAction";
 
 const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
   const theme = useMantineTheme();
@@ -62,13 +61,13 @@ const ProfileModal = ({ modalOpened, setModalOpened, data }) => {
 
   return (
     <Modal
-      overlayColor={
+      overlaycolor={
         theme.colorScheme === "dark"
           ? theme.colors.dark[9]
           : theme.colors.gray[2]
       }
-      overlayOpacity={0.55}
-      overlayBlur={3}
+      overlayopacity={0.55}
+      overlayblur={3}
       size="55%"
       opened={modalOpened}
       onClose={() => setModalOpened(false)}

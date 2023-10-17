@@ -17,7 +17,8 @@ import { createReport } from "../../redux/actions/ReportActions";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import { useNavigate } from "react-router-dom";
 
-function ExplorePost({ postDtl }) {
+// eslint-disable-next-line react/prop-types
+function ExplorePost({ postDtl, updateSavedPosts }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -170,6 +171,9 @@ function ExplorePost({ postDtl }) {
             if (savePromise.success) {
                 setIsSaved(!isSaved);
                 toast.success(<b>{savePromise.message}</b>);
+                if (savePromise.message == "Post unsaved successfully.") {
+                    updateSavedPosts(postDtl._id);
+                }
             } else {
                 toast.error(<b>{savePromise.error}</b>);
             }
@@ -402,6 +406,7 @@ ExplorePost.propTypes = {
             _id: PropTypes.string.isRequired,
         }),
     }).isRequired,
+    // updateSavedPosts: PropTypes.func.isRequired,
 };
 
 export default ExplorePost;

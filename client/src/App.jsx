@@ -10,6 +10,7 @@ import Admin from "./pages/Admin/Admin";
 import Blank from "./components/Blank/Blank";
 import Dashboard from "./pages/Admin/Dashboard";
 import UserList from "./components/UserList/UserList";
+
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);

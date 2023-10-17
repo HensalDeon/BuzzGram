@@ -55,7 +55,6 @@ const PostShare = () => {
                         await dispatch(uploadPost(newPost));
                         if (!error) {
                             resetShare();
-                            dispatch(getTimelinePosts(user._id));
                             return toast.success(<b>Post uploaded successfully..!</b>);
                         } else {
                             toast.error(<b>Failed to upload post</b>);

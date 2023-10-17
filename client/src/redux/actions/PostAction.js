@@ -1,24 +1,13 @@
 import * as PostsApi from "../../api/PostsRequests";
 import { logout } from "./AuthActions";
 
-// export const getTimelinePosts = (id) => async (dispatch) => {
-//     dispatch({ type: "RETREIVING_START" });
-//     try {
-//         const { data } = await PostsApi.getTimelinePosts(id);
-//         dispatch({ type: "RETREIVING_SUCCESS", data: data });
-//     } catch (error) {
-//         console.log(error);
-//         if (error.response.data.error === "Token has expired") {
-//             dispatch(logout());
-//         }
-//         dispatch({ type: "RETREIVING_FAIL" });
-//     }
-// };
-export const getTimelinePosts = (id,page) => async (dispatch) => {
-    dispatch({ type: "RETREIVING_START" });
+export const getTimelinePosts = (id, page) => async (dispatch) => {
     try {
-        const { data } = await PostsApi.getTimelinePosts(id,page);
-        dispatch({ type: "RETREIVING_SUCCESS", data: data });
+        if (page) {
+            dispatch({ type: "RETREIVING_START" });
+            const { data } = await PostsApi.getTimelinePosts(id, page);
+            dispatch({ type: "RETREIVING_SUCCESS", data: data });
+        }
     } catch (error) {
         console.log(error);
         if (error.response.data.error === "Token has expired") {
@@ -99,7 +88,6 @@ export const savePost = (id, postId, isSaved) => async (dispatch) => {
             return { success: false, error: response.data.error };
         }
     } catch (error) {
-        console.log(error);
         if (error.response.data.error === "Token has expired") {
             dispatch(logout());
         }

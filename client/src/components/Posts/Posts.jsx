@@ -16,6 +16,8 @@ const Posts = () => {
     const [page, setPage] = useState(initialPage);
     const [scrolling, setScrolling] = useState(false);
 
+    console.log(timeLineloading);
+
     const handelInfiniteScroll = async () => {
         if (!scrolling) {
             setScrolling(true);
@@ -41,7 +43,9 @@ const Posts = () => {
     useEffect(() => {
         const currentPage = localStorage.getItem("timelinePage");
         if (currentPage !== String(page)) {
-            dispatch(getTimelinePosts(user._id, page));
+            if (page) {
+                dispatch(getTimelinePosts(user._id, page));
+            }
             localStorage.setItem("timelinePage", page);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

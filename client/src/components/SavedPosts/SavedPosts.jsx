@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 // import "./Explore.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import PacmanLoader from "react-spinners/PacmanLoader";
 
 import PostView from "../Explore/PostView";
 import { getSavedPosts } from "../../api/PostsRequests";
 import toast from "react-hot-toast";
+import { logout } from "../../redux/actions/AuthActions";
 
 function SavedPosts() {
     const { user } = useSelector((state) => state.authReducer.authData);
     const [savedPosts, setSavedPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch();
+
+    const updateSavedPosts = (postId) => {
+        const updatedSavedPosts = savedPosts.filter((post) => post._id !== postId);
+        setSavedPosts(updatedSavedPosts);
+      };
+      
 
     useEffect(() => {
         setLoading(true);
@@ -19,7 +27,11 @@ function SavedPosts() {
                 setLoading(false);
                 setSavedPosts(res.data);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error);
+                if (error.response.data.error === "Token has expired") {
+                    dispatch(logout());
+                }
                 setLoading(false);
                 toast.error(<b>Error loading saved Posts!</b>);
             });
@@ -41,7 +53,7 @@ function SavedPosts() {
                         </b>
                         <div className="explore">
                             {savedPosts?.map((post) => (
-                                <PostView postDtl={post} key={post._id} />
+                                <PostView postDtl={post} key={post._id} updateSavedPosts={updateSavedPosts}/>
                             ))}
                             {savedPosts?.length < 1 && !loading && (
                                 <b className="d-flex flex-row">
