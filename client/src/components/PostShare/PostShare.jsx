@@ -1,6 +1,6 @@
 import Cropper from "react-cropper";
-import toast, { Toaster } from "react-hot-toast";
 import "cropperjs/dist/cropper.css";
+import toast, { Toaster } from "react-hot-toast";
 import { useState, useRef } from "react";
 import defProfile from "../../img/icon-accounts.svg";
 import "./PostShare.scss";
@@ -8,9 +8,6 @@ import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
-import { getTimelinePosts } from "../../redux/actions/PostAction";
-// import { data } from "autoprefixer";
-// import { UilEdit } from "@iconscout/react-unicons";
 
 const PostShare = () => {
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -27,12 +24,11 @@ const PostShare = () => {
     // handle post upload
     const handleUpload = async (e) => {
         e.preventDefault();
-        // if (!description.current.value && !imageRef.current.value) {
+        
         if (!description.current.value && !image) {
             return toast.error(<b>Please Provide the Details!</b>);
         } else if (!description.current.value) {
             return toast.error(<b>Please Provide Description..!</b>);
-            // } else if (!imageRef.current.value) {
         } else if (!image) {
             return toast.error(<b>Please Provide an Image...!</b>);
         }
@@ -75,7 +71,7 @@ const PostShare = () => {
 
     const validateImage = (file) => {
         const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-        const maxSize = 4 * 1024 * 1024; // 4MB
+        const maxSize = 4 * 1024 * 1024;
         if (!allowedTypes.includes(file.file.type)) {
             toast.error(<b>Only JPEG, JPG and PNG images are allowed</b>);
             return false;

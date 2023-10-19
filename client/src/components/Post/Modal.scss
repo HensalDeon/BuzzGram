@@ -71,11 +71,10 @@ $gradient-color-2: #ff3399;
     display: flex;
     justify-content: space-between;
     padding: 1 1rem ;
-
-    .modalButton {
-        width: 100%;
-        max-width: 3rem;
-        height: 2rem;
-        align-self: flex-end;
-    }
+}
+.modalButton {
+    width: 100%;
+    max-width: 3rem;
+    height: 2rem;
+    align-self: flex-end;
 }

@@ -14,13 +14,40 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
             return { ...state, adminAuthData: action.data, adminLoading: false, adminError: null };
         case "ADMIN_AUTH_FAIL":
             return { ...state, adminLoading: false, adminError: action.error };
+        case "PROFILE_UPLOAD_SUCCESS":
+            return {
+                ...state,
+                authData: {
+                    ...state.authData,
+                    user: {
+                        ...state.authData.user,
+                        profileimage: action.data,
+                    },
+                },
+            };
         case "UPDATING_START":
             return { ...state, updateLoading: true, error: null };
-        case "UPDATING_SUCCESS":
-            localStorage.setItem("profile", JSON.stringify({ ...action?.data }));
-            return { ...state, authData: action.data, updateLoading: false, error: null };
+        case "UPDATING_SUCCESS": {
+            const updatedUser = { ...state.authData.user, ...action.data.user };
+            const updatedToken = state.authData.token;
+            const updatedData = {
+                user: updatedUser,
+                token: updatedToken,
+            };
+            localStorage.setItem("profile", JSON.stringify(updatedData));
+
+            return {
+                ...state,
+                authData: {
+                    user: updatedUser,
+                    token: updatedToken,
+                },
+                updateLoading: false,
+                error: null,
+            };
+        }
         case "UPDATING_FAIL":
-            return { ...state, updateLoading: true, error: action.error };
+            return { ...state, updateLoading: false, error: action.error };
         case "LOG_OUT":
             // localStorage.clear();
             localStorage.removeItem("profile");

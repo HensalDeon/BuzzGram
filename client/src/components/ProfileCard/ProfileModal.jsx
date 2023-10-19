@@ -1,20 +1,33 @@
 import PropTypes from "prop-types";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
-function ProfileModal({ editOpened, setEditOpened, data }) {
+import toast, { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUser } from "../../redux/actions/UserAction";
+// eslint-disable-next-line react/prop-types
+function ProfileModal({ editOpened, setEditOpened, data, updateCurrUser }) {
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.authReducer.authData);
     const [editProfile, setEditProfile] = useState({
         username: data.username,
         fullname: data.fullname,
         bio: data.bio,
     });
+    const handleEditClose = () => {
+        setEditOpened(false);
+        setEditProfile({
+            username: data.username,
+            fullname: data.fullname,
+            bio: data.bio,
+        });
+    };
 
-    const handleEditClose = () => setEditOpened(false);
-    const maxBioLength = 100;
+    const maxBioLength = 50;
     const handleEditInput = (e) => {
         const { name, value } = e.target;
 
         if (name === "bio" && value.length > maxBioLength) {
-            return;
+            return toast.error(<b>Maximum characters reached!</b>);
         }
 
         setEditProfile((prevEditData) => ({
@@ -23,8 +36,27 @@ function ProfileModal({ editOpened, setEditOpened, data }) {
         }));
     };
 
+    const handleSubmit = async () => {
+        setEditOpened(false);
+        const loadingToastId = toast.loading("Updating...");
+        try {
+            const response = await dispatch(updateUser(user._id, editProfile));
+            toast.dismiss(loadingToastId);
+            console.log(response, "response");
+            if (response.success) {
+                updateCurrUser(editProfile);
+                toast.success(<b>{response.message}</b>);
+            } else {
+                toast.error(<b>{response.error}</b>);
+            }
+        } catch (error) {
+            console.log(error, "///");
+        }
+    };
+
     return (
         <>
+            <Toaster position="top-center" reverseOrder={false}></Toaster>
             <Modal show={editOpened} onHide={handleEditClose}>
                 <Modal.Body style={{ width: "17rem" }}>
                     <label className="pt-2 pb-3 linear-gradient-text">Edit Profile?</label>
@@ -44,12 +76,26 @@ function ProfileModal({ editOpened, setEditOpened, data }) {
                         <span className="lg-text">Bio:</span>
                     </div>
                     <div className="Search my-2">
-                        <textarea style={{width:"100%"}} type="text" name="bio" value={editProfile.bio} onChange={handleEditInput} />
+                        <textarea
+                            style={{ width: "100%" }}
+                            type="text"
+                            name="bio"
+                            value={editProfile.bio}
+                            onChange={handleEditInput}
+                        />
                     </div>
                     <div style={{ display: "flex" }}>
                         <span className="lg-text">
-                            {maxBioLength - editProfile.username.length} / {maxBioLength}
+                            {maxBioLength - editProfile.bio.length} / {maxBioLength}
                         </span>
+                    </div>
+                    <div className="d-flex flex-row-reverse">
+                        <button className="button modalButton" onClick={handleSubmit}>
+                            Yes!
+                        </button>
+                        <button className="button modalButton  mx-3" onClick={handleEditClose}>
+                            No!
+                        </button>
                     </div>
                 </Modal.Body>
             </Modal>

@@ -23,12 +23,39 @@ const postReducer = (
             return { ...state, error: false, uploading: true };
         case "UPLOAD_SUCCESS":
             return { ...state, posts: [action.data, ...state.posts], uploading: false, error: false, hasMorePosts: true };
+        case "PROFILE_UPLOAD_SUCCESS":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post.user._id === action.id) {
+                        return {
+                            ...post,
+                            user: {
+                                ...post.user,
+                                profileimage: action.data,
+                            },
+                        };
+                    }
+                    return post;
+                }),
+                allPosts: state.allPosts.map((post) => {
+                    if (post.user._id === action.id) {
+                        return {
+                            ...post,
+                            user: {
+                                ...post.user,
+                                profileimage: action.data,
+                            },
+                        };
+                    }
+                    return post;
+                }),
+            };
         case "UPLOAD_FAIL":
             return { ...state, uploading: false, error: true };
         case "RETREIVING_START":
             return { ...state, timeLineloading: true, error: false };
         case "RETREIVING_SUCCESS":
-            // return { ...state, posts: action.data, timeLineloading: false, error: false };
             return {
                 ...state,
                 posts: action.data.length > 0 ? [...state.posts, ...action.data] : state.posts,
@@ -41,7 +68,6 @@ const postReducer = (
         case "GET_POSTS_START":
             return { ...state, loading: true, error: false };
         case "GET_POSTS_SUCCESS":
-            // return { ...state, allPosts: action.data, loading: false, error: false };
             return {
                 ...state,
                 allPosts: action.data.length > 0 ? [...state.allPosts, ...action.data] : state.allPosts,

@@ -8,7 +8,7 @@ import editProfile from "../../img/icon-flatEditProfile.svg";
 import avatar from "../../img/icon-accounts.svg";
 import editCover from "../../img/icon-flatEditCoverImg.svg";
 import "./ProfileCard.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -17,9 +17,13 @@ import BeatLoader from "react-spinners/BeatLoader";
 import PostView from "../Explore/PostView";
 import Modal from "react-bootstrap/Modal";
 import ProfileModal from "./ProfileModal";
-import { followUser, unfollowUser } from "../../redux/actions/UserAction";
+import { followUser, unfollowUser, uploadProfilePic } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
+import Cropper from "react-cropper";
+import "cropperjs/dist/cropper.css";
+import { uploadImage } from "../../redux/actions/UploadAction";
+
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -28,17 +32,156 @@ const ProfileCard = ({ location }) => {
     const [expanded, setExpanded] = useState(false);
     const [followers, setFollowers] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [profileLoading, setProfileLoading] = useState(false);
     const [show, setShow] = useState(false);
+    const [showProfile, setShowProfile] = useState(false);
     const [isFollowed, setIsFollowed] = useState(user?.following.includes(id));
     const [editOpened, setEditOpened] = useState(false);
+    const [isProfile, setIsProfile] = useState(false);
+
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [image, setImage] = useState(currUser?.user?.profileimage);
+    const [croppedBlob, setCroppedBlob] = useState(null);
+
+    const fileInputRef = useRef(null);
+    const cropperRef = useRef();
+
+    const handleImageClick = (type) => {
+        console.log(type);
+        if (location === "profile") {
+            fileInputRef.current.value = null;
+            fileInputRef.current.click();
+            type === "profile" ? setIsProfile(true) : setIsProfile(false);
+        }
+    };
+    console.log(isProfile);
+    const handleProfileImageChange = (event) => {
+        if (event.target.files && event.target.files[0]) {
+            let img = event.target.files[0];
+
+            console.log(img, "image");
+
+            const fileExtension = img.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+            const allowedExtensions = ["jpg", "jpeg", "png"];
+
+            if (allowedExtensions.includes(fileExtension)) {
+                setSelectedImage({
+                    name: img.name,
+                    url: URL.createObjectURL(img),
+                    file: img,
+                });
+                handleShowProfile();
+            } else {
+                setSelectedImage(null);
+                return toast.error(<b>Invalid file type. Please select a JPG, JPEG, or PNG image.</b>);
+            }
+        }
+    };
+
+    const validateImage = (file) => {
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+        const maxSize = 4 * 1024 * 1024;
+        if (!allowedTypes.includes(file.file.type)) {
+            toast.error(<b>Only JPEG, JPG and PNG images are allowed</b>);
+            return false;
+        }
+        if (file.file.size > maxSize) {
+            toast.error(<b>The image size cannot exceed 4MB</b>);
+            return false;
+        }
+        return true;
+    };
+
+    // Reset Post Share
+    const resetShare = () => {
+        setSelectedImage(null);
+        // setImage(null);
+        setCroppedBlob(null);
+    };
+
+    const handleImageUpload = async (e) => {
+        e.preventDefault();
+        if (!selectedImage) return toast.error(<b>Please Provide an Image...!</b>);
+
+        if (typeof cropperRef.current?.cropper !== "undefined") {
+            const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas();
+            setImage(croppedCanvas.toDataURL());
+            croppedCanvas.toBlob(function(blob) {
+                const file = new File([blob], selectedImage.name, { type: blob.type });
+                setCroppedBlob({ file });
+            }, selectedImage.type);
+        }
+    };
+
+    useEffect(() => {
+        if (croppedBlob && validateImage(croppedBlob)) {
+            const formData = new FormData();
+            formData.append("file", croppedBlob.file);
+            try {
+                const uploadImages = async () => {
+                    const loadtingToast = toast.loading(<b>uploading...!</b>);
+                    setProfileLoading(true);
+                    const response = await dispatch(uploadImage(formData));
+                    if (response && response.url) {
+                        const profileimage = response.url;
+
+                        try {
+                            const response = await dispatch(uploadProfilePic(user._id, profileimage));
+                            toast.dismiss(loadtingToast);
+                            if (response.success) {
+                                handleProfileClose();
+                                setProfileLoading(false);
+                                resetShare();
+                                toast.success(<b>Profile Pic Uploaded...!</b>);
+                                currUser.posts.map((post) => {
+                                    post.user.profileimage = profileimage;
+                                });
+                            } else {
+                                handleProfileClose();
+                                setProfileLoading(false);
+                                toast.error(<b>Failed to upload pic</b>);
+                            }
+                        } catch (error) {
+                            handleProfileClose();
+                            toast.dismiss(loadtingToast);
+
+                            setProfileLoading(false);
+                            toast.error(<b>Failed to Upload</b>);
+                            console.log(error);
+                        }
+                    } else {
+                        handleProfileClose();
+                        toast.dismiss(loadtingToast);
+
+                        setProfileLoading(false);
+                        console.log("error aaahne");
+                        toast.error(<b>Failed to Upload Image</b>);
+                    }
+                };
+                uploadImages();
+            } catch (err) {
+                handleProfileClose();
+                setProfileLoading(false);
+                toast.error(<b>Failed to Upload Image...!</b>);
+                console.log(err);
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [croppedBlob]);
 
     const toggleExpand = () => {
         setExpanded(!expanded);
     };
     const handleClose = () => setShow(false);
+    const handleProfileClose = () => setShowProfile(false);
+
+    const handleShowProfile = () => setShowProfile(true);
     const handleShow = () => setShow(true);
     const handleEditProfile = () => {
-        console.log("hey");
         setEditOpened(true);
     };
 
@@ -104,6 +247,17 @@ const ProfileCard = ({ location }) => {
         }
     };
 
+    const updateCurrUser = (newUserData) => {
+        console.log(newUserData);
+        setCurrUser((prev) => ({
+            ...prev,
+            user: {
+                ...prev.user,
+                ...newUserData,
+            },
+        }));
+    };
+
     return (
         <div
             className="ProfileCard"
@@ -111,18 +265,69 @@ const ProfileCard = ({ location }) => {
         >
             <div className="ProfileImages">
                 <img src={currUser.user?.coverimage || Cover} alt="cover image" />
-                {location === "profile" && (
+                {location === "profile" && currUser?.user?._id === user._id && (
                     <span>
-                        <img src={editCover} className="editCover-icon" alt="coverEdit" />
+                        <img
+                            onClick={() => handleImageClick("cover")}
+                            src={editCover}
+                            className="editCover-icon"
+                            alt="coverEdit"
+                        />
                     </span>
                 )}
                 <img
                     className={location === "profile" ? "profileImg" : ""}
-                    src={currUser.user?.profileimage || defProfile}
+                    src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
                     alt="profile image"
                 />
-                {location === "profile" && <img className="editProfile-icon" src={editProfile} alt="porfileEdit" />}
+                {location === "profile" && currUser?.user?._id === user._id && (
+                    <img
+                        onClick={() => handleImageClick("profile")}
+                        className="editProfile-icon"
+                        src={editProfile}
+                        alt="porfileEdit"
+                    />
+                )}
+                <input
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleProfileImageChange}
+                />
             </div>
+
+            <Modal show={showProfile} onHide={handleProfileClose} backdrop="static" keyboard={false}>
+                <Modal.Body>
+                    <Cropper
+                        className="editPrImg"
+                        ref={cropperRef}
+                        src={selectedImage?.url}
+                        aspectRatio={1}
+                        background={false}
+                        responsive={true}
+                    />
+                    <div className="d-flex flex-row-reverse py-3 px-2 gap-2">
+                        <button
+                            className="button modaButton px-3 py-1"
+                            onClick={handleImageUpload}
+                            disabled={profileLoading}
+                        >
+                            Crop and Update
+                        </button>
+                        <button
+                            onClick={() => {
+                                setSelectedImage(null), setImage(null), setCroppedBlob(null), handleProfileClose();
+                            }}
+                            className="button modaButton px-3 py-1"
+                            disabled={profileLoading}
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                </Modal.Body>
+            </Modal>
+
             {/* modal for confirm unfollow action */}
             <Modal show={show} onHide={handleClose}>
                 <Modal.Body style={{ width: "10rem" }}>
@@ -140,7 +345,14 @@ const ProfileCard = ({ location }) => {
             </Modal>
 
             {/* modal for edit profile */}
-            {currUser?.user && <ProfileModal editOpened={editOpened} setEditOpened={setEditOpened} data={currUser?.user} />}
+            {currUser?.user && (
+                <ProfileModal
+                    editOpened={editOpened}
+                    setEditOpened={setEditOpened}
+                    data={currUser?.user}
+                    updateCurrUser={updateCurrUser}
+                />
+            )}
 
             {!loading ? (
                 <>

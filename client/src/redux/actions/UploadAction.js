@@ -4,7 +4,7 @@ import { logout } from "./AuthActions";
 export const uploadImage = (formdata) => async (dispatch) => {
     dispatch({type: "IMG_UPLOAD_START"});
     try {
-        let res = await UploadApi.uploadImage(formdata);
+        const res = await UploadApi.uploadImage(formdata);
         dispatch({ type: "IMG_UPLOAD_SUCCESS"});
         return { url: res.data.url };
     } catch (error) {

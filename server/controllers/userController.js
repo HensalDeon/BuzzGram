@@ -1,5 +1,6 @@
 import UserModel from "../model/userModel.js";
 import bcrypt from "bcrypt";
+import { createAccessToken } from "./authController.js";
 
 // get a User
 export const getUser = async (req, res) => {
@@ -20,28 +21,53 @@ export const getUser = async (req, res) => {
     }
 };
 
-// update a user
+export const updateProfilePic = async (req, res) => {
+    const id = req.params.id;
+    const url = req.body;
+
+    try {
+        const user = await UserModel.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        user.profileimage = url.profileimage;
+        await user.save();
+        res.status(200).json({ message: "Profile pic updated!" });
+    } catch (error) {
+        console.error("Error updating profile pic:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
 export const updateUser = async (req, res) => {
     const id = req.params.id;
-    const { currentUserId, currentUserAdminStatus, password } = req.body;
+    const { username, fullname, bio } = req.body;
 
-    if (id === currentUserId || currentUserAdminStatus) {
-        try {
-            if (password) {
-                const salt = await bcrypt.genSalt(10);
-                req.body.password = await bcrypt.hash(password, salt);
-            }
+    try {
+        const user = await UserModel.findById(id);
 
-            const user = await UserModel.findByIdAndUpdate(id, req.body, {
-                new: true,
-            });
-
-            res.status(200).json(user);
-        } catch (error) {
-            res.status(500).json(error);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
         }
-    } else {
-        res.status(403).json("Access Denied! you can only update your own profile");
+
+        const exists = await UserModel.findOne({ username });
+
+        if (exists && exists._id.toString() !== id) {
+            return res.status(400).json({ error: "Username already taken" });
+        }
+        user.username = username;
+        user.fullname = fullname;
+        user.bio = bio;
+
+        await user.save();
+        const token = createAccessToken(user);
+
+        res.status(200).json({ message: "User updated successfully", user, token });
+    } catch (error) {
+        console.error("Error updating user:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 };
 

@@ -24,8 +24,8 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
     const navigate = useNavigate();
     const [showUnfollow, setshowUnfollow] = useState(false);
     const [showPost, setShowPost] = useState(false);
-    const [liked, setLiked] = useState(postDtl?.likes.includes(user._id));
-    const [isSaved, setIsSaved] = useState(user?.saved.includes(postDtl._id));
+    const [liked, setLiked] = useState(postDtl?.likes?.includes(user._id));
+    const [isSaved, setIsSaved] = useState(user?.saved?.includes(postDtl._id));
     const [likes, setLikes] = useState(postDtl?.likes.length);
     const [text, setText] = useState("");
     const [showCmt, setshowCmt] = useState(false);
@@ -36,7 +36,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
         description: postDtl.description,
     });
     const [reportData, setReportData] = useState("");
-    const [isFollowed, setIsFollowed] = useState(user?.following.includes(postDtl.user._id));
+    const [isFollowed, setIsFollowed] = useState(user?.following?.includes(postDtl.user._id));
     const handlePostClose = () => setShowPost(false);
 
     const handleClose = () => setShow(false);
@@ -48,7 +48,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
 
     const handleEditClose = () => {
         setShowEdit(false);
-        setEditData({ description: postDtl.description });
+        setEditData({ description: postDtl?.description });
     };
 
     const handleReportClose = () => {

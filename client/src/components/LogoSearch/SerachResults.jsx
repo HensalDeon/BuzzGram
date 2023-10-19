@@ -5,7 +5,6 @@ import PropTypes from "prop-types";
 function SerachResults({ users }) {
     const navigate = useNavigate();
     const handleUserView = (user) => {
-        console.log(user, "///");
         navigate(`/profile/${user._id}`);
     };
     return (
@@ -15,7 +14,7 @@ function SerachResults({ users }) {
                     <div onClick={() => handleUserView(user)} className="follower py-2 mx-2 px-2" key={user._id}>
                         <div>
                             <img
-                                src={avatar}
+                                src={user.profileimage || avatar}
                                 alt="avatar"
                                 style={{ width: "2.5rem", height: "2.5rem", borderRadius: "50%" }}
                             />

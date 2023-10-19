@@ -135,6 +135,18 @@ $gray: var(--gray);
         }
     }
 }
+.editPrImg {
+    width: 39rem;
+    @media (max-width: 992px) {
+        width: 29rem;
+    }
+    @media (max-width: 768px) {
+        width: 19rem;
+    }
+    @media (max-width: 576px) {
+        width: 19rem;
+    }
+}
 .profileView {
     font-weight: bold;
     color: orange;
