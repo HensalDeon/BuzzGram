@@ -51,6 +51,34 @@ const postReducer = (
                     return post;
                 }),
             };
+        case "COVER_UPLOAD_SUCCESS":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post.user._id === action.id) {
+                        return {
+                            ...post,
+                            user: {
+                                ...post.user,
+                                coverimage: action.data,
+                            },
+                        };
+                    }
+                    return post;
+                }),
+                allPosts: state.allPosts.map((post) => {
+                    if (post.user._id === action.id) {
+                        return {
+                            ...post,
+                            user: {
+                                ...post.user,
+                                coverimage: action.data,
+                            },
+                        };
+                    }
+                    return post;
+                }),
+            };
         case "UPLOAD_FAIL":
             return { ...state, uploading: false, error: true };
         case "RETREIVING_START":

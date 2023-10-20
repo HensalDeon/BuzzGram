@@ -25,6 +25,17 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
                     },
                 },
             };
+        case "COVER_UPLOAD_SUCCESS":
+            return {
+                ...state,
+                authData: {
+                    ...state.authData,
+                    user: {
+                        ...state.authData.user,
+                        coverimage: action.data,
+                    },
+                },
+            };
         case "UPDATING_START":
             return { ...state, updateLoading: true, error: null };
         case "UPDATING_SUCCESS": {

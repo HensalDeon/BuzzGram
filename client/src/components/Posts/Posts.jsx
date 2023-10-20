@@ -16,8 +16,6 @@ const Posts = () => {
     const [page, setPage] = useState(initialPage);
     const [scrolling, setScrolling] = useState(false);
 
-    console.log(timeLineloading);
-
     const handelInfiniteScroll = async () => {
         if (!scrolling) {
             setScrolling(true);

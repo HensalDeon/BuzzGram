@@ -17,9 +17,22 @@ export const updateUser = (id, formData) => async (dispatch) => {
 };
 
 export const uploadProfilePic = (id, profileUrl) => async (dispatch) => {
-    try {   
+    try {
         const { data } = await UserApi.updateProfilePic(id, profileUrl);
-        dispatch({ type: "PROFILE_UPLOAD_SUCCESS", data: profileUrl, id:id });
+        dispatch({ type: "PROFILE_UPLOAD_SUCCESS", data: profileUrl, id: id });
+        return { success: true, data };
+    } catch (error) {
+        if (error.response.data.error === "Token has expired") {
+            dispatch(logout());
+        }
+        return { success: false };
+    }
+};
+
+export const uploadCoverPic = (id, coverUrl) => async (dispatch) => {
+    try {
+        const { data } = await UserApi.updateCoverPic(id, coverUrl);
+        dispatch({ type: "COVER_UPLOAD_SUCCESS", data: coverUrl, id: id });
         return { success: true, data };
     } catch (error) {
         if (error.response.data.error === "Token has expired") {

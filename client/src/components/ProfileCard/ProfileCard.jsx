@@ -17,7 +17,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 import PostView from "../Explore/PostView";
 import Modal from "react-bootstrap/Modal";
 import ProfileModal from "./ProfileModal";
-import { followUser, unfollowUser, uploadProfilePic } from "../../redux/actions/UserAction";
+import { followUser, unfollowUser, uploadCoverPic, uploadProfilePic } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
 import Cropper from "react-cropper";
@@ -41,6 +41,7 @@ const ProfileCard = ({ location }) => {
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [image, setImage] = useState(currUser?.user?.profileimage);
+    const [coverImage, setCoverImage] = useState(currUser?.user?.coverimage);
     const [croppedBlob, setCroppedBlob] = useState(null);
 
     const fileInputRef = useRef(null);
@@ -54,7 +55,6 @@ const ProfileCard = ({ location }) => {
             type === "profile" ? setIsProfile(true) : setIsProfile(false);
         }
     };
-    console.log(isProfile);
     const handleProfileImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             let img = event.target.files[0];
@@ -109,7 +109,7 @@ const ProfileCard = ({ location }) => {
 
         if (typeof cropperRef.current?.cropper !== "undefined") {
             const croppedCanvas = cropperRef.current?.cropper.getCroppedCanvas();
-            setImage(croppedCanvas.toDataURL());
+            isProfile ? setImage(croppedCanvas.toDataURL()) : setCoverImage(croppedCanvas.toDataURL());
             croppedCanvas.toBlob(function(blob) {
                 const file = new File([blob], selectedImage.name, { type: blob.type });
                 setCroppedBlob({ file });
@@ -127,18 +127,25 @@ const ProfileCard = ({ location }) => {
                     setProfileLoading(true);
                     const response = await dispatch(uploadImage(formData));
                     if (response && response.url) {
-                        const profileimage = response.url;
+                        // const profileimage = response.url;
+                        const imageUploaded = response.url;
 
                         try {
-                            const response = await dispatch(uploadProfilePic(user._id, profileimage));
+                            const response = await dispatch(
+                                isProfile
+                                    ? uploadProfilePic(user._id, imageUploaded)
+                                    : uploadCoverPic(user._id, imageUploaded)
+                            );
                             toast.dismiss(loadtingToast);
                             if (response.success) {
                                 handleProfileClose();
                                 setProfileLoading(false);
                                 resetShare();
-                                toast.success(<b>Profile Pic Uploaded...!</b>);
+                                toast.success(<b>{isProfile ? "Profile" : "Cover"} Pic Uploaded...!</b>);
                                 currUser.posts.map((post) => {
-                                    post.user.profileimage = profileimage;
+                                    isProfile
+                                        ? (post.user.profileimage = imageUploaded)
+                                        : (post.user.coverimage = imageUploaded);
                                 });
                             } else {
                                 handleProfileClose();
@@ -264,7 +271,11 @@ const ProfileCard = ({ location }) => {
             style={location === "profile" ? { overflowY: "auto", boxShadow: " rgb(208,86,155,0.3) 0px 0px 100px" } : {}}
         >
             <div className="ProfileImages">
-                <img src={currUser.user?.coverimage || Cover} alt="cover image" />
+                <img
+                    className={location === "profile" ? "profileCover" : ""}
+                    src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
+                    alt="cover image"
+                />
                 {location === "profile" && currUser?.user?._id === user._id && (
                     <span>
                         <img
@@ -303,7 +314,7 @@ const ProfileCard = ({ location }) => {
                         className="editPrImg"
                         ref={cropperRef}
                         src={selectedImage?.url}
-                        aspectRatio={1}
+                        aspectRatio={isProfile ? 1 : 2}
                         background={false}
                         responsive={true}
                     />

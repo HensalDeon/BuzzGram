@@ -14,7 +14,7 @@ $gray: var(--gray);
     height: 100vh;
 
     @media (min-width: 992px) {
-        margin: 0 6%;
+        margin: 0 9%;
     }
 
     transition: transform 0.3s ease;
@@ -46,6 +46,19 @@ $gray: var(--gray);
             }
             @media (max-width: 768px) {
                 width: 7rem;
+            }
+        }
+
+        .profileCover {
+            height: 25vw;
+            @media (max-width: 993px) {
+                height: 31vw;
+            }
+            @media (max-width: 776px) {
+                height: 34vw;
+            }
+            @media (max-width: 576px) {
+                height: 38vw;
             }
         }
         .editProfile-icon {
@@ -81,6 +94,7 @@ $gray: var(--gray);
             text-overflow: ellipsis;
             max-width: 215px;
             cursor: pointer;
+            text-align: center;
         }
         .show-full-text {
             white-space: normal;

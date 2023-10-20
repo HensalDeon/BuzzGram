@@ -31,12 +31,31 @@ export const updateProfilePic = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
-
         user.profileimage = url.profileimage;
         await user.save();
         res.status(200).json({ message: "Profile pic updated!" });
     } catch (error) {
         console.error("Error updating profile pic:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const updateCoverPic = async (req, res) => {
+    const id = req.params.id;
+    const url = req.body;
+
+    try {
+        const user = await UserModel.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        user.coverimage = url.coverimage;
+        await user.save();
+        res.status(200).json({ message: "Cover pic updated!" });
+    } catch (error) {
+        console.error("Error updating cover pic:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 };
