@@ -1,6 +1,5 @@
 import { useState } from "react";
 import avatar from "../../img/icon-accounts.svg";
-// import blockModal from "../../img/icon-blockModal.svg";
 import blockUser from "../../img/icon-blockUser.svg";
 import unblock from "../../img/icon-unblock.svg";
 import PropTypes from "prop-types";
@@ -39,7 +38,6 @@ function List({ user }) {
             <tr className="table-row" key={user._id}>
                 <td className="table-cell">
                     <div className="image-container">
-                        {/* {index + 1} */}
                         <img src={user.profileimage || avatar} alt="" className="avatar" />
                     </div>
                 </td>
@@ -48,7 +46,7 @@ function List({ user }) {
                 <td className="table-cell">{formatDate(user.createdAt)}</td>
                 <td className="table-cell">{user.phone}</td>
                 <td className="table-cell">
-                    <span className={blocked ? "blocked" : "unblocked"}>{blocked ? "disabled" : "enabled"}</span>
+                    <span className={blocked ? "red" : "green"}>{blocked ? "disabled" : "enabled"}</span>
                 </td>
                 <td className="table-cell">
                     <div className="image-container">

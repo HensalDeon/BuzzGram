@@ -1,0 +1,36 @@
+.action-img {
+    max-width: 30px;
+}
+
+.content {
+    max-width: 125px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.expand {
+    max-width: none;
+    white-space: normal;
+    overflow: visible;
+    cursor: pointer;
+}
+
+.post-size {
+    width: 36rem;
+    @media (max-width: 1200px) {
+        width: 33rem;
+    }
+    @media (max-width: 992px) {
+        width: 28rem;
+    }
+    @media (max-width: 700px) {
+        width: 26rem;
+    }
+    @media (max-width: 576px) {
+        width: 21rem;
+    }
+}

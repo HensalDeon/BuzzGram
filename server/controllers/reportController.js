@@ -7,7 +7,6 @@ import UserModel from "../model/userModel.js";
 export const createReport = async (req, res) => {
     try {
         const { reporterId, targetType, targetId, reason } = req.body;
-        console.log(req.body, "////");
         if (!reporterId || !targetType || !targetId || !reason) return res.status(500).json("values are undefined");
         const newReport = new ReportModel({
             reporterId,
@@ -29,5 +28,47 @@ export const createReport = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Error creating report" });
+    }
+};
+
+export const getAllReports = async (req, res) => {
+    try {
+        const reports = await ReportModel.find()
+            .populate({
+                path: "reporterId",
+                select: "username profileimage",
+                model: UserModel,
+            })
+            .exec();
+
+        res.status(200).json(reports);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Error fetching report" });
+    }
+};
+
+export const getTargetData = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const targetType = req.params.targetType;
+        if (!targetType || !id) return res.status(400).json({ error: "data cannot be undefined" });
+        const model = targetType === "post" ? PostModel : CommentModel;
+
+        const target = await model
+            .findById({ _id: id })
+            .populate({
+                path: "user",
+                select: "username profileimage",
+                model: UserModel,
+            })
+            .exec();
+        if (!target) {
+            return res.status(404).json({ error: "Target not found." });
+        }
+
+        res.status(200).json(target);
+    } catch (error) {
+        console.log(error);
     }
 };

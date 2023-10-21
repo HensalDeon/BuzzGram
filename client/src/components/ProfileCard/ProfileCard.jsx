@@ -400,7 +400,7 @@ const ProfileCard = ({ location }) => {
                                 />
                             )}
                         </span>
-                        <p>{currUser.user?.fullname}</p>
+                        <span>{currUser.user?.fullname}</span>
                         <span className={bioClassName} onClick={toggleExpand}>
                             {currUser.user?.bio || "Write about yourself😊"}
                         </span>

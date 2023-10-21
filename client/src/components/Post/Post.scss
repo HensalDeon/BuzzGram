@@ -82,6 +82,10 @@
     gap: 1rem;
     align-items: flex-start;
 
+    img{
+        border-radius: 50%;
+    }
+
     .user-details {
         display: flex;
         flex-direction: column;

@@ -10,18 +10,20 @@ import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
 import Comment from "../../img/icon-comment.svg";
 import defProfile from "../../img/icon-accounts.svg";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { deletePost, getAllPosts, getTimelinePosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // eslint-disable-next-line react/prop-types
 function ExplorePost({ postDtl, updateSavedPosts }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
     const [showUnfollow, setshowUnfollow] = useState(false);
     const [showPost, setShowPost] = useState(false);
     const [liked, setLiked] = useState(postDtl?.likes?.includes(user._id));
@@ -250,7 +252,13 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
         <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
 
-            <img onClick={() => handlePostView(postDtl)} src={postDtl.image} alt="" key={postDtl._id} />
+            <img
+                onClick={() => handlePostView(postDtl)}
+                src={postDtl.image}
+                alt=""
+                key={postDtl._id}
+                style={location.pathname.includes("/profile") ? { height: "15vw" } : {}}
+            />
             <Modal show={showUnfollow} onHide={handleUfModalClose}>
                 <Modal.Body style={{ width: "10rem" }}>
                     <img src={postDtl.user.profileimage || defProfile} alt="" />

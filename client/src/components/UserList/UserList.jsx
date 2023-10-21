@@ -1,11 +1,13 @@
-import "./UserList.scss";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserDetails } from "../../redux/actions/AdminActions";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import List from "./List";
 import { Toaster } from "react-hot-toast";
+
+import PacmanLoader from "react-spinners/PacmanLoader";
 import AdminSearch from "../LogoSearch/AdminSearch";
+import List from "./List";
+
+import "./UserList.scss";
 
 function UserList() {
     const dispatch = useDispatch();
@@ -43,7 +45,6 @@ function UserList() {
                     </thead>
                     <tbody>
                         {userDetails && !loading && filteredUsers.map((user) => <List user={user} key={user._id} />)}
-                        {/* {userDetails && !loading && userDetails.map((user) => <List user={user} key={user._id} />)} */}
                     </tbody>
                 </table>
                 <PacmanLoader loading={loading} cssOverride={override} color="orange" speedMultiplier={1} />

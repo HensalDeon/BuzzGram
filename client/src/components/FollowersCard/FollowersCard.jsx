@@ -1,9 +1,11 @@
 import "./FollowersCard.scss";
 import { Followers } from "../../Data/FollwersData";
+import { useLocation } from "react-router-dom";
 
 const FollowersCard = () => {
+    const location = useLocation();
     return (
-        <div className="FollowersCard">
+        <div className="FollowersCard" style={location.pathname.includes("/profile") ? { width: "40%",paddingRight:"2rem" } : {}}>
             <h3>People you may know!</h3>
 
             {Followers.map((follower) => {

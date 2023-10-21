@@ -69,10 +69,10 @@
     color: inherit !important;
     font-size: 0.92rem !important;
 
-    .unblocked {
+    .green {
         @include actions(#0a3622, #ccf0d1, #b3e9b9);
     }
-    .blocked {
+    .red {
         @include actions(#540f0f, #ffe1e1, #e9b3b3);
     }
 }
@@ -106,6 +106,7 @@
     max-width: 40px;
     height: auto;
     margin-right: 10px;
+    border-radius: 50%;
 }
 
 .block {

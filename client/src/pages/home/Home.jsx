@@ -8,10 +8,9 @@ import PropTypes from "prop-types";
 import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import Explore from "../../components/Explore/Explore";
 import SavedPosts from "../../components/SavedPosts/SavedPosts";
+import FollowersCard from "../../components/FollowersCard/FollowersCard";
 
 const Home = ({ location }) => {
-
-
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
 
@@ -32,11 +31,16 @@ const Home = ({ location }) => {
         <div className="Home">
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
-            {/* {isLargeScreen && location !== "explore" && location !== "saved" && <ProfileSide location={location} />} */}
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
             {location === "saved" && <SavedPosts />}
-            {location === "profile" && <ProfileCard location={location} />}
+            {/* {location === "profile" && <ProfileCard location={location} />} */}
+            {location === "profile" && (
+                <div className="d-flex flex-row">
+                    <ProfileCard location={location} />
+                    {isLargeScreen && <FollowersCard />}
+                </div>
+            )}
         </div>
     );
 };

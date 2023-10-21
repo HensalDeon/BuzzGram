@@ -7,7 +7,6 @@ import ReportModel from "../model/reportModel.js";
 // Creat new Post
 export const createPost = async (req, res) => {
     const newPost = new PostModel(req.body);
-    console.log(req.body);
     try {
         await newPost.save();
         const post = await PostModel.findById(newPost._id).populate("user").exec();

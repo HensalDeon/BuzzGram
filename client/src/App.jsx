@@ -10,6 +10,7 @@ import Admin from "./pages/Admin/Admin";
 import Blank from "./components/Blank/Blank";
 import Dashboard from "./pages/Admin/Dashboard";
 import UserList from "./components/UserList/UserList";
+import Reports from "./components/Reports/Reports";
 
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
@@ -37,7 +38,7 @@ function App() {
                     <Route index element={<Dashboard />} />
                     <Route path="users" element={admin ? <UserList /> : <Navigate to="../auth" />} />
                     <Route path="posts" element={admin ? <Blank /> : <Navigate to="../auth" />} />
-                    <Route path="reports" element={admin ? <Blank /> : <Navigate to="../auth" />} />
+                    <Route path="reports" element={admin ? <Reports /> : <Navigate to="../auth" />} />
                 </Route>
                 <Route path="/admin/auth" element={admin ? <Navigate to="../admin" /> : <AdminAuth />} />
             </Routes>
