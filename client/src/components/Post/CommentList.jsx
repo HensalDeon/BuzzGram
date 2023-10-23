@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { logout } from "../../redux/actions/AuthActions";
 import { createReport } from "../../redux/actions/ReportActions";
+import { deleteCmt } from "../../redux/actions/CommentActions";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
     const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
 
     const handleReportShow = () => {
         setShowReport(true);
-        handleActionClose()
+        handleActionClose();
     };
 
     const handleCmtEditInput = (e) => {
@@ -98,7 +99,8 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                 toast.dismiss(loadingToastId);
                 toast.success(<b>{res.data.message}</b>);
                 handleActionClose();
-
+                dispatch(deleteCmt(comment._id,data._id));
+                handleCmtClose();
                 const updatedComments = comments.filter((cmt) => cmt._id !== comment._id);
                 setComments(updatedComments);
             })
@@ -138,12 +140,12 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         });
     };
 
-    const handleCmtReport = async() => {
+    const handleCmtReport = async () => {
         if (!reportData.trim()) return toast.error(<b>cannot send empty report!</b>);
         const loadingToastId = toast.loading("Reporting...");
         try {
             const reportPromise = await dispatch(createReport(user._id, "comment", comment._id, reportData));
-            console.log(reportPromise,'//');
+            console.log(reportPromise, "//");
             toast.dismiss(loadingToastId);
             if (reportPromise.success) {
                 setShowReport(false);

@@ -199,6 +199,28 @@ const postReducer = (
                 posts: state.posts.filter((post) => post._id !== action.postId),
                 allPosts: state.allPosts.filter((post) => post._id !== action.postId),
             };
+        case "DELETE_COMMENT":
+            return {
+                ...state,
+                posts: state.posts.map((post) => {
+                    if (post._id === action.postId) {
+                        return {
+                            ...post,
+                            comments: post.comments.filter((commentId) => commentId !== action.id),
+                        };
+                    }
+                    return post;
+                }),
+                allPosts: state.allPosts.map((post) => {
+                    if (post._id === action.postId) {
+                        return {
+                            ...post,
+                            comments: post.comments.filter((commentId) => commentId !== action.id),
+                        };
+                    }
+                    return post;
+                }),
+            };
         case "FILTER_REPORTED_POSTS":
             return {
                 ...state,

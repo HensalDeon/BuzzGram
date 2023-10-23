@@ -22,7 +22,6 @@ import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import CommentList from "./CommentList";
 
-
 const Post = ({ data }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -163,14 +162,14 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
+
     const handleDelete = async () => {
         const loadingToastId = toast.loading("Deleting...");
         try {
-            const deletePromise = await dispatch(deletePost(data._id, user._id));
+            const deletePromise = await dispatch(deletePost(data._id, user._id, "user"));
             toast.dismiss(loadingToastId);
             if (deletePromise.success) {
                 toast.success(<b>Post Deleted...!</b>);
-                dispatch(getTimelinePosts(user._id));
             } else {
                 toast.error(<b>Failed to delete...!</b>);
             }
@@ -179,6 +178,7 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
+
     const handleSave = async () => {
         const loadingToastId = toast.loading("Saving...");
         try {
@@ -197,6 +197,7 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
+
     const handleFollow = async () => {
         const loadingToastId = toast.loading("Following...");
         try {
@@ -237,6 +238,7 @@ const Post = ({ data }) => {
             console.error("Error:", error);
         }
     };
+
     return (
         //modal for post options
         <div className="Post">

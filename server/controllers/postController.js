@@ -61,7 +61,7 @@ export const deletePost = async (req, res) => {
         if (!post) {
             return res.status(404).json("Post not found");
         }
-        if (post.user.toString() === user) {
+        if (post.user.toString() === user || process.env.ADMIN_NAME) {
             await CommentModel.deleteMany({ postId: id });
             await post.deleteOne();
             res.status(200).json("Post deleted successfully");

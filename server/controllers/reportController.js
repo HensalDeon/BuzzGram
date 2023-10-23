@@ -3,7 +3,7 @@ import ReportModel from "../model/reportModel.js";
 import PostModel from "../model/postModel.js";
 import CommentModel from "../model/commentModel.js";
 import UserModel from "../model/userModel.js";
-
+import PropagateLoader from "react-spinners/PropagateLoader";
 export const createReport = async (req, res) => {
     try {
         const { reporterId, targetType, targetId, reason } = req.body;
@@ -33,12 +33,18 @@ export const createReport = async (req, res) => {
 
 export const getAllReports = async (req, res) => {
     try {
+        const { page } = req.query;
+        const pageNumber = parseInt(page) || 1;
+        const itemsPerPage = 8;
+        const skipCount = (pageNumber - 1) * itemsPerPage;
         const reports = await ReportModel.find()
             .populate({
                 path: "reporterId",
                 select: "username profileimage",
                 model: UserModel,
             })
+            .skip(skipCount)
+            .limit(itemsPerPage)
             .exec();
 
         res.status(200).json(reports);
@@ -64,11 +70,44 @@ export const getTargetData = async (req, res) => {
             })
             .exec();
         if (!target) {
-            return res.status(404).json({ error: "Target not found." });
+            return res.json("deleted");
         }
 
         res.status(200).json(target);
     } catch (error) {
         console.log(error);
+    }
+};
+
+    export const updateReport = async (req, res) => {
+        try {
+            const id = req.params.id;
+            const reportId = req.params.reportId;
+            if (!reportId || !id) return res.status(400).json({ error: "data cannot be undefined" });
+
+            if (!id === process.env.ADMIN_NAME) {
+                return res.status(400).json({ error: "unAutharized for this action" });
+            }
+            const report = await ReportModel.findByIdAndUpdate({ _id: reportId }, { status: "resolved" }, { new: true }).exec();
+            if (!report) {
+                return res.status(404).json({ error: "Report not found" });
+            }
+            return res.status(200).json({ message: "Report resolved", report });
+        } catch (error) {
+            console.error("Error updating report:", error);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+    };
+
+export const deleteReport = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) console.log("id is undefined");
+        const report = await ReportModel.findByIdAndDelete({ _id: id });
+        if (!report) return res.status(404).json({ error: "Report could not be found!" });
+        res.status(200).json({ message: "Deleted successfully!" });
+    } catch (error) {
+        console.error("Error deleting report:", error);
+        return res.status(500).json({ error: "Internal server error" });
     }
 };

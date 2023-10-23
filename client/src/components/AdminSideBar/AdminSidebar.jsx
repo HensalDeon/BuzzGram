@@ -27,8 +27,8 @@ const AdminSidebar = () => {
         }, 500);
     };
 
-    const handleLogout = () => {
-        dispatch(adminLogout());
+    const handleLogout = async () => {
+        await dispatch(adminLogout());
         navigate("/admin/auth");
     };
 

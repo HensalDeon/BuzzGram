@@ -1,4 +1,5 @@
 import * as PostsApi from "../../api/PostsRequests";
+import * as AdminApi from "../../api/AdminRequests";
 import { logout } from "./AuthActions";
 
 export const getTimelinePosts = (id, page) => async (dispatch) => {
@@ -61,9 +62,11 @@ export const updatePost = (postId, userId, editedData) => async (dispatch) => {
         }
     }
 };
-export const deletePost = (postId, userId) => async (dispatch) => {
+
+export const deletePost = (postId, userId, owner) => async (dispatch) => {
     try {
-        const response = await PostsApi.deletePost(postId, userId);
+        const response =
+            owner === "user" ? await PostsApi.deletePost(postId, userId) : await AdminApi.deletePost(postId, userId);
         if (response.status === 200) {
             dispatch({ type: "DELETE_POST_SUCCESS", postId });
             return { success: true };

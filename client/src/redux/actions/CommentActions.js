@@ -18,3 +18,6 @@ export const createComment = (formData) => async (dispatch) => {
     }
 };
 
+export const deleteCmt = (id, postId) => (dispatch) => {
+    dispatch({ type: "DELETE_COMMENT", id: id, postId: postId });
+};

@@ -8,7 +8,6 @@ export const userAxiosInstance = () => {
 
     instance.interceptors.request.use((req) => {
         const userToken = localStorage.getItem("profile");
-
         if (userToken) {
             req.headers.Authorization = `Bearer ${JSON.parse(userToken).token}`;
         }
@@ -35,4 +34,3 @@ export const adminAxiosInstance = () => {
 
     return instance;
 };
-

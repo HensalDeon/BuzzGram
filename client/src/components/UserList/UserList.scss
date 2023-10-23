@@ -34,13 +34,11 @@
 .table-row {
     td {
         font-size: 1rem;
-    }
-    &:nth-child(even) {
-        background-color: #f2f2f2 !important;
+        background-color: inherit !important;
     }
 
     &:hover {
-        background-color: #ddd !important;
+        background-color: #d9d9d935 !important;
     }
 }
 

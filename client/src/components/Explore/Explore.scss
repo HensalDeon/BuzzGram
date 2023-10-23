@@ -3,6 +3,17 @@
     flex-wrap: wrap;
     gap: 0.5rem;
 
+    .image-height {
+        height: 15vw;
+
+        @media (max-width: 776px) {
+            height: 25vw;
+        }
+        @media (max-width: 450px) {
+            height: 29vw;
+        }
+    }
+
     img {
         flex: 1;
         max-width: calc(34.1% - 1rem);

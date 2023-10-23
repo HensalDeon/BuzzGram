@@ -60,13 +60,13 @@ const authReducer = (state = { authData: null, loading: false, error: null, upda
         case "UPDATING_FAIL":
             return { ...state, updateLoading: false, error: action.error };
         case "LOG_OUT":
-            // localStorage.clear();
             localStorage.removeItem("profile");
             localStorage.removeItem("expPage");
             localStorage.removeItem("timelinePage");
             return { ...state, authData: null, loading: false, error: null, updateLoading: false };
         case "ADMIN_LOG_OUT":
-            return { ...state, adminAuthData: null, adminLoading: false, adminError: null };
+            localStorage.removeItem("admin");
+            return { ...state, adminAuthData: null, adminLoading: false, adminError: null, updateLoading: false };
         case "FOLLOW_USER":
             return {
                 ...state,

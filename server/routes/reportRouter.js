@@ -5,14 +5,16 @@ import * as reportController from "../controllers/reportController.js";
 import Auth from "../middleware/auth.js";
 
 /** Get Requests */
-router.route("/").get(reportController.getAllReports);
-router.route("/target/:id/:targetType").get(reportController.getTargetData);
+router.route("/").get(Auth, reportController.getAllReports);
+router.route("/target/:id/:targetType").get(Auth, reportController.getTargetData);
 
 /** POST Requests */
 router.route("/").post(Auth, reportController.createReport);
-// router.route("/").get(reportController.getReports);
-// router.route("/:reportId").get(reportController.getReportById);
-// router.route("/:reportId").put(reportController.updateReport);
-// router.route("/:reportId").delete(reportController.deleteReport);
+
+/** PUT Requests */
+router.route("/:id/:reportId").put(Auth, reportController.updateReport);
+
+/** DELETE Request */
+router.route("/:id").delete(reportController.deleteReport);
 
 export default router;

@@ -13,7 +13,7 @@ import defProfile from "../../img/icon-accounts.svg";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import { deletePost, getAllPosts, getTimelinePosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
+import { deletePost, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -91,11 +91,10 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
     const handleDelete = async () => {
         const loadingToastId = toast.loading("Deleting...");
         try {
-            const deletePromise = await dispatch(deletePost(postDtl._id, user._id));
+            const deletePromise = await dispatch(deletePost(postDtl._id, user._id, "user"));
             toast.dismiss(loadingToastId);
             if (deletePromise.success) {
                 toast.success(<b>Post Deleted...!</b>);
-                dispatch(getAllPosts(user._id));
             } else {
                 toast.error(<b>Failed to delete...!</b>);
             }
@@ -192,7 +191,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
             const response = await dispatch(followUser(postDtl.user._id, user._id));
             console.log(response);
             if (response.success) {
-                dispatch(getTimelinePosts(user._id));
+                // dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {
@@ -213,7 +212,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
         try {
             const response = await dispatch(unfollowUser(postDtl.user._id, user._id));
             if (response.success) {
-                dispatch(getTimelinePosts(user._id));
+                // dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {
@@ -257,7 +256,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
                 src={postDtl.image}
                 alt=""
                 key={postDtl._id}
-                style={location.pathname.includes("/profile") ? { height: "15vw" } : {}}
+                className={location.pathname.includes("/profile") ? "image-height" : ""}
             />
             <Modal show={showUnfollow} onHide={handleUfModalClose}>
                 <Modal.Body style={{ width: "10rem" }}>

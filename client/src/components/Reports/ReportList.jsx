@@ -1,18 +1,27 @@
 import avatar from "../../img/icon-accounts.svg";
 import view from "../../img/icon-flatView.svg";
 import resolve from "../../img/icon-flatDone.svg";
+import deleteIco from "../../img/icon-flatDelete.svg";
 import like from "../../img/like.png";
 
-import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import PropTypes from "prop-types";
-import { getTargetData } from "../../api/ReportRequests";
+import toast from "react-hot-toast";
 
-function ReportList({ report, setTargetLoading }) {
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteReport, getTargetData, updateReport } from "../../api/ReportRequests";
+import { deletePost } from "../../redux/actions/PostAction";
+import { adminDeleteComment } from "../../api/CommentRequests";
+
+function ReportList({ report, setTargetLoading, setReports }) {
     const [expanded, setExpanded] = useState(true);
     const [showTarget, setShowTarget] = useState(false);
     const [data, setData] = useState(null);
     const [show, setShow] = useState(false);
+    const [nullResult, setNullResult] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleExpansion = () => {
         setExpanded(!expanded);
@@ -27,21 +36,89 @@ function ReportList({ report, setTargetLoading }) {
         setShow(false);
     };
 
-    const handleDeleteAction = () => {
-        console.log("deleted dummy");
-        setShow(false);
+    const handleReportDelete = () => {
+        const loadingToastId = toast.loading("Deleting...");
+        deleteReport(report._id)
+            .then((res) => {
+                toast.dismiss(loadingToastId);
+                setReports((prevReports) => prevReports.filter((r) => r._id !== report._id));
+                toast.success(<b>{res.data.message}</b>);
+            })
+            .catch((err) => {
+                toast.dismiss(loadingToastId);
+                toast.error(<b>{err.response.data.err}</b>);
+            });
     };
 
-    const handleView = () => {
-        console.log(report);
-        setTargetLoading(true);
+    const handleDelete = async () => {
+        const loadingToastId = toast.loading("Deleting...");
+        try {
+            const deletePromise = await dispatch(deletePost(report.targetId, "HensalDeon", "admin"));
+            toast.dismiss(loadingToastId);
+            if (deletePromise.success) {
+                setShow(false);
+                toast.success(<b>Post Deleted...!</b>);
+            } else {
+                setShow(false);
+                toast.error(<b>Failed to delete...!</b>);
+            }
+        } catch (error) {
+            setShow(false);
+            toast.error(<b>Something went wrong!</b>);
+            console.error("Error:", error);
+        }
+    };
 
+    const handleCmtDelete = () => {
+        const loadingToastId = toast.loading("Deleting...");
+        adminDeleteComment(report.targetId)
+            .then((res) => {
+                setShow(false);
+                toast.dismiss(loadingToastId);
+                toast.success(<b>{res.data.message}</b>);
+            })
+            .catch((error) => {
+                setShow(false);
+                toast.dismiss(loadingToastId);
+                console.error("Error deleting comment:", error);
+                toast.error(<b>Error deleting comment</b>);
+            });
+    };
+
+    const handleDeleteAction = async () => {
+        if (report.targetType === "post") {
+            handleDelete();
+        } else if (report.targetType === "comment") {
+            handleCmtDelete();
+        }
+    };
+
+    const handleResolve = () => {
+        console.log(report);
+        console.log("resolved");
+        updateReport("HensalDeon", report._id).then((res) => {
+            console.log(res.data.report);
+            const updatedReport = res.data.report;
+            setReports((prevReports) => {
+                return prevReports.map((r) => {
+                    if (r._id === updatedReport._id) {
+                        return { ...updatedReport, reporterId: r.reporterId };
+                    }
+                    return r;
+                });
+            });
+        });
+    };
+    console.log(report);
+    const handleView = () => {
+        setTargetLoading(true);
         getTargetData(report.targetId, report.targetType)
             .then((res) => {
-                console.log(res.data == null);
-                setData(res.data);
-                if (res.data) {
+                if (res.data && res.data !== "deleted") {
+                    setData(res.data);
                     setShowTarget(true);
+                } else if (res.data && res.data === "deleted") {
+                    setNullResult(true);
                 }
                 setTargetLoading(false);
             })
@@ -50,8 +127,6 @@ function ReportList({ report, setTargetLoading }) {
                 setTargetLoading(false);
             });
     };
-
-    console.log(data, "2131");
 
     const handleTargetClose = () => {
         setShowTarget(false);
@@ -87,7 +162,12 @@ function ReportList({ report, setTargetLoading }) {
                     <div className="image-container">
                         <div className="d-flex gap-2">
                             <img onClick={handleView} src={view} className="action-img" alt="action" />
-                            {report.status === "pending" && <img src={resolve} className="action-img" alt="action" />}
+                            {report.status === "pending" && (
+                                <img src={resolve} onClick={handleResolve} className="action-img" alt="action" />
+                            )}
+                            {report.status === "resolved" && (
+                                <img src={deleteIco} onClick={handleReportDelete} className="action-img" alt="action" />
+                            )}
                         </div>
                     </div>
                 </td>
@@ -136,6 +216,17 @@ function ReportList({ report, setTargetLoading }) {
                     </div>
                 </Modal.Body>
             </Modal>
+
+            <Modal show={nullResult} onHide={() => setNullResult(false)} style={{ marginTop: "14%" }}>
+                <Modal.Body>
+                    <span className="lg-text">
+                        {report.targetType === "post" ? "Post" : "Comment"} has already been deleted!
+                    </span>
+                    <button onClick={() => setNullResult(false)} className="button mx-5 mt-2 py-1">
+                        OK
+                    </button>
+                </Modal.Body>
+            </Modal>
         </>
     );
 }
@@ -146,6 +237,7 @@ ReportList.propTypes = {
             profileimage: PropTypes.string,
             username: PropTypes.string,
         }),
+        _id: PropTypes.string,
         reason: PropTypes.string,
         createdAt: PropTypes.string,
         targetType: PropTypes.string,
@@ -153,6 +245,7 @@ ReportList.propTypes = {
         status: PropTypes.oneOf(["pending", "resolved"]),
     }).isRequired,
     setTargetLoading: PropTypes.func.isRequired,
+    setReports: PropTypes.func.isRequired,
 };
 
 export default ReportList;
