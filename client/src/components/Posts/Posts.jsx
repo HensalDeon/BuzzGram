@@ -4,9 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
 import PropagateLoader from "react-spinners/PropagateLoader";
-
 import debounce from "lodash/debounce";
-
+import { motion } from "framer-motion";
 const Posts = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -60,9 +59,16 @@ const Posts = () => {
 
     return (
         <div className="Posts">
-            {posts.map((post) => {
-                return <Post data={post} key={post._id} />;
-            })}
+            {posts.map((post) => (
+                <motion.div
+                    key={post._id}
+                    initial={{ y: -20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Post data={post} />
+                </motion.div>
+            ))}
             <PropagateLoader loading={timeLineloading} cssOverride={override} color="orange" />
         </div>
     );

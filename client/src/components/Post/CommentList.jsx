@@ -99,7 +99,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                 toast.dismiss(loadingToastId);
                 toast.success(<b>{res.data.message}</b>);
                 handleActionClose();
-                dispatch(deleteCmt(comment._id,data._id));
+                dispatch(deleteCmt(comment._id, data._id));
                 handleCmtClose();
                 const updatedComments = comments.filter((cmt) => cmt._id !== comment._id);
                 setComments(updatedComments);
@@ -164,6 +164,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
             setLoading(true);
             getComments(data._id)
                 .then((response) => {
+                    console.log(response);
                     if (response.data) {
                         setLoading(false);
                         setComments(response.data);
@@ -236,7 +237,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                         {comments.map((comment, index) => (
                             <div key={comment._id}>
                                 <div className="cmt-containers">
-                                    <img src={avatar} style={{ maxWidth: "2rem" }} alt="avatar" />
+                                    <img src={comment?.user?.profileimage || avatar} style={{ maxWidth: "2rem" }} alt="avatar" />
                                     <div className="user-details">
                                         <b className="lg-text">{comment.user.username}</b>
                                         <span className="text">

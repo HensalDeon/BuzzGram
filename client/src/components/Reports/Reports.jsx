@@ -8,6 +8,7 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import { useDispatch } from "react-redux";
 import { adminLogout } from "../../redux/actions/AuthActions";
 import debounce from "lodash/debounce";
+import { motion } from "framer-motion";
 function Reports() {
     const [loading, setLoading] = useState(true);
     const [hasMoreReports, setHasMoreReports] = useState(true);
@@ -84,31 +85,38 @@ function Reports() {
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             <div>filter by targetType , filter by reported time</div>
             <div className="table-container">
-                <table className="table">
-                    <thead className="table-head">
-                        <tr>
-                            <th style={{ display: "flex", justifyContent: "center" }}>User</th>
-                            <th>Username</th>
-                            <th>Reason</th>
-                            <th>Reported on</th>
-                            <th>Target</th>
-                            <th>Status</th>
-                            <th style={{ display: "flex", justifyContent: "center" }}>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {!loading &&
-                            reports.map((report) => (
-                                <ReportList
-                                    report={report}
-                                    key={report._id}
-                                    setTargetLoading={setTargetLoading}
-                                    setReports={setReports}
-                                    incPage={incPage}
-                                />
-                            ))}
-                    </tbody>
-                </table>
+                {!loading && (
+                    <motion.div
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <table className="table">
+                            <thead className="table-head">
+                                <tr>
+                                    <th style={{ display: "flex", justifyContent: "center" }}>User</th>
+                                    <th>Username</th>
+                                    <th>Reason</th>
+                                    <th>Reported on</th>
+                                    <th>Target</th>
+                                    <th>Status</th>
+                                    <th style={{ display: "flex", justifyContent: "center" }}>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {reports.map((report) => (
+                                    <ReportList
+                                        report={report}
+                                        key={report._id}
+                                        setTargetLoading={setTargetLoading}
+                                        setReports={setReports}
+                                        incPage={incPage}
+                                    />
+                                ))}
+                            </tbody>
+                        </table>
+                    </motion.div>
+                )}
                 <PropagateLoader loading={loading} cssOverride={overrideCss} color="orange" />
                 <PacmanLoader loading={targetLoading} cssOverride={override} color="orange" speedMultiplier={1} />
             </div>

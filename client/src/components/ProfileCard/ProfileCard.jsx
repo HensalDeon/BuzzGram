@@ -23,7 +23,7 @@ import { getTimelinePosts } from "../../redux/actions/PostAction";
 import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { uploadImage } from "../../redux/actions/UploadAction";
-
+import { motion } from "framer-motion";
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -270,43 +270,45 @@ const ProfileCard = ({ location }) => {
             className="ProfileCard"
             style={location === "profile" ? { overflowY: "auto", boxShadow: " rgb(208,86,155,0.3) 0px 0px 100px" } : {}}
         >
-            <div className="ProfileImages">
-                <img
-                    className={location === "profile" ? "profileCover" : ""}
-                    src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
-                    alt="cover image"
-                />
-                {location === "profile" && currUser?.user?._id === user._id && (
-                    <span>
-                        <img
-                            onClick={() => handleImageClick("cover")}
-                            src={editCover}
-                            className="editCover-icon"
-                            alt="coverEdit"
-                        />
-                    </span>
-                )}
-                <img
-                    className={location === "profile" ? "profileImg" : ""}
-                    src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
-                    alt="profile image"
-                />
-                {location === "profile" && currUser?.user?._id === user._id && (
+            <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
+                <div className="ProfileImages">
                     <img
-                        onClick={() => handleImageClick("profile")}
-                        className="editProfile-icon"
-                        src={editProfile}
-                        alt="porfileEdit"
+                        className={location === "profile" ? "profileCover" : ""}
+                        src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
+                        alt="cover image"
                     />
-                )}
-                <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: "none" }}
-                    ref={fileInputRef}
-                    onChange={handleProfileImageChange}
-                />
-            </div>
+                    {location === "profile" && currUser?.user?._id === user._id && (
+                        <span>
+                            <img
+                                onClick={() => handleImageClick("cover")}
+                                src={editCover}
+                                className="editCover-icon"
+                                alt="coverEdit"
+                            />
+                        </span>
+                    )}
+                    <img
+                        className={location === "profile" ? "profileImg" : ""}
+                        src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
+                        alt="profile image"
+                    />
+                    {location === "profile" && currUser?.user?._id === user._id && (
+                        <img
+                            onClick={() => handleImageClick("profile")}
+                            className="editProfile-icon"
+                            src={editProfile}
+                            alt="porfileEdit"
+                        />
+                    )}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        ref={fileInputRef}
+                        onChange={handleProfileImageChange}
+                    />
+                </div>
+            </motion.div>
 
             <Modal show={showProfile} onHide={handleProfileClose} backdrop="static" keyboard={false}>
                 <Modal.Body>
@@ -367,49 +369,55 @@ const ProfileCard = ({ location }) => {
 
             {!loading ? (
                 <>
-                    <div className="ProfileName">
-                        <span>
-                            <span style={location === "profile" ? { fontSize: "20px", padding: "0 14px" } : {}}>
-                                {currUser.user?.username}
+                    <motion.div
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                    >
+                        <div className="ProfileName">
+                            <span>
+                                <span style={location === "profile" ? { fontSize: "20px", padding: "0 14px" } : {}}>
+                                    {currUser.user?.username}
+                                </span>
+                                {user._id !== currUser.user._id && (
+                                    <>
+                                        {isFollowed ? (
+                                            <img
+                                                onClick={handleShow}
+                                                style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
+                                                src={unfollow}
+                                                alt="unfollow"
+                                            />
+                                        ) : (
+                                            <img
+                                                onClick={handleFollow}
+                                                style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
+                                                src={follow}
+                                                alt="follow"
+                                            />
+                                        )}
+                                    </>
+                                )}
+                                {user._id == currUser.user._id && location === "profile" && (
+                                    <img
+                                        onClick={handleEditProfile}
+                                        style={{ width: "2em", position: "absolute", cursor: "pointer" }}
+                                        src={editIcon}
+                                        alt="edit"
+                                    />
+                                )}
                             </span>
-                            {user._id !== currUser.user._id && (
-                                <>
-                                    {isFollowed ? (
-                                        <img
-                                            onClick={handleShow}
-                                            style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
-                                            src={unfollow}
-                                            alt="unfollow"
-                                        />
-                                    ) : (
-                                        <img
-                                            onClick={handleFollow}
-                                            style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
-                                            src={follow}
-                                            alt="follow"
-                                        />
-                                    )}
-                                </>
-                            )}
-                            {user._id == currUser.user._id && location === "profile" && (
-                                <img
-                                    onClick={handleEditProfile}
-                                    style={{ width: "2em", position: "absolute", cursor: "pointer" }}
-                                    src={editIcon}
-                                    alt="edit"
-                                />
-                            )}
-                        </span>
-                        <span>{currUser.user?.fullname}</span>
-                        <span className={bioClassName} onClick={toggleExpand}>
-                            {currUser.user?.bio || "Write about yourself😊"}
-                        </span>
-                    </div>
+                            <span>{currUser.user?.fullname}</span>
+                            <span className={bioClassName} onClick={toggleExpand}>
+                                {currUser.user?.bio || "Write about yourself😊"}
+                            </span>
+                        </div>
+                    </motion.div>
+
                     <div className="followStatus">
                         <hr />
                         <div>
                             <div className="follow">
-                                {/* <span>{currUser.user?.followers.length}</span> */}
                                 <span>{followers}</span>
                                 <span>Followers</span>
                             </div>
@@ -437,20 +445,26 @@ const ProfileCard = ({ location }) => {
                                 </Link>
                             </span>
                         )}
-                        {location === "profile" && (
-                            <div className="Post mb-3">
-                                <div className="explore">
-                                    {currUser?.posts.map((post) => (
-                                        <PostView postDtl={post} key={post._id} />
-                                    ))}
-                                    {currUser?.posts.length < 1 && (
-                                        <b className="d-flex flex-row">
-                                            No Posts Yet!<span className="material-symbols-outlined">photo_camera</span>
-                                        </b>
-                                    )}
+                        <motion.div
+                            initial={{ y: -20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {location === "profile" && (
+                                <div className="Post mb-3">
+                                    <div className="explore">
+                                        {currUser?.posts.map((post) => (
+                                            <PostView postDtl={post} key={post._id} />
+                                        ))}
+                                        {currUser?.posts.length < 1 && (
+                                            <b className="d-flex flex-row">
+                                                No Posts Yet!<span className="material-symbols-outlined">photo_camera</span>
+                                            </b>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </motion.div>
                     </div>
                 </>
             ) : (

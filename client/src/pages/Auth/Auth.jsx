@@ -8,7 +8,7 @@ import { sendOtpSignup, verifyOtp } from "../../api/AuthRequests";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const loginValidation = Yup.object().shape({
     username: Yup.string()
@@ -58,13 +58,14 @@ const validationSchema = Yup.object().shape({
 
 const Auth = () => {
     const [showLogin, setShowLogin] = useState(true);
+    const navigate = useNavigate();
     const toggleForm = () => {
         setShowLogin(!showLogin);
     };
 
     return (
         <div className="Auth">
-            <div className="a-left">
+            <div className="a-left" onClick={() => navigate("/auth")}>
                 <img src={Logo} alt="" />
                 <div className="Webname">
                     <h1>BuzzGram</h1>
@@ -136,7 +137,9 @@ function LogIn({ toggleForm }) {
                         <div style={{ color: "red" }}>{formik.errors.password}</div>
                     )}
                 </div>
-                <Link to={"/forgot-password"} className="forgot-pass">forgot password?</Link>
+                <Link to={"/forgot-password"} className="forgot-pass">
+                    forgot password?
+                </Link>
 
                 <div className="pt-3">
                     <span style={{ fontSize: "12px" }}>

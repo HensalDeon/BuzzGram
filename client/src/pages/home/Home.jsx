@@ -9,6 +9,7 @@ import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import Explore from "../../components/Explore/Explore";
 import SavedPosts from "../../components/SavedPosts/SavedPosts";
 import FollowersCard from "../../components/FollowersCard/FollowersCard";
+import { motion } from "framer-motion";
 
 const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
@@ -34,12 +35,13 @@ const Home = ({ location }) => {
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
             {location === "saved" && <SavedPosts />}
-            {/* {location === "profile" && <ProfileCard location={location} />} */}
             {location === "profile" && (
-                <div className="d-flex flex-row">
-                    <ProfileCard location={location} />
-                    {isLargeScreen && <FollowersCard />}
-                </div>
+                <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
+                    <div className="d-flex flex-row">
+                        <ProfileCard location={location} />
+                        {isLargeScreen && <FollowersCard />}
+                    </div>
+                </motion.div>
             )}
         </div>
     );

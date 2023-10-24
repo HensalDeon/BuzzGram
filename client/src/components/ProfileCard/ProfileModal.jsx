@@ -42,7 +42,6 @@ function ProfileModal({ editOpened, setEditOpened, data, updateCurrUser }) {
         try {
             const response = await dispatch(updateUser(user._id, editProfile));
             toast.dismiss(loadingToastId);
-            console.log(response, "response");
             if (response.success) {
                 updateCurrUser(editProfile);
                 toast.success(<b>{response.message}</b>);

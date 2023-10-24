@@ -126,7 +126,7 @@ function ForgotPass() {
     return (
         <div className="Auth">
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <div className="a-left">
+            <div onClick={() => navigate("/auth")} className="a-left">
                 <img src={Logo} alt="" />
                 <div className="Webname">
                     <h1>BuzzGram</h1>
