@@ -8,7 +8,7 @@ import Auth from "../middleware/auth.js";
 /**GET Requests */
 router.route("/:id").get(postController.getUserPosts);
 router.route("/:id/all").get(Auth, postController.getAllPosts);
-// router.route("/:id/timeline").get(postController.getTimelinePosts);
+router.route("/:id/admin").get( postController.getAllPostsByAdmin);
 router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 router.route("/:id/comments").get(Auth, commentController.getComments);
 router.route("/:id/saved").get(Auth, postController.getSavedPosts);

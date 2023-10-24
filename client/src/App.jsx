@@ -11,12 +11,12 @@ import Blank from "./components/Blank/Blank";
 import Dashboard from "./pages/Admin/Dashboard";
 import UserList from "./components/UserList/UserList";
 import Reports from "./components/Reports/Reports";
+import ForgotPass from "./ForgotPass/ForgotPass";
 
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);
     const Authorized = user && user?.user?.isblocked !== true;
-
 
     return (
         <div className="App">
@@ -31,6 +31,7 @@ function App() {
                 <Route path="/saved" element={Authorized ? <Home location="saved" /> : <Navigate to="/auth" />} />
                 <Route path="/auth" element={Authorized ? <Navigate to="../home" /> : <Auth />} />
                 <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="/auth" />} />
+                <Route path="/forgot-password" element={Authorized ? <Home location="profile" /> : <ForgotPass />} />
                 <Route path="*" element={<p>Not Found</p>} />
 
                 {/* Admin routes */}

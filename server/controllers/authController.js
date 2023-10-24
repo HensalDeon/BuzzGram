@@ -97,6 +97,49 @@ export const signupOtpGenerate = async (req, res) => {
     }
 };
 
+export const sendOtpRecovery = async (req, res) => {
+    try {
+        const { phone } = req.body;
+        const user = await UserModel.findOne({ phone });
+        if (!user) {
+            return res.status(404).json({ error: "There isn't an account associated with this number" });
+        }
+        const otpSent = await sendOtp(phone);
+        if (otpSent) {
+            return res.status(200).json({ message: "OTP sent successfully" });
+        } else {
+            return res.status(500).json({ error: "Failed to send OTP" });
+        }
+    } catch (error) {
+        console.error("Error in signupOtpSend:", error);
+        return res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+export const forgotPassword = async (req, res) => {
+    try {
+        const { phone, password } = req.body;
+        const user = await UserModel.findOne({ phone }).exec();
+        if (!user) {
+            return res.status(400).send({ error: "User not Found" });
+        }
+
+        if (user.isblocked) {
+            return res.status(400).send({ error: "User is blocked." });
+        }
+
+        const hashedPassword = await hashPassword(password);
+
+        user.password = hashedPassword;
+        await user.save();
+        
+        return res.status(200).send({ message: "Password updated successfully" });
+    } catch (error) {
+        console.error("An error occurred:", error);
+        return res.status(500).send({ error: "Something went wrong" });
+    }
+};
+
 export const otpVerification = async (req, res) => {
     try {
         const { otp, phone } = req.body;

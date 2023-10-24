@@ -3,7 +3,6 @@ import ReportModel from "../model/reportModel.js";
 import PostModel from "../model/postModel.js";
 import CommentModel from "../model/commentModel.js";
 import UserModel from "../model/userModel.js";
-import PropagateLoader from "react-spinners/PropagateLoader";
 export const createReport = async (req, res) => {
     try {
         const { reporterId, targetType, targetId, reason } = req.body;

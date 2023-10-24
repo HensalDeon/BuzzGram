@@ -245,3 +245,27 @@ export const getUserPosts = async (req, res) => {
         res.status(500).json({ error: "Internal server error occured" });
     }
 };
+
+export const getAllPostsByAdmin = async (req, res) => {
+    try {
+        const { page } = req.query;
+        const limitValue = 8;
+        const pageValue = parseInt(page, 10) || 1;
+        const skipCount = (pageValue - 1) * limitValue;
+        const posts = await PostModel.find({})
+            .populate({
+                path: "user",
+                select: "-password",
+            })
+            .skip(skipCount)
+            .limit(limitValue)
+            .exec();
+        if (!posts) {
+            return res.status(404).json({ error: "No posts found." });
+        }
+        return res.status(200).json(posts);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};

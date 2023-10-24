@@ -8,6 +8,7 @@ import { sendOtpSignup, verifyOtp } from "../../api/AuthRequests";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
+import { Link } from "react-router-dom";
 
 const loginValidation = Yup.object().shape({
     username: Yup.string()
@@ -21,6 +22,7 @@ const loginValidation = Yup.object().shape({
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)/, "Password must contain at least one letter", "and one number")
         .required("Password cannot be empty"),
 });
+
 const validationSchema = Yup.object().shape({
     fullname: Yup.string()
         .trim()
@@ -37,6 +39,9 @@ const validationSchema = Yup.object().shape({
         .min(8, "Minimum 6 characters required")
         .matches(/^(?=.*[a-zA-Z])(?=.*\d)/, "Password must contain at least one letter", "and one number")
         .required("Password cannot be empty"),
+    confPassword: Yup.string()
+        .oneOf([Yup.ref("password"), null], "Confirm password is not same")
+        .required("Confirm password is required"),
     email: Yup.string()
         .trim()
         .email("Invalid email fromat")
@@ -92,7 +97,7 @@ function LogIn({ toggleForm }) {
                 if (result.error === "User is blocked.") {
                     return toast.error(<b>User is blocked! Contact admin for assistance!</b>);
                 } else {
-                    return toast.error(<b>Login failed. Please check your credentials.</b>);
+                    return toast.error(<b>Invalid Credentials.</b>);
                 }
             } catch (error) {
                 toast.error("Somethig went wrong!");
@@ -103,7 +108,7 @@ function LogIn({ toggleForm }) {
     return (
         <div className="a-right">
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <form className="infoForm authForm" onSubmit={formik.handleSubmit}>
+            <form className="infoForm authForm position-relative" onSubmit={formik.handleSubmit}>
                 <h3>Log In</h3>
 
                 <div style={{ display: "flow" }}>
@@ -131,8 +136,9 @@ function LogIn({ toggleForm }) {
                         <div style={{ color: "red" }}>{formik.errors.password}</div>
                     )}
                 </div>
+                <Link to={"/forgot-password"} className="forgot-pass">forgot password?</Link>
 
-                <div>
+                <div className="pt-3">
                     <span style={{ fontSize: "12px" }}>
                         Don&#39;t have an account?{" "}
                         <button onClick={toggleForm}>
@@ -223,6 +229,7 @@ function SignUp({ toggleForm }) {
             fullname: "",
             username: "",
             password: "",
+            confPassword: "",
             email: "",
             phone: "",
             verifyOtp: "",
@@ -287,6 +294,18 @@ function SignUp({ toggleForm }) {
                     />
                     {formik.touched.password && formik.errors.password && (
                         <div style={{ color: "red" }}>{formik.errors.password}</div>
+                    )}
+                </div>
+                <div style={{ display: "flow" }}>
+                    <input
+                        {...formik.getFieldProps("confPassword")}
+                        type="password"
+                        className="infoInput"
+                        placeholder="Confirm password"
+                        name="confPassword"
+                    />
+                    {formik.touched.confPassword && formik.errors.confPassword && (
+                        <div style={{ color: "red" }}>{formik.errors.confPassword}</div>
                     )}
                 </div>
                 <div style={{ display: "flow" }}>

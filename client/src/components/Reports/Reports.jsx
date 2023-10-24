@@ -31,6 +31,10 @@ function Reports() {
         marginBottom: "5rem",
     };
 
+    const incPage = () => {
+        setPage((prev) => prev + 1);
+    };
+
     const handelInfiniteScroll = async () => {
         if (!scrolling && hasMoreReports) {
             setScrolling(true);
@@ -49,7 +53,6 @@ function Reports() {
     useEffect(() => {
         getReports(page)
             .then((res) => {
-                console.log("skhdhvbkshv");
                 setLoading(false);
                 const newReports = res.data;
                 if (newReports.length === 0 || newReports.length < 8) {
@@ -101,6 +104,7 @@ function Reports() {
                                     key={report._id}
                                     setTargetLoading={setTargetLoading}
                                     setReports={setReports}
+                                    incPage={incPage}
                                 />
                             ))}
                     </tbody>

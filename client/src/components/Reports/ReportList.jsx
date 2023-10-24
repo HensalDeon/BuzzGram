@@ -14,7 +14,7 @@ import { deleteReport, getTargetData, updateReport } from "../../api/ReportReque
 import { deletePost } from "../../redux/actions/PostAction";
 import { adminDeleteComment } from "../../api/CommentRequests";
 
-function ReportList({ report, setTargetLoading, setReports }) {
+function ReportList({ report, setTargetLoading, setReports, incPage }) {
     const [expanded, setExpanded] = useState(true);
     const [showTarget, setShowTarget] = useState(false);
     const [data, setData] = useState(null);
@@ -41,7 +41,11 @@ function ReportList({ report, setTargetLoading, setReports }) {
         deleteReport(report._id)
             .then((res) => {
                 toast.dismiss(loadingToastId);
-                setReports((prevReports) => prevReports.filter((r) => r._id !== report._id));
+                setReports((prevReports) => {
+                    const updatedReports = prevReports.filter((r) => r._id !== report._id);
+                    if (updatedReports.length < 8) incPage();
+                    return updatedReports;
+                });
                 toast.success(<b>{res.data.message}</b>);
             })
             .catch((err) => {
@@ -94,8 +98,6 @@ function ReportList({ report, setTargetLoading, setReports }) {
     };
 
     const handleResolve = () => {
-        console.log(report);
-        console.log("resolved");
         updateReport("HensalDeon", report._id).then((res) => {
             console.log(res.data.report);
             const updatedReport = res.data.report;
@@ -109,7 +111,6 @@ function ReportList({ report, setTargetLoading, setReports }) {
             });
         });
     };
-    console.log(report);
     const handleView = () => {
         setTargetLoading(true);
         getTargetData(report.targetId, report.targetType)
@@ -246,6 +247,7 @@ ReportList.propTypes = {
     }).isRequired,
     setTargetLoading: PropTypes.func.isRequired,
     setReports: PropTypes.func.isRequired,
+    incPage: PropTypes.func.isRequired,
 };
 
 export default ReportList;
