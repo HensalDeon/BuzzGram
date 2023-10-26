@@ -139,7 +139,7 @@ export const getAllPosts = async (req, res) => {
             reports: { $in: [userIdObjectId] },
         });
         const { page } = req.query;
-        const limitValue = 6;
+        const limitValue = 8;
         const pageValue = parseInt(page, 10) || 1;
 
         const skipCount = (pageValue - 1) * limitValue;

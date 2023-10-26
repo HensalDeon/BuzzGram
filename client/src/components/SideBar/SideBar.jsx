@@ -10,7 +10,7 @@ import "./SideBar.scss";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../redux/actions/AuthActions";
-
+import { motion } from "framer-motion";
 export default function SideBar() {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -29,7 +29,7 @@ export default function SideBar() {
     };
 
     return (
-        <aside className="sidebar">
+        <motion.aside className="sidebar">
             <div className="sidebar-inner">
                 <header className="sidebar-header">
                     <button type="button" className="sidebar-burger" onClick={toggleSidebar}></button>
@@ -43,7 +43,7 @@ export default function SideBar() {
                         <span>Home</span>
                     </button>
                     <button type="button">
-                        <Link className="material-symbols-outlined">
+                        <Link className="material-symbols-outlined" to={"/chat"}>
                             <img style={{ width: "2rem" }} src={CHAT} alt="chat" />
                         </Link>
                         <span style={{ animationDelay: "0.1s" }}>Messages</span>
@@ -76,6 +76,6 @@ export default function SideBar() {
                     </button>
                 </footer>
             </div>
-        </aside>
+        </motion.aside>
     );
 }

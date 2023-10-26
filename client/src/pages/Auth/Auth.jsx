@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
 const loginValidation = Yup.object().shape({
     username: Yup.string()
         .trim()
@@ -107,7 +107,12 @@ function LogIn({ toggleForm }) {
         },
     });
     return (
-        <div className="a-right">
+        <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="a-right"
+        >
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             <form className="infoForm authForm position-relative" onSubmit={formik.handleSubmit}>
                 <h3>Log In</h3>
@@ -153,7 +158,7 @@ function LogIn({ toggleForm }) {
                     </button>
                 </div>
             </form>
-        </div>
+        </motion.div>
     );
 }
 
@@ -257,7 +262,12 @@ function SignUp({ toggleForm }) {
         },
     });
     return (
-        <div className="a-right signup">
+        <motion.div
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="a-right signup"
+        >
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             <form className="infoForm authForm" onSubmit={formik.handleSubmit}>
                 <h3>Sign Up</h3>
@@ -378,7 +388,7 @@ function SignUp({ toggleForm }) {
                     </button>
                 </div>
             </form>
-        </div>
+        </motion.div>
     );
 }
 

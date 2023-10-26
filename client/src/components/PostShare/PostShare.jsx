@@ -8,7 +8,7 @@ import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
-
+import { motion } from "framer-motion";
 const PostShare = () => {
     const { user } = useSelector((state) => state.authReducer.authData);
     const uploading = useSelector((state) => state.postReducer.uploading);
@@ -24,7 +24,7 @@ const PostShare = () => {
     // handle post upload
     const handleUpload = async (e) => {
         e.preventDefault();
-        
+
         if (!description.current.value && !image) {
             return toast.error(<b>Please Provide the Details!</b>);
         } else if (!description.current.value) {
@@ -133,7 +133,7 @@ const PostShare = () => {
             <Toaster position="top-center" reverseOrder={false}></Toaster>
             <div className="PostShare">
                 <img src={user.profileimage || defProfile} alt="" />
-                <div>
+                <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
                     <input type="text" name="description" placeholder="What's happening" ref={description} />
                     <div className="postOptions">
                         <div className="option" style={{ color: "var(--photo)" }} onClick={() => imageRef.current.click()}>
@@ -180,7 +180,7 @@ const PostShare = () => {
                             </div>
                         </>
                     )}
-                </div>
+                </motion.div>
             </div>
         </>
     );

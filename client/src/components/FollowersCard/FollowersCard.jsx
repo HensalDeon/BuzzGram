@@ -14,7 +14,13 @@ const FollowersCard = () => {
                 <h3>People you may know!</h3>
                 {Followers.map((follower) => {
                     return (
-                        <div className="follower pb-3 gap-1" key={follower.id}>
+                        <motion.div
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className="follower pb-3 gap-1"
+                            key={follower.id}
+                        >
                             <div>
                                 <img src={follower.img} alt="" className="followerImage" />
                                 <div className="name">
@@ -23,7 +29,7 @@ const FollowersCard = () => {
                                 </div>
                             </div>
                             <button className="button fc-button">Follow</button>
-                        </div>
+                        </motion.div>
                     );
                 })}
             </motion.div>

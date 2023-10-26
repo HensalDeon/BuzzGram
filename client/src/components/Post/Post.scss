@@ -84,6 +84,7 @@
 
     img{
         border-radius: 50%;
+        cursor: pointer;
     }
 
     .user-details {
@@ -92,6 +93,7 @@
 
         b {
             align-self: self-start;
+            cursor: pointer;
         }
         .text {
             width: 9rem;

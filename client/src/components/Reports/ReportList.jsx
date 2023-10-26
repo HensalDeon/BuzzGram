@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { deleteReport, getTargetData, updateReport } from "../../api/ReportRequests";
 import { deletePost } from "../../redux/actions/PostAction";
 import { adminDeleteComment } from "../../api/CommentRequests";
+import { deleteCmt } from "../../redux/actions/CommentActions";
 
 function ReportList({ report, setTargetLoading, setReports, incPage }) {
     const [expanded, setExpanded] = useState(true);
@@ -77,6 +78,7 @@ function ReportList({ report, setTargetLoading, setReports, incPage }) {
         const loadingToastId = toast.loading("Deleting...");
         adminDeleteComment(report.targetId)
             .then((res) => {
+                dispatch(deleteCmt(report.targetId, data.postId._id));
                 setShow(false);
                 toast.dismiss(loadingToastId);
                 toast.success(<b>{res.data.message}</b>);
@@ -98,19 +100,28 @@ function ReportList({ report, setTargetLoading, setReports, incPage }) {
     };
 
     const handleResolve = () => {
-        updateReport("HensalDeon", report._id).then((res) => {
-            console.log(res.data.report);
-            const updatedReport = res.data.report;
-            setReports((prevReports) => {
-                return prevReports.map((r) => {
-                    if (r._id === updatedReport._id) {
-                        return { ...updatedReport, reporterId: r.reporterId };
-                    }
-                    return r;
+        const loadingToast = toast.loading(<b>Changing...</b>);
+        updateReport("HensalDeon", report._id)
+            .then((res) => {
+                toast.dismiss(loadingToast);
+                const updatedReport = res.data.report;
+                setReports((prevReports) => {
+                    return prevReports.map((r) => {
+                        if (r._id === updatedReport._id) {
+                            return { ...updatedReport, reporterId: r.reporterId };
+                        }
+                        return r;
+                    });
                 });
+                toast.success(<b>Status changed!</b>);
+            })
+            .catch((err) => {
+                toast.dismiss(loadingToast);
+                console.log(err);
+                toast.error(<b>Error updating status</b>);
             });
-        });
     };
+
     const handleView = () => {
         setTargetLoading(true);
         getTargetData(report.targetId, report.targetType)

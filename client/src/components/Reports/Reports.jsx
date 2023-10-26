@@ -83,7 +83,7 @@ function Reports() {
     return (
         <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <div>filter by targetType , filter by reported time</div>
+            {/* <div>filter by targetType , filter by reported time</div> */}
             <div className="table-container">
                 {!loading && (
                     <motion.div
@@ -110,7 +110,7 @@ function Reports() {
                                         key={report._id}
                                         setTargetLoading={setTargetLoading}
                                         setReports={setReports}
-                                        incPage={incPage}
+                                        incPage={incPage}   
                                     />
                                 ))}
                             </tbody>

@@ -12,9 +12,11 @@ import toast from "react-hot-toast";
 import { logout } from "../../redux/actions/AuthActions";
 import { createReport } from "../../redux/actions/ReportActions";
 import { deleteCmt } from "../../redux/actions/CommentActions";
+import { useNavigate } from "react-router-dom";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user } = useSelector((state) => state.authReducer.authData);
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState([]);
@@ -237,9 +239,16 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                         {comments.map((comment, index) => (
                             <div key={comment._id}>
                                 <div className="cmt-containers">
-                                    <img src={comment?.user?.profileimage || avatar} style={{ maxWidth: "2rem" }} alt="avatar" />
+                                    <img
+                                        onClick={() => navigate(`/profile/${comment?.user?._id}`)}
+                                        src={comment?.user?.profileimage || avatar}
+                                        style={{ maxWidth: "2rem" }}
+                                        alt="avatar"
+                                    />
                                     <div className="user-details">
-                                        <b className="lg-text">{comment.user.username}</b>
+                                        <b onClick={() => navigate(`/profile/${comment?.user?._id}`)} className="lg-text">
+                                            {comment.user.username}
+                                        </b>
                                         <span className="text">
                                             {comment.text}&nbsp;&nbsp;&nbsp;&nbsp;
                                             <img

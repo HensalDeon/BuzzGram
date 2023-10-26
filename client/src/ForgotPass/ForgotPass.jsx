@@ -41,8 +41,10 @@ function ForgotPass() {
             return;
         }
         try {
+            const loadingToast = toast.loading(<b>Sending...!</b>);
             const res = await sendOtpRecovery({ phone: phoneInputRef.current.value });
             console.log(res.data);
+            toast.dismiss(loadingToast);
             if (res.status == 200) {
                 toast.success(<b>{res.data.message}</b>);
                 setOtpSent(true);
@@ -64,7 +66,9 @@ function ForgotPass() {
             return;
         }
         try {
+            const loadingToast = toast.loading(<b>Verifying...!</b>);
             const res = await verifyOtp(phoneInputRef.current.value, otpInputRef.current.value);
+            toast.dismiss(loadingToast);
             if (res.status == 200) {
                 setIsOtpVerified(true);
                 toast.success(<b>{res.data.message}</b>);

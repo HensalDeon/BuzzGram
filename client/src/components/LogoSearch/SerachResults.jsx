@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import avatar from "../../img/icon-accounts.svg";
 import PropTypes from "prop-types";
-
+import { motion } from "framer-motion";
 function SerachResults({ users }) {
     const navigate = useNavigate();
     const handleUserView = (user) => {
@@ -12,7 +12,11 @@ function SerachResults({ users }) {
             {users.map((user) => {
                 return (
                     <div onClick={() => handleUserView(user)} className="follower py-2 mx-2 px-2" key={user._id}>
-                        <div>
+                        <motion.div
+                            initial={{ y: -20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                        >
                             <img
                                 src={user.profileimage || avatar}
                                 alt="avatar"
@@ -22,7 +26,7 @@ function SerachResults({ users }) {
                                 <span>{user?.fullname || "no name available"}</span>
                                 <span>{user?.username || "no usernmae"}</span>
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
                 );
             })}

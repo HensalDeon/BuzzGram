@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import "./BottomBar.scss";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
-// import Home from "../../pages/home/Home";
+import { motion } from "framer-motion";
 
 function BottomBar() {
     const navigate = useNavigate();
@@ -18,7 +18,12 @@ function BottomBar() {
         }, 100);
     }, []);
     return (
-        <aside className="bottombar">
+        <motion.aside
+            initial={{ x: -20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="bottombar"
+        >
             <div className="tabs">
                 <input id="tab-1" type="radio" name="group" defaultChecked={location.pathname.includes("/home")} />
                 <input id="tab-2" type="radio" name="group" />
@@ -27,29 +32,49 @@ function BottomBar() {
                 <input id="tab-5" type="radio" name="group" defaultChecked={location.pathname.includes("/profile")} />
 
                 <div className="buttons">
-                    <label onClick={() => navigate("/home")} className="material-symbols-outlined" htmlFor="tab-1">
+                    <motion.label
+                        whileHover={{ scale: 1.3 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => navigate("/home")}
+                        className="material-symbols-outlined"
+                        htmlFor="tab-1"
+                    >
                         Home
-                    </label>
+                    </motion.label>
                     <label className="material-symbols-outlined" htmlFor="tab-2">
                         Chat
                     </label>
-                    <label onClick={() => navigate("/explore")} className="material-symbols-outlined" htmlFor="tab-3">
+                    <motion.label
+                        whileHover={{ scale: 1.3 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => navigate("/explore")}
+                        className="material-symbols-outlined"
+                        htmlFor="tab-3"
+                    >
                         Explore
-                    </label>
-                    <label onClick={() => navigate("/saved")} className="material-symbols-outlined" htmlFor="tab-4">
+                    </motion.label>
+                    <motion.label
+                        whileHover={{ scale: 1.3 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => navigate("/saved")}
+                        className="material-symbols-outlined"
+                        htmlFor="tab-4"
+                    >
                         Bookmark
-                    </label>
-                    <label
+                    </motion.label>
+                    <motion.label
+                        whileHover={{ scale: 1.3 }}
+                        transition={{ duration: 0.3 }}
                         onClick={() => navigate(`/profile/${user._id}`)}
                         className="material-symbols-outlined"
                         htmlFor="tab-5"
                     >
                         Person
-                    </label>
+                    </motion.label>
                     <div className="underline"></div>
                 </div>
             </div>
-        </aside>
+        </motion.aside>
     );
 }
 

@@ -10,6 +10,7 @@ import Explore from "../../components/Explore/Explore";
 import SavedPosts from "../../components/SavedPosts/SavedPosts";
 import FollowersCard from "../../components/FollowersCard/FollowersCard";
 import { motion } from "framer-motion";
+import Chat from "../Chat/Chat";
 
 const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
@@ -32,6 +33,7 @@ const Home = ({ location }) => {
         <div className="Home">
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
+            {location === "chat" && <Chat />}
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
             {location === "saved" && <SavedPosts />}

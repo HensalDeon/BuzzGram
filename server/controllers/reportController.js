@@ -67,6 +67,11 @@ export const getTargetData = async (req, res) => {
                 select: "username profileimage",
                 model: UserModel,
             })
+            .populate({
+                path:"postId",
+                select: "_id",
+                model: PostModel
+            })
             .exec();
         if (!target) {
             return res.json("deleted");
