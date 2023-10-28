@@ -1,5 +1,5 @@
 import Cover from "../../img/cover.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import defProfile from "../../img/icon-accounts.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import follow from "../../img/icon-flatFollow.svg";
@@ -7,6 +7,7 @@ import editIcon from "../../img/icon-flatEdit.svg";
 import editProfile from "../../img/icon-flatEditProfile.svg";
 import avatar from "../../img/icon-accounts.svg";
 import editCover from "../../img/icon-flatEditCoverImg.svg";
+import chat from "../../img/icon-flatChatwith.svg";
 import "./ProfileCard.scss";
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
@@ -26,6 +27,7 @@ import { uploadImage } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { user } = useSelector((state) => state.authReducer.authData);
     const { id } = useParams();
     const [currUser, setCurrUser] = useState([]);
@@ -264,6 +266,17 @@ const ProfileCard = ({ location }) => {
             },
         }));
     };
+    // const currentChatUser = useSelector((state) => state.chatReducer.currentChatUser);
+    const handleChatClick = () => {
+        dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
+        navigate("/chat");
+        // navigate(`/chat/${currUser?.user?._id}`);
+    };
+    // useEffect(() => {
+    //     if (currentChatUser) {
+    //         navigate("/chat");
+    //     }
+    // }, [currentChatUser, navigate]);
 
     return (
         <div
@@ -381,9 +394,22 @@ const ProfileCard = ({ location }) => {
                                 </span>
                                 {user._id !== currUser.user._id && (
                                     <>
+                                        <img
+                                            title="chat"
+                                            onClick={handleChatClick}
+                                            style={{
+                                                width: "2.4em",
+                                                position: "absolute",
+                                                cursor: "pointer",
+                                                right: "13rem",
+                                            }}
+                                            src={chat}
+                                            alt="chat"
+                                        />
                                         {isFollowed ? (
                                             <img
                                                 onClick={handleShow}
+                                                title="unfollow user"
                                                 style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
                                                 src={unfollow}
                                                 alt="unfollow"
@@ -391,6 +417,7 @@ const ProfileCard = ({ location }) => {
                                         ) : (
                                             <img
                                                 onClick={handleFollow}
+                                                title="follow user"
                                                 style={{ width: "2.4em", position: "absolute", cursor: "pointer" }}
                                                 src={follow}
                                                 alt="follow"

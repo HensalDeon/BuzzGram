@@ -6,6 +6,7 @@ import Auth from "../middleware/auth.js";
 
 /** GET Requests */
 router.route("/search").get(Auth, userCotroller.searchResult);
+router.route("/:id").get(Auth, userCotroller.getUser);
 
 /** PUT Requests */
 router.route("/:id").put(Auth, userCotroller.updateUser);
