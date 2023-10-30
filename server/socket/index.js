@@ -1,13 +1,12 @@
 import { Server } from "socket.io";
 
+let activeUsers = [];
 export default function initializeSocketServer() {
     const io = new Server(8800, {
         cors: {
             origin: "http://localhost:5173",
         },
     });
-
-    let activeUsers = [];
 
     io.on("connection", (socket) => {
         // add new User
@@ -41,3 +40,5 @@ export default function initializeSocketServer() {
         });
     });
 }
+
+export { activeUsers };

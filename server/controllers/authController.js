@@ -48,7 +48,12 @@ export const loginUser = async (req, res) => {
         if (!passwordCheck) {
             return res.status(400).send({ error: "Password does not Match" });
         }
+
+        user.visited++;
+        await user.save();
+
         const token = createAccessToken(user);
+        
         user.password = "";
         return res.status(200).send({
             user,
@@ -132,7 +137,7 @@ export const forgotPassword = async (req, res) => {
 
         user.password = hashedPassword;
         await user.save();
-        
+
         return res.status(200).send({ message: "Password updated successfully" });
     } catch (error) {
         console.error("An error occurred:", error);

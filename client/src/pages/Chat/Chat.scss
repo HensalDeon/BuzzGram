@@ -84,6 +84,20 @@
     height: 1rem;
 }
 
+.offline-dot {
+    border-radius: 50%;
+    position: absolute;
+    left: 2.12rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    background: #cecece;
+    top: 0.124rem;
+    @media (max-width: 620px) {
+        left: 2.11rem;
+        top: 0.083rem;
+    }
+}
+
 .chatbox-empty-message {
     display: flex;
     align-self: center;

@@ -7,8 +7,6 @@ const chatReducer = (
             return { ...state, chatUsers: [...state.chatUsers, action.data] };
         case "CURRENT_CHAT_USER":
             return { ...state, currentChatUser: action.data };
-        case "SET_CHATS":
-            return { ...state, chats: action.data };
         default:
             return state;
     }

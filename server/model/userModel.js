@@ -68,6 +68,10 @@ const userSchema = new mongoose.Schema(
                 ref: "Post",
             },
         ],
+        visited: {
+            type: Number,
+            default: 0,
+        },
     },
     {
         timestamps: true,

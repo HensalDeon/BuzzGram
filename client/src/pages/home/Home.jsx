@@ -17,6 +17,7 @@ const Home = ({ location }) => {
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
 
     useEffect(() => {
+        
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 930);
             setIsSmallScreen(window.innerWidth <= 450);

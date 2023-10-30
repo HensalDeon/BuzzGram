@@ -26,7 +26,7 @@ function BottomBar() {
         >
             <div className="tabs">
                 <input id="tab-1" type="radio" name="group" defaultChecked={location.pathname.includes("/home")} />
-                <input id="tab-2" type="radio" name="group" />
+                <input id="tab-2" type="radio" name="group" defaultChecked={location.pathname.includes("/chat")} />
                 <input id="tab-3" type="radio" name="group" defaultChecked={location.pathname.includes("/explore")} />
                 <input id="tab-4" type="radio" name="group" defaultChecked={location.pathname.includes("/saved")} />
                 <input id="tab-5" type="radio" name="group" defaultChecked={location.pathname.includes("/profile")} />

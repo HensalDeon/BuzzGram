@@ -1,13 +1,14 @@
-// 
-
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import avatar from "../../img/icon-accounts.svg";
+import sent from "../../img/icon-flatSent.svg";
 import { addMessage, getMessages } from "../../api/MessageRequests";
 import { getUser } from "../../api/UserRequests";
 import "./Chatbox.scss";
 import { format } from "timeago.js";
 import InputEmoji from "react-input-emoji";
+import PropTypes from "prop-types";
+import { motion } from "framer-motion";
 
 function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
     const [userData, setUserData] = useState(null);
@@ -55,15 +56,14 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
     // Send Message
     const handleSend = async (e) => {
         e.preventDefault();
+        if (!newMessage) return;
         const message = {
             senderId: currentUser,
             text: newMessage,
             chatId: chat._id,
         };
         const receiverId = chat.members.find((id) => id !== currentUser);
-        // send message to socket server
         setSendMessage({ ...message, receiverId });
-        // send message to database
         try {
             const { data } = await addMessage(message);
             setMessages([...messages, data]);
@@ -75,35 +75,37 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
 
     // Receive Message from parent component
     useEffect(() => {
-        console.log("Message Arrived: ", receivedMessage);
         if (receivedMessage !== null && receivedMessage.chatId === chat._id) {
             setMessages([...messages, receivedMessage]);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [receivedMessage]);
 
     const scroll = useRef();
-    const imageRef = useRef();
+    // const imageRef = useRef();
 
-    console.log(messages, "/090");
     return (
         <>
             <div className="ChatBox-container">
                 {chat ? (
                     <>
                         {/* chat-header */}
-                        <div className="chat-header">
+                        <motion.div
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className="chat-header"
+                        >
                             <div className="follower">
-                                    <img
-                                        src={userData?.profileimage || avatar}
-                                        alt="Profile"
-                                        className="followerImage"
-                                        style={{ width: "50px", height: "50px", borderRadius: "50%" }}
-                                    />
-                                    <div className="name" style={{ fontSize: "0.9rem" }}>
-                                        <span>
-                                            {userData?.username}
-                                        </span>
-                                    </div>
+                                <img
+                                    src={userData?.profileimage || avatar}
+                                    alt="Profile"
+                                    className="followerImage"
+                                    style={{ width: "50px", height: "50px", borderRadius: "50%" }}
+                                />
+                                <div className="name" style={{ fontSize: "0.9rem" }}>
+                                    <span>{userData?.username}</span>
+                                </div>
                             </div>
                             <hr
                                 style={{
@@ -112,28 +114,40 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
                                     marginTop: "20px",
                                 }}
                             />
-                        </div>
+                        </motion.div>
                         {/* chat-body */}
                         <div className="chat-body">
                             {messages.map((message) => (
-                                <div
+                                <motion.div
+                                    initial={{ x: -20, opacity: 0 }}
+                                    animate={{ x: 0, opacity: 1 }}
+                                    transition={{ duration: 0.5 }}
                                     ref={scroll}
                                     key={message._id}
                                     className={message.senderId === currentUser ? "message own" : "message"}
                                 >
                                     <span>{message.text}</span> <span>{format(message.createdAt)}</span>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
                         {/* chat-sender */}
-                        <div className="chat-sender">
-                            <div onClick={() => imageRef.current.click()}>+</div>
+                        <motion.div
+                            initial={{ x: -20, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={{ duration: 0.5 }}
+                            className="chat-sender"
+                        >
+                            {/* <div onClick={() => imageRef.current.click()}>+</div> */}
                             <InputEmoji value={newMessage} onChange={handleChange} />
-                            <div className="send-button button" onClick={handleSend}>
-                                Send
-                            </div>
-                            <input type="file" name="" id="" style={{ display: "none" }} ref={imageRef} />
-                        </div>{" "}
+                            <motion.img
+                                whileHover={{ scale: 1.2 }}
+                                whileTap={{ scale: 0.9 }}
+                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                src={sent}
+                                onClick={handleSend}
+                            ></motion.img>
+                            {/* <input type="file" style={{ display: "none" }} ref={imageRef} /> */}
+                        </motion.div>
                     </>
                 ) : (
                     <span className="chatbox-empty-message">Tap on a chat to start conversation...</span>
@@ -142,5 +156,12 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
         </>
     );
 }
+
+Chatbox.propTypes = {
+    chat: PropTypes.object,
+    currentUser: PropTypes.string.isRequired,
+    setSendMessage: PropTypes.func.isRequired,
+    receivedMessage: PropTypes.object,
+};
 
 export default Chatbox;
