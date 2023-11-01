@@ -3,7 +3,7 @@ import Auth from "./pages/Auth/Auth";
 import AdminAuth from "./pages/Auth/AdminAuth";
 import Home from "./pages/home/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import "./scss/Integrate.scss";
 import "./App.scss";
 import Admin from "./pages/Admin/Admin";

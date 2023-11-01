@@ -1,7 +1,6 @@
-import axios from "axios";
-import env from "../../env";
+import { userAxiosInstance } from "../utils/axiosInstance";
 
-const API = axios.create({ baseURL: env.REACT_APP_SERVER_DOMAIN });
+const API = userAxiosInstance();
 
 export const getMessages = (id) => API.get(`/message/${id}`);
 

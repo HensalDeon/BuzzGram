@@ -38,6 +38,49 @@ export default function initializeSocketServer() {
                 io.to(user.socketId).emit("recieve-message", data);
             }
         });
+
+        socket.on("outgoing-video-call", (data) => {
+            const user = activeUsers.find((user) => user.userId === data.to);
+            if (user) {
+                io.to(user.socketId).emit("incoming-video-call", {
+                    from: data.from,
+                    roomId: data.roomId,
+                    callType: data.callType,
+                });
+            }
+        });
+        socket.on("outgoing-voice-call", (data) => {
+            console.log(data,"back data");
+            const user = activeUsers.find((user) => user.userId === data.to);
+            if (user) {
+                io.to(user.socketId).emit("incoming-voice-call", {
+                    from: data.from,
+                    roomId: data.roomId,
+                    callType: data.callType,
+                });
+            }
+        });
+
+        socket.on("reject-voice-call", (data) => {
+            const user = activeUsers.find((user) => user.userId === data.from);
+            if (user) {
+                io.to(user.socketId).emit("voice-call-rejected");
+            }
+        });
+
+        socket.on("reject-video-call", (data) => {
+            const user = activeUsers.find((user) => user.userId === data.from);
+            if (user) {
+                io.to(user.socketId).emit("video-call-rejected");
+            }
+        });
+
+        socket.on("accept-incoming-call", (data) => {
+            const user = activeUsers.find((user) => user.userId === data.id);
+            if (user) {
+                io.to(user.socketId).emit("accept-call");
+            }
+        });
     });
 }
 

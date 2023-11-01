@@ -235,6 +235,7 @@ const ProfileCard = ({ location }) => {
             console.error("Error:", error);
         }
     };
+
     const handleUnFollow = async () => {
         const loadingToastId = toast.loading("Unfollowing...");
         handleClose();
@@ -266,17 +267,10 @@ const ProfileCard = ({ location }) => {
             },
         }));
     };
-    // const currentChatUser = useSelector((state) => state.chatReducer.currentChatUser);
     const handleChatClick = () => {
         dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
         navigate("/chat");
-        // navigate(`/chat/${currUser?.user?._id}`);
-    };
-    // useEffect(() => {
-    //     if (currentChatUser) {
-    //         navigate("/chat");
-    //     }
-    // }, [currentChatUser, navigate]);
+    }
 
     return (
         <div
@@ -401,7 +395,7 @@ const ProfileCard = ({ location }) => {
                                                 width: "2.4em",
                                                 position: "absolute",
                                                 cursor: "pointer",
-                                                right: "13rem",
+                                                marginLeft: "3rem",
                                             }}
                                             src={chat}
                                             alt="chat"

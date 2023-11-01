@@ -16,6 +16,15 @@
     }
     .name {
         align-self: center;
+        cursor: pointer;
+    }
+    .vedio-icon {
+        width: 3rem;
+        cursor: pointer;
+    }
+    .call-icon {
+        width: 2.1rem;
+        cursor: pointer;
     }
 }
 .chat-body {
@@ -36,6 +45,10 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+
+    @media (max-width: 576px) {
+        padding: 0.4rem 0.5rem;
+    }
 }
 
 .message > span:nth-child(2) {
@@ -61,7 +74,7 @@
     border-radius: 1rem;
     align-self: end;
 
-    img{
+    img {
         width: 2.1rem;
         cursor: pointer;
     }
@@ -88,4 +101,64 @@
 .chat-sender > div {
     height: 70%;
     padding: 0px 15px 0px 15px;
+}
+
+.media-share {
+    width: 30vw;
+    border-radius: 1rem;
+}
+
+.message-media {
+    max-width: 30vw;
+    img {
+        max-width: 100%;
+        border-radius: 1vw;
+        object-fit: cover;
+        cursor: pointer;
+    }
+}
+
+.image-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+
+    .imageView {
+        max-width: 50%;
+        max-height: 50%;
+    }
+    .cancel{
+        width: 5rem;
+        @media (min-width:993px) {
+            width: 4rem;
+        }
+        @media (max-width:992px) {
+            width: 3rem;
+        }
+        cursor: pointer;
+    }
+
+    .profile-img{
+        border-radius: 50%;
+        max-width: 25vw;
+    }
+
+    .close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: rgb(228, 205, 205);
+        width: 2.2vw;
+        cursor: pointer;
+    }
 }
