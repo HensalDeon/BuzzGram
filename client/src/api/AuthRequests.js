@@ -16,3 +16,5 @@ export const sendOtpRecovery = (phone) => API.post("/auth/otp-recovery", phone);
 export const verifyOtp = (phone, otp) => API.post("/auth/verify-otp", { phone, otp });
 
 export const forgotPassword = (formData) => API.put("/auth/forgot-password", formData);
+
+export const getGeneratedToken = (userId) => API.get(`/auth/generate-token/${userId}`);

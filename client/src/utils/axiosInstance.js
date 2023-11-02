@@ -17,6 +17,7 @@ export const userAxiosInstance = () => {
 
     return instance;
 };
+
 export const adminAxiosInstance = () => {
     const instance = axios.create({
         baseURL: env.REACT_APP_SERVER_DOMAIN,

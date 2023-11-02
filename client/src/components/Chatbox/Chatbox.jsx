@@ -99,6 +99,7 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
 
     // Send Message
     const handleSend = async (e) => {
+        console.log("send message");
         e.preventDefault();
         if (!newMessage) return;
         const message = {
@@ -127,6 +128,7 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
 
     const handleShowMedia = () => setShowMedia(true);
     const handleCloseMedia = () => {
+        console.log("close aayao");
         setShowMedia(false);
         // setMedia(null);
     };
@@ -177,7 +179,6 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
             const response = await uploadImage(formData);
             if (response && response.data.url) {
                 toast.dismiss(loadingToast);
-
                 const message = {
                     senderId: currentUser,
                     media: response.data.url,
@@ -186,8 +187,9 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
                 const receiverId = chat.members.find((id) => id !== currentUser);
                 setSendMessage({ ...message, receiverId });
                 try {
+                    console.log("entered 12");
                     const { data } = await addMessage(message);
-                    shareLoading(false);
+                    setShareLoading(false);
                     setMessages([...messages, data]);
                     handleCloseMedia();
                 } catch (error) {
@@ -287,17 +289,17 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
                             </div>
                         )}
                         {/* {(videoCall || voiceCall) && <Call data={userData} socket={socket} />} */}
-                        {videoCall && <Call data={userData} socket={socket} />}
-                        {voiceCall && <Call data={userData} socket={socket} />}
+                        {videoCall && <Call data={videoCall} socket={socket} />}
+                        {voiceCall && <Call data={voiceCall} socket={socket} />}
 
                         <div className="chat-body">
-                            {messages.map((message) => (
+                            {messages.map((message,index) => (
                                 <motion.div
                                     initial={{ x: -20, opacity: 0 }}
                                     animate={{ x: 0, opacity: 1 }}
                                     transition={{ duration: 0.5 }}
                                     ref={scroll}
-                                    key={message._id}
+                                    key={index}
                                     className={message.senderId === currentUser ? "message own" : "message"}
                                 >
                                     {message.text && <span>{message.text}</span>}

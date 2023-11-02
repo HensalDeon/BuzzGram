@@ -35,15 +35,15 @@ export default function initializeSocketServer() {
             console.log("Sending from socket to :", receiverId);
             console.log("Data: ", data);
             if (user) {
+                console.log("recieve message sdent aat");
                 io.to(user.socketId).emit("recieve-message", data);
             }
         });
 
         socket.on("outgoing-video-call", (data) => {
-            console.log(data,"back data");
+            console.log(data, "back data");
             const user = activeUsers.find((user) => user.userId === data.to);
             if (user) {
-                console.log(user,"////");
                 io.to(user.socketId).emit("incoming-video-call", {
                     from: data.from,
                     roomId: data.roomId,
@@ -77,11 +77,14 @@ export default function initializeSocketServer() {
         });
 
         socket.on("accept-incoming-call", (data) => {
+            console.log(data, "incoming call accepted");
             const user = activeUsers.find((user) => user.userId === data.id);
             if (user) {
+                console.log("entered the inside");
                 io.to(user.socketId).emit("accept-call");
             }
         });
+
     });
 }
 

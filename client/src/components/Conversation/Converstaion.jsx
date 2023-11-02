@@ -38,6 +38,7 @@ function Converstaion({ data, currentUser, online }) {
                     <div className="name" style={{ fontSize: "0.8rem" }}>
                         <span>{userData?.username}</span>
                         <span style={{ color: online ? "#51e200" : "darkgrey" }}>{online ? "Online" : "Offline"}</span>
+                        <span></span>
                     </div>
                 </div>
             </div>

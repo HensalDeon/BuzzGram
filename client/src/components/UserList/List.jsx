@@ -32,7 +32,6 @@ function List({ user }) {
             setBlocked(true);
         }
     };
-
     return (
         <>
             <tr className="table-row" key={user._id}>

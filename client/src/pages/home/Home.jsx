@@ -11,13 +11,25 @@ import SavedPosts from "../../components/SavedPosts/SavedPosts";
 import FollowersCard from "../../components/FollowersCard/FollowersCard";
 import { motion } from "framer-motion";
 import Chat from "../Chat/Chat";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../api/UserRequests";
+import { logout } from "../../redux/actions/AuthActions";
 
 const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
+    const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.authReducer.authData);
+    useEffect(() => {
+        (async () => {
+            const { data } = await getUser(user._id);
+            if (data.isblocked) {
+                dispatch(logout());
+            }
+        })();
+    }, [location, user, dispatch]);
 
     useEffect(() => {
-        
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 930);
             setIsSmallScreen(window.innerWidth <= 450);

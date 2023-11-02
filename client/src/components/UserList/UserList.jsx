@@ -9,7 +9,7 @@ import List from "./List";
 
 import "./UserList.scss";
 
-function UserList() {
+function UserList({socket}) {
     const dispatch = useDispatch();
     const { userDetails, loading } = useSelector((state) => state.adminReducer);
     const [searchQuery, setSearchQuery] = useState("");

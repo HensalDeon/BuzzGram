@@ -72,7 +72,7 @@ function Chat() {
         });
 
         socket.current.on("incoming-video-call", ({ from, roomId, callType }) => {
-                dispatch({
+            dispatch({
                 type: "SET_INCOMING_VIDEO_CALL",
                 incomingVideoCall: { ...from, roomId, callType },
             });
@@ -92,19 +92,23 @@ function Chat() {
         socket.current.on("voice-call-rejected", () => {
             dispatch({ type: "END_CALL" });
         });
+
+        socket.current.on("recieve-message", (data) => {
+            setReceivedMessage(data);
+        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
 
     // Send Message to socket server
     useEffect(() => {
         if (sendMessage !== null) {
+            console.log("nmber of times");
             socket.current.emit("send-message", sendMessage);
         }
     }, [sendMessage]);
 
     // Send Vedio call to socket server
     useEffect(() => {
-        console.log("worked broo");
         if (videoCall && videoCall?.type == "out-going") {
             socket.current.emit("outgoing-video-call", {
                 to: videoCall?._id,
@@ -135,20 +139,6 @@ function Chat() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [voiceCall]);
-
-    // Send Message to socket server
-    useEffect(() => {
-        if (sendMessage !== null) {
-            socket.current.emit("send-message", sendMessage);
-        }
-    }, [sendMessage]);
-
-    // Get the message from socket server
-    useEffect(() => {
-        socket.current.on("recieve-message", (data) => {
-            setReceivedMessage(data);
-        });
-    }, []);
 
     const checkOnlineStatus = (chat) => {
         const chatMember = chat.members.find((member) => member !== user._id);
