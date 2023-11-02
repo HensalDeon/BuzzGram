@@ -2,9 +2,8 @@ import { useDispatch, useSelector } from "react-redux";
 import cancelIcon from "../../img/icon-flatCancel.svg";
 import { motion } from "framer-motion";
 import PulseLoader from "react-spinners/PulseLoader";
-import { useState } from "react";
+
 function Call({ data, socket }) {
-    console.log(data);
     const dispatch = useDispatch();
     const { videoCall, voiceCall } = useSelector((state) => state.chatReducer);
 
@@ -25,7 +24,8 @@ function Call({ data, socket }) {
                     <img className="profile-img" src={data?.profileimage} alt="profile" />
                     <span className="text-white position-relative d-flex flex-row align-items-baseline gap-1">
                         {!videoCall || !voiceCall ? "Calling" : "Ongoing call"}
-                        {!videoCall || !voiceCall && <PulseLoader color="#ffffff" margin={7} size={7} speedMultiplier={0.6} />}
+                        {!videoCall ||
+                            (!voiceCall && <PulseLoader color="#ffffff" margin={7} size={7} speedMultiplier={0.6} />)}
                     </span>
                 </div>
                 <motion.img

@@ -286,7 +286,9 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, socket })
                                 <img className="close" src={close} onClick={() => closeImageModal()} />
                             </div>
                         )}
-                        {videoCall || (voiceCall && <Call data={userData} socket={socket} />)}
+                        {/* {(videoCall || voiceCall) && <Call data={userData} socket={socket} />} */}
+                        {videoCall && <Call data={userData} socket={socket} />}
+                        {voiceCall && <Call data={userData} socket={socket} />}
 
                         <div className="chat-body">
                             {messages.map((message) => (

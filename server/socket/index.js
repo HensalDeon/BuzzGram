@@ -40,8 +40,10 @@ export default function initializeSocketServer() {
         });
 
         socket.on("outgoing-video-call", (data) => {
+            console.log(data,"back data");
             const user = activeUsers.find((user) => user.userId === data.to);
             if (user) {
+                console.log(user,"////");
                 io.to(user.socketId).emit("incoming-video-call", {
                     from: data.from,
                     roomId: data.roomId,
@@ -50,7 +52,6 @@ export default function initializeSocketServer() {
             }
         });
         socket.on("outgoing-voice-call", (data) => {
-            console.log(data,"back data");
             const user = activeUsers.find((user) => user.userId === data.to);
             if (user) {
                 io.to(user.socketId).emit("incoming-voice-call", {
