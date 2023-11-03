@@ -26,7 +26,7 @@ import "cropperjs/dist/cropper.css";
 import { uploadImage } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
-import { getFollowers } from "../../api/UserRequests";
+import { getFollowers, getFollowing } from "../../api/UserRequests";
 
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
@@ -41,7 +41,8 @@ const ProfileCard = ({ location }) => {
     const [showFollowing, setShowFollowing] = useState(false);
     const [followingData, setFollowingData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [dataLoading, setDataLoading] = useState(false);
+    const [followersLoading, setfollowersLoading] = useState(false);
+    const [followingLoading, setfollowingLoading] = useState(false);
     const [profileLoading, setProfileLoading] = useState(false);
     const [show, setShow] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -204,30 +205,30 @@ const ProfileCard = ({ location }) => {
 
     const handleFollowersView = async () => {
         try {
-            setDataLoading(true);
-            const response = await getFollowers(user?._id);
+            setfollowersLoading(true);
+            const response = await getFollowers(currUser?.user?._id);
             if (response.data) {
                 setFollowersData(response.data.followers);
-                setDataLoading(false);
+                setfollowersLoading(false);
                 setShowFollowers(true);
             }
         } catch (error) {
-            setDataLoading(false);
+            setfollowersLoading(false);
             console.log(error);
             toast.error(<b>Couldn&#39;t get the details</b>);
         }
     };
     const handleFollowingView = async () => {
         try {
-            setDataLoading(true);
-            const response = await getFollowers(user?._id);
+            setfollowingLoading(true);
+            const response = await getFollowing(currUser?.user?._id);
             if (response.data) {
                 setFollowingData(response.data.following);
-                setDataLoading(false);
+                setfollowingLoading(false);
                 setShowFollowing(true);
             }
         } catch (error) {
-            setDataLoading(false);
+            setfollowingLoading(false);
             console.log(error);
             toast.error(<b>Couldn&#39;t get the details</b>);
         }
@@ -480,17 +481,18 @@ const ProfileCard = ({ location }) => {
                             <div className="follow" onClick={handleFollowersView}>
                                 <span>{followers}</span>
                                 <span>Followers</span>
-                                <BeatLoader loading={dataLoading} color="orange" speedMultiplier={1} />
+                                <BeatLoader loading={followersLoading} color="orange" speedMultiplier={1} />
                             </div>
                             <div className="vl"></div>
                             <div className="follow" onClick={handleFollowingView}>
                                 <span>{currUser.user?.following.length}</span>
                                 <span>Followings</span>
+                                <BeatLoader loading={followingLoading} color="orange" speedMultiplier={1} />
                             </div>
 
                             {showFollowers && (
                                 <LikedUsersDetail
-                                    currUser={user}
+                                    currUser={currUser?.user}
                                     usersToShow={showFollowers}
                                     userDetails={followersData}
                                     setUsersToShow={setShowFollowers}
