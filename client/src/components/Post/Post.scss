@@ -54,6 +54,13 @@
     .viewCmt {
         cursor: pointer;
     }
+
+}
+
+.background{
+    &:hover{
+        background: var(--buttonBg);
+    }
 }
 
 .Post > img {

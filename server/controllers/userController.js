@@ -169,3 +169,34 @@ export const searchResult = async (req, res) => {
 
     res.status(200).json(users);
 };
+
+
+export const getFollowersDetail = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) return res.status(400).json({ error: "params cannot be undefined!" });
+
+        const followers = await UserModel.findById(id)
+            .select("followers")
+            .populate("followers", "username fullname profileimage followers");
+        res.status(200).json(followers);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+export const getFollowingDetail = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) return res.status(400).json({ error: "params cannot be undefined!" });
+
+        const followings = await UserModel.findById(id)
+            .select("following")
+            .populate("following", "username fullname profileimage followers");
+        res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};

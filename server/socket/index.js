@@ -41,7 +41,7 @@ export default function initializeSocketServer() {
         });
 
         socket.on("outgoing-video-call", (data) => {
-            console.log(data, "back data");
+           
             const user = activeUsers.find((user) => user.userId === data.to);
             if (user) {
                 io.to(user.socketId).emit("incoming-video-call", {
@@ -53,7 +53,9 @@ export default function initializeSocketServer() {
         });
         socket.on("outgoing-voice-call", (data) => {
             const user = activeUsers.find((user) => user.userId === data.to);
+            console.log(data, "back data");
             if (user) {
+                console.log("incoming sent cheyth")
                 io.to(user.socketId).emit("incoming-voice-call", {
                     from: data.from,
                     roomId: data.roomId,
@@ -77,10 +79,8 @@ export default function initializeSocketServer() {
         });
 
         socket.on("accept-incoming-call", (data) => {
-            console.log(data, "incoming call accepted");
             const user = activeUsers.find((user) => user.userId === data.id);
             if (user) {
-                console.log("entered the inside");
                 io.to(user.socketId).emit("accept-call");
             }
         });

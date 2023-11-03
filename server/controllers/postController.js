@@ -269,3 +269,18 @@ export const getAllPostsByAdmin = async (req, res) => {
         return res.status(500).json({ error: "Internal server error." });
     }
 };
+
+export const getLikedUsersDetails = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) return res.status(400).json({ error: "params cannot be undefined!" });
+
+        const likedUsers = await PostModel.findById(id)
+            .select("likes")
+            .populate("likes", "username fullname profileimage followers");
+        res.status(200).json(likedUsers);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};

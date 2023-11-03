@@ -79,6 +79,7 @@ function Chat() {
         });
 
         socket.current.on("incoming-voice-call", ({ from, roomId, callType }) => {
+            console.log("incoming vannu");
             dispatch({
                 type: "SET_INCOMING_VOICE_CALL",
                 incomingVoiceCall: { ...from, roomId, callType },
@@ -86,10 +87,12 @@ function Chat() {
         });
 
         socket.current.on("video-call-rejected", () => {
+            
             dispatch({ type: "END_CALL" });
         });
 
         socket.current.on("voice-call-rejected", () => {
+            console.log("reject cheyth dispatch");
             dispatch({ type: "END_CALL" });
         });
 
@@ -110,6 +113,7 @@ function Chat() {
     // Send Vedio call to socket server
     useEffect(() => {
         if (videoCall && videoCall?.type == "out-going") {
+            console.log("video call sent");
             socket.current.emit("outgoing-video-call", {
                 to: videoCall?._id,
                 from: {

@@ -21,13 +21,19 @@ import Comment from "../../img/icon-comment.svg";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import CommentList from "./CommentList";
+import { getLikedUsersDetail } from "../../api/PostsRequests";
+import BeatLoader from "react-spinners/BeatLoader";
+import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 
 const Post = ({ data }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.authReducer.authData);
 
+    const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(false);
+    const [showLikedUsers, setShowLikedUsers] = useState(false);
+    const [likedUsers, setLikedUsers] = useState([]);
     const [showUnfollow, setshowUnfollow] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [showReport, setShowReport] = useState(false);
@@ -104,6 +110,22 @@ const Post = ({ data }) => {
         setLiked((prev) => !prev);
         liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
         dispatch(likePost(data._id, user._id));
+    };
+
+    const handleLikesView = async () => {
+        try {
+            setLoading(true);
+            const response = await getLikedUsersDetail(data?._id);
+            if (response.data) {
+                setLikedUsers(response.data.likes);
+                setLoading(false);
+                setShowLikedUsers(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+            toast.error(<b>Couldn&#39;t get the details</b>);
+        }
     };
 
     const maxEditLength = 100;
@@ -325,6 +347,14 @@ const Post = ({ data }) => {
             </Modal>
 
             <CommentList showCmt={showCmt} handleCmtClose={handleCmtClose} data={data} />
+            {likedUsers.length !== 0 && (
+                <LikedUsersDetail
+                    currUser={user}
+                    usersToShow={showLikedUsers}
+                    userDetails={likedUsers}
+                    setUsersToShow={setShowLikedUsers}
+                />
+            )}
 
             <div className="header">
                 <div className="contents">
@@ -342,7 +372,14 @@ const Post = ({ data }) => {
                 <img src={liked ? Heart : NotLike} alt="" style={{ cursor: "pointer" }} onClick={handleLike} />
                 <img src={Share} alt="" />
             </div>
-            <span style={{ color: "var(--gray)", fontSize: "12px" }}>{likes} likes</span>
+            <span
+                onClick={handleLikesView}
+                className="d-flex position-relative"
+                style={{ color: "var(--gray)", fontSize: "12px", cursor: "pointer" }}
+            >
+                {likes} likes
+                <BeatLoader loading={loading} color="orange" speedMultiplier={1} />
+            </span>
             <div className="detail">
                 <span>
                     <b>{data.user?.username || "noNameAvailable"}</b>

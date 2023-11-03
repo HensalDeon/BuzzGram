@@ -42,20 +42,20 @@ $ulwidth: 20%;
     }
 }
 .tabs input:nth-child(1):checked ~ .buttons .underline {
-    translate: 0 0;
+    translate: 0 ;
 }
 
 .tabs input:nth-child(2):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 5) 0;
+    translate: calc($ulwidth * 5);
 }
 .tabs input:nth-child(3):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 10) 0;
+    translate: calc($ulwidth * 10);
 }
 .tabs input:nth-child(4):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 15) 0;
+    translate: calc($ulwidth * 15);
 }
 .tabs input:nth-child(5):checked ~ .buttons .underline {
-    translate: calc($ulwidth * 20) 0;
+    translate: calc($ulwidth * 20);
 }
 
 .tabs input:nth-child(1):checked ~ .buttons label:nth-child(1) {

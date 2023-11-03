@@ -25,6 +25,9 @@ import Cropper from "react-cropper";
 import "cropperjs/dist/cropper.css";
 import { uploadImage } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
+import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
+import { getFollowers } from "../../api/UserRequests";
+
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -33,7 +36,12 @@ const ProfileCard = ({ location }) => {
     const [currUser, setCurrUser] = useState([]);
     const [expanded, setExpanded] = useState(false);
     const [followers, setFollowers] = useState(null);
+    const [showFollowers, setShowFollowers] = useState(false);
+    const [followersData, setFollowersData] = useState([]);
+    const [showFollowing, setShowFollowing] = useState(false);
+    const [followingData, setFollowingData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [dataLoading, setDataLoading] = useState(false);
     const [profileLoading, setProfileLoading] = useState(false);
     const [show, setShow] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -194,6 +202,37 @@ const ProfileCard = ({ location }) => {
         setEditOpened(true);
     };
 
+    const handleFollowersView = async () => {
+        try {
+            setDataLoading(true);
+            const response = await getFollowers(user?._id);
+            if (response.data) {
+                setFollowersData(response.data.followers);
+                setDataLoading(false);
+                setShowFollowers(true);
+            }
+        } catch (error) {
+            setDataLoading(false);
+            console.log(error);
+            toast.error(<b>Couldn&#39;t get the details</b>);
+        }
+    };
+    const handleFollowingView = async () => {
+        try {
+            setDataLoading(true);
+            const response = await getFollowers(user?._id);
+            if (response.data) {
+                setFollowingData(response.data.following);
+                setDataLoading(false);
+                setShowFollowing(true);
+            }
+        } catch (error) {
+            setDataLoading(false);
+            console.log(error);
+            toast.error(<b>Couldn&#39;t get the details</b>);
+        }
+    };
+
     const override = {
         display: "block",
         margin: "auto",
@@ -270,7 +309,7 @@ const ProfileCard = ({ location }) => {
     const handleChatClick = () => {
         dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
         navigate("/chat");
-    }
+    };
 
     return (
         <div
@@ -438,15 +477,33 @@ const ProfileCard = ({ location }) => {
                     <div className="followStatus">
                         <hr />
                         <div>
-                            <div className="follow">
+                            <div className="follow" onClick={handleFollowersView}>
                                 <span>{followers}</span>
                                 <span>Followers</span>
+                                <BeatLoader loading={dataLoading} color="orange" speedMultiplier={1} />
                             </div>
                             <div className="vl"></div>
-                            <div className="follow">
+                            <div className="follow" onClick={handleFollowingView}>
                                 <span>{currUser.user?.following.length}</span>
                                 <span>Followings</span>
                             </div>
+
+                            {showFollowers && (
+                                <LikedUsersDetail
+                                    currUser={user}
+                                    usersToShow={showFollowers}
+                                    userDetails={followersData}
+                                    setUsersToShow={setShowFollowers}
+                                />
+                            )}
+                            {showFollowing && (
+                                <LikedUsersDetail
+                                    currUser={user}
+                                    usersToShow={showFollowing}
+                                    userDetails={followingData}
+                                    setUsersToShow={setShowFollowing}
+                                />
+                            )}
 
                             {currUser.user && (
                                 <>

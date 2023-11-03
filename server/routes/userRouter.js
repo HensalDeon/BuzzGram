@@ -7,6 +7,8 @@ import Auth from "../middleware/auth.js";
 /** GET Requests */
 router.route("/search").get(Auth, userCotroller.searchResult);
 router.route("/:id").get(Auth, userCotroller.getUser);
+router.route("/:id/followers").get(userCotroller.getFollowersDetail);
+router.route("/:id/following").get(userCotroller.getFollowingDetail);
 
 /** PUT Requests */
 router.route("/:id").put(Auth, userCotroller.updateUser);

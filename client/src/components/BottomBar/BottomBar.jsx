@@ -41,9 +41,15 @@ function BottomBar() {
                     >
                         Home
                     </motion.label>
-                    <label className="material-symbols-outlined" htmlFor="tab-2">
+                    <motion.label
+                        whileHover={{ scale: 1.3 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => navigate("/chat")}
+                        className="material-symbols-outlined"
+                        htmlFor="tab-2"
+                    >
                         Chat
-                    </label>
+                    </motion.label>
                     <motion.label
                         whileHover={{ scale: 1.3 }}
                         transition={{ duration: 0.3 }}
