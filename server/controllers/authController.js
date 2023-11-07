@@ -30,6 +30,52 @@ export const registerUser = async (req, res) => {
     }
 };
 
+//google authentication
+export const googleAuthentication = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await UserModel.findOne({ email });
+        console.log(user);
+        const token = createAccessToken(user);
+        if (user) {
+            if (user.isblocked) {
+                return res.status(400).send({ error: "User is blocked." });
+            }
+            user.visited++;
+            await user.save();
+            user.password = "";
+            return res.status(200).send({
+                user,
+                token,
+            });
+        } else {
+            let { username, fullname, email, profileimage, password } = req.body;
+            const existingUsername = await UserModel.findOne({ username }).exec();
+            if (existingUsername) {
+                username = `${username.split(" ").join("").toLowerCase()}_${
+                    Date.now() + Math.random().toString(36).slice(-4)
+                }`;
+            }
+            const hashedPass = await hashPassword(password);
+            const newUser = new UserModel({
+                fullname,
+                username,
+                email,
+                password: hashedPass,
+                phone,
+                profileimage,
+            });
+            const user = await newUser.save();
+            user.visited++;
+            await user.save();
+            return res.status(200).json({ user, token });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({ error: "Internal Server Error" });
+    }
+};
+
 // login User
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;

@@ -4,7 +4,8 @@ const router = Router();
 import * as authController from "../controllers/authController.js";
 
 /** POST Requests */
-router.route("/register").post(authController.registerUser); //resiter user
+router.route("/register").post(authController.registerUser); //regiter user
+router.route("/google-auth").post(authController.googleAuthentication); //google authenticated user
 router.route("/login").post(authController.loginUser); //login user
 router.route("/admin-login").post(authController.adminLogin); //login admin
 router.route("/otp-signup").post(authController.signupOtpGenerate); //Otp generation for signup

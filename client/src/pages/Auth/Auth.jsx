@@ -3,13 +3,16 @@ import Logo from "../../img/logo.png";
 import { useEffect, useState, useRef } from "react";
 import PropTypes from "prop-types";
 import { useFormik } from "formik";
-import { logIn, signUp } from "../../redux/actions/AuthActions";
+import { googleAuth, logIn, signUp } from "../../redux/actions/AuthActions";
 import { sendOtpSignup, verifyOtp } from "../../api/AuthRequests";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
+import { app } from "../../utils/firebase";
+
 const loginValidation = Yup.object().shape({
     username: Yup.string()
         .trim()
@@ -59,12 +62,46 @@ const validationSchema = Yup.object().shape({
 const Auth = () => {
     const [showLogin, setShowLogin] = useState(true);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const toggleForm = () => {
         setShowLogin(!showLogin);
     };
 
+    const handleGoogleClick = async () => {
+        try {
+            const provider = new GoogleAuthProvider();
+            const auth = getAuth(app);
+            const { _tokenResponse } = await signInWithPopup(auth, provider);
+            console.log(_tokenResponse);
+            const values = {
+                username: ` ${_tokenResponse.firstName}_${_tokenResponse.lastName}`,
+                fullname: _tokenResponse.displayName,
+                password: _tokenResponse.idToken,
+                email: _tokenResponse.email,
+                profileimage: _tokenResponse.photoUrl,
+            };
+            try {
+                const result = await dispatch(googleAuth(values));
+                if (result.success) {
+                    return toast.success(<b>Logined..!</b>);
+                }
+                if (result.error === "User is blocked.") {
+                    return toast.error(<b>User is blocked! Contact admin for assistance!</b>);
+                } else {
+                    return toast.error(<b>Invalid Credentials.</b>);
+                }
+            } catch (error) {
+                toast.error("Somethig went wrong!");
+                console.error("An error occurred:", error);
+            }
+        } catch (error) {
+            console.log("cannot sign in with google", error);
+        }
+    };
+
     return (
         <div className="Auth">
+            <Toaster position="top-center" reverseOrder={false}></Toaster>
             <div className="a-left" onClick={() => navigate("/auth")}>
                 <img src={Logo} alt="" />
                 <div className="Webname">
@@ -73,11 +110,16 @@ const Auth = () => {
                 </div>
             </div>
 
-            {showLogin ? <LogIn toggleForm={toggleForm} /> : <SignUp toggleForm={toggleForm} />}
+            {showLogin ? (
+                <LogIn toggleForm={toggleForm} handleGoogleClick={handleGoogleClick} />
+            ) : (
+                <SignUp toggleForm={toggleForm} handleGoogleClick={handleGoogleClick} />
+            )}
         </div>
     );
 };
-function LogIn({ toggleForm }) {
+
+function LogIn({ toggleForm, handleGoogleClick }) {
     const loading = useSelector((state) => state.authReducer.loading);
     const dispatch = useDispatch();
     const formik = useFormik({
@@ -106,6 +148,7 @@ function LogIn({ toggleForm }) {
             }
         },
     });
+
     return (
         <motion.div
             initial={{ x: -20, opacity: 0 }}
@@ -113,7 +156,6 @@ function LogIn({ toggleForm }) {
             transition={{ duration: 0.5 }}
             className="a-right"
         >
-            <Toaster position="top-center" reverseOrder={false}></Toaster>
             <form className="infoForm authForm position-relative" onSubmit={formik.handleSubmit}>
                 <h3>Log In</h3>
 
@@ -157,6 +199,17 @@ function LogIn({ toggleForm }) {
                         {loading ? "login..." : "Login"}
                     </button>
                 </div>
+                <motion.button
+                    type="button"
+                    disabled={loading}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    onClick={handleGoogleClick}
+                    className="login-with-google-btn"
+                >
+                    Sign in with Google
+                </motion.button>
             </form>
         </motion.div>
     );
@@ -166,7 +219,7 @@ LogIn.propTypes = {
     toggleForm: PropTypes.func.isRequired,
 };
 
-function SignUp({ toggleForm }) {
+function SignUp({ toggleForm, handleGoogleClick }) {
     const loading = useSelector((state) => state.authReducer.loading);
     const error = useSelector((state) => state.authReducer.error);
     const dispatch = useDispatch();
@@ -268,7 +321,7 @@ function SignUp({ toggleForm }) {
             transition={{ duration: 0.5 }}
             className="a-right signup"
         >
-            <Toaster position="top-center" reverseOrder={false}></Toaster>
+            {/* <Toaster position="top-center" reverseOrder={false}></Toaster> */}
             <form className="infoForm authForm" onSubmit={formik.handleSubmit}>
                 <h3>Sign Up</h3>
 
@@ -387,6 +440,17 @@ function SignUp({ toggleForm }) {
                         {loading ? "Signing..." : "SignUp"}
                     </button>
                 </div>
+                <motion.button
+                    type="button"
+                    disabled={loading}
+                    className="login-with-google-btn"
+                    onClick={handleGoogleClick}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                    Sign in with Google
+                </motion.button>
             </form>
         </motion.div>
     );

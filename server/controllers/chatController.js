@@ -1,4 +1,5 @@
 import ChatModel from "../model/chatModel.js";
+import MessageModel from "../model/messageModel.js";
 
 export const createChat = async (req, res) => {
     const senderId = req.body.senderId;
@@ -23,13 +24,31 @@ export const createChat = async (req, res) => {
     }
 };
 
+// export const userChats = async (req, res) => {
+//     try {
+//         const chat = await ChatModel.find({
+//             members: { $in: [req.params.userId] },
+//         });
+//         res.status(200).json(chat);
+//     } catch (error) {
+//         res.status(500).json(error);
+//     }
+// };
 export const userChats = async (req, res) => {
     try {
-        const chat = await ChatModel.find({
-            members: { $in: [req.params.userId] },
-        });
-        res.status(200).json(chat);
+        const chats = await ChatModel.find({ members: { $in: [req.params.userId] } });
+        const chatsWithLastMessage = [];
+
+        for (const chat of chats) {
+            const lastMessage = await MessageModel.findOne({ chatId: chat._id }).sort({ createdAt: -1 }).exec();
+            const chatData = chat.toJSON();
+            chatData.lastMessage = lastMessage;
+            chatsWithLastMessage.push(chatData);
+        }
+
+        res.status(200).json(chatsWithLastMessage);
     } catch (error) {
+        console.log(error);
         res.status(500).json(error);
     }
 };

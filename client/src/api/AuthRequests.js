@@ -5,6 +5,8 @@ const API = axios.create({ baseURL: env.REACT_APP_SERVER_DOMAIN });
 
 export const logIn = (formData) => API.post("/auth/login", formData);
 
+export const googleAuth = (formData) => API.post("/auth/google-auth", formData);
+
 export const signUp = (formData) => API.post("/auth/register", formData);
 
 export const adminLogin = (formData) => API.post("/auth/admin-login", formData);

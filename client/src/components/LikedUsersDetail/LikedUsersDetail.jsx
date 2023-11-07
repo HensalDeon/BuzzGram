@@ -5,7 +5,7 @@ import follow from "../../img/icon-flatFollow.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -50,53 +50,77 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
             console.error("Error:", error);
         }
     };
+
+    // useEffect(() => {
+    //     const handleScroll = () => {
+    //         const modalBody = modalBodyRef.current;
+    //         if (modalBody) {
+    //             if (modalBody.scrollTop + modalBody.clientHeight >= modalBody.scrollHeight) {
+    //                 console.log("heloo");
+    //             }
+    //         }
+    //     };
+    //     modalBodyRef.current.addEventListener("scroll", handleScroll);
+    //     return () => {
+    //         const modalBody = modalBodyRef.current;
+    //         if (modalBody) {
+    //             modalBody.removeEventListener("scroll", handleScroll);
+    //         }
+    //     };
+    // }, [userDetails]);
     return (
         <Modal show={usersToShow} onHide={() => setUsersToShow(false)}>
             <Modal.Body style={{ overflow: "scroll", maxHeight: "14rem" }}>
                 {userDetails.map((user) => {
                     return (
-                        <motion.div
-                            initial={{ y: -20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ duration: 0.5 }}
-                            key={user._id}
-                            className="d-flex flex-column py-1 px-1 background"
-                            style={{ width: "17rem", borderRadius: "1rem" }}
-                        >
-                            <div className="d-flex gap-5 justify-content-between">
-                                <div className="d-flex gap-3 align-items-center">
-                                    <img
-                                        style={{ width: "3rem" }}
-                                        className="rounded-circle"
-                                        src={user?.profileimage}
-                                        alt="avatar"
-                                    />
-                                    <div className="d-flex flex-column" onClick={() => navigate(`/profile/${user._id}`)}>
-                                        <span className="text-white text-left">{user?.username}</span>
-                                        <span className="text-white align-self-start">{user?.fullname}</span>
+                        <div key={user._id}>
+                            <motion.div
+                                initial={{ y: -20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ duration: 0.5 }}
+                                key={user._id}
+                                className="d-flex flex-column py-1 px-1 background"
+                                style={{ width: "17rem", borderRadius: "1rem" }}
+                            >
+                                <div className="d-flex gap-5 justify-content-between">
+                                    <div className="d-flex gap-3 align-items-center">
+                                        <img
+                                            style={{ width: "3rem" }}
+                                            className="rounded-circle"
+                                            src={user?.profileimage}
+                                            alt="avatar"
+                                        />
+                                        <div
+                                            className="d-flex flex-column"
+                                            onClick={() => navigate(`/profile/${user._id}`)}
+                                        >
+                                            <span className="text-white text-left">{user?.username}</span>
+                                            <span className="text-white align-self-start">{user?.fullname}</span>
+                                        </div>
                                     </div>
+                                    {follows.includes(user._id) ? (
+                                        <motion.img
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                            src={unfollow}
+                                            style={{ width: "2.5rem", cursor: "pointer" }}
+                                            onClick={() => handleUnFollow(user._id)}
+                                        />
+                                    ) : (
+                                        <motion.img
+                                            whileHover={{ scale: 1.2 }}
+                                            whileTap={{ scale: 0.9 }}
+                                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                            src={follow}
+                                            style={{ width: "2.5rem", cursor: "pointer" }}
+                                            onClick={() => handleFollow(user._id)}
+                                        />
+                                    )}
                                 </div>
-                                {follows.includes(user._id) ? (
-                                    <motion.img
-                                        whileHover={{ scale: 1.2 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                                        src={unfollow}
-                                        style={{ width: "2.5rem", cursor: "pointer" }}
-                                        onClick={() => handleUnFollow(user._id)}
-                                    />
-                                ) : (
-                                    <motion.img
-                                        whileHover={{ scale: 1.2 }}
-                                        whileTap={{ scale: 0.9 }}
-                                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                                        src={follow}
-                                        style={{ width: "2.5rem", cursor: "pointer" }}
-                                        onClick={() => handleFollow(user._id)}
-                                    />
-                                )}
-                            </div>
-                        </motion.div>
+                            </motion.div>
+                            <div className="bg-bottom"></div>
+                        </div>
                     );
                 })}
             </Modal.Body>

@@ -12,7 +12,7 @@ router.route("/:id/admin").get(postController.getAllPostsByAdmin);
 router.route("/:id/timeline").get(Auth, postController.getTimelinePosts);
 router.route("/:id/comments").get(Auth, commentController.getComments);
 router.route("/:id/saved").get(Auth, postController.getSavedPosts);
-router.route("/:id/liked-users").get(Auth, postController.getLikedUsersDetails);
+router.route("/:id/liked-users").get( postController.getLikedUsersDetails);
 
 /**POST Requests */
 router.route("/").post(Auth, postController.createPost);

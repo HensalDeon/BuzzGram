@@ -13,6 +13,20 @@ export const logIn = (formData) => async (dispatch) => {
         return { success: false, error: error.response.data.error };
     }
 };
+export const googleAuth = (formData) => async (dispatch) => {
+    dispatch({ type: "AUTH_START" });
+    try {
+        const { data } = await AuthApi.googleAuth(formData);
+        if (data.error) {
+            return { success: false, error: data.error };
+        }
+        dispatch({ type: "AUTH_SUCCESS", data: data });
+        return { success: true };
+    } catch (error) {
+        dispatch({ type: "AUTH_FAIL", error: true });
+        return { success: false, error: error.response.data.error };
+    }
+};
 
 export const adminLogin = (formData) => async (dispatch) => {
     dispatch({ type: "ADMIN_AUTH_START" });

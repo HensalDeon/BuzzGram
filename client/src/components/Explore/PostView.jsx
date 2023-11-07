@@ -3,6 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { createComment } from "../../redux/actions/CommentActions";
 import CommentList from "../Post/CommentList";
 import PropTypes from "prop-types";
+import BeatLoader from "react-spinners/BeatLoader";
 
 import dots from "../../img/dots.png";
 import Share from "../../img/share.png";
@@ -17,6 +18,8 @@ import { deletePost, likePost, savePost, updatePost } from "../../redux/actions/
 import { createReport } from "../../redux/actions/ReportActions";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getLikedUsersDetail } from "../../api/PostsRequests";
+import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 
 // eslint-disable-next-line react/prop-types
 function ExplorePost({ postDtl, updateSavedPosts }) {
@@ -26,6 +29,9 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
     const location = useLocation();
     const [showUnfollow, setshowUnfollow] = useState(false);
     const [showPost, setShowPost] = useState(false);
+    const [likedUsers, setLikedUsers] = useState([]);
+    const [showLikedUsers, setShowLikedUsers] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [liked, setLiked] = useState(postDtl?.likes?.includes(user._id));
     const [isSaved, setIsSaved] = useState(user?.saved?.includes(postDtl._id));
     const [likes, setLikes] = useState(postDtl?.likes.length);
@@ -86,6 +92,22 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
         setLiked((prev) => !prev);
         liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
         dispatch(likePost(postDtl._id, user._id));
+    };
+
+    const handleLikesView = async () => {
+        try {
+            setLoading(true);
+            const response = await getLikedUsersDetail(postDtl?._id);
+            if (response.data) {
+                setLikedUsers(response.data.likes);
+                setLoading(false);
+                setShowLikedUsers(true);
+            }
+        } catch (error) {
+            setLoading(false);
+            console.log(error);
+            toast.error(<b>Couldn&#39;t get the details</b>);
+        }
     };
 
     const handleDelete = async () => {
@@ -370,7 +392,10 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
                                 />
                                 <img src={Share} alt="" />
                             </div>
-                            <span style={{ color: "var(--gray)", fontSize: "12px" }}>{likes} likes</span>
+                            <span onClick={handleLikesView} style={{ color: "var(--gray)", fontSize: "12px" }}>
+                                {likes} likes
+                                <BeatLoader loading={loading} color="orange" speedMultiplier={1} />
+                            </span>
                             <div className="detail">
                                 <span>
                                     <b>{postDtl?.user.username || "noNameAvailable"}</b>
@@ -396,6 +421,14 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
                 </Modal.Body>
             </Modal>
             <CommentList showCmt={showCmt} handleCmtClose={handleCmtClose} data={postDtl} />
+            {likedUsers.length !== 0 && (
+                <LikedUsersDetail
+                    currUser={user}
+                    usersToShow={showLikedUsers}
+                    userDetails={likedUsers}
+                    setUsersToShow={setShowLikedUsers}
+                />
+            )}
         </>
     );
 }

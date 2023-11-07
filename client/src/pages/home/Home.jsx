@@ -14,12 +14,17 @@ import Chat from "../Chat/Chat";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../api/UserRequests";
 import { logout } from "../../redux/actions/AuthActions";
-
+import socket from "../../utils/socket";
+import Peer from "peerjs";
+import { useRef } from "react";
 const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
+    const [peer, setPeer] = useState();
+    const constraintsRef = useRef(null);
+
     useEffect(() => {
         (async () => {
             const { data } = await getUser(user._id);
@@ -28,6 +33,24 @@ const Home = ({ location }) => {
             }
         })();
     }, [location, user, dispatch]);
+
+    useEffect(() => {
+        const peer = new Peer(user._id, { iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] });
+        peer.on("open", (id) => {
+            socket.emit("new-user-add", { userId: user._id, peerId: id });
+            socket.on("get-users", (users) => {
+                dispatch({ type: "SET_ONLINE_USERS", data: users });
+            });
+            dispatch({ type: "SET_PEER_ID", id: id });
+            setPeer(peer);
+        });
+        return () => {
+            peer.destroy();
+            socket.off("new-user-add");
+            socket.off("get-users");
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         const handleResize = () => {
@@ -43,10 +66,11 @@ const Home = ({ location }) => {
     }, []);
 
     return (
-        <div className="Home">
+        <div className="Home" ref={constraintsRef}>
+            <motion.div initial={{ bottom: "5vw", right: "2vw" }} className="item" drag dragConstraints={constraintsRef} />
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
-            {location === "chat" && <Chat />}
+            {location === "chat" && <Chat peer={peer} socket={socket} />}
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
             {location === "saved" && <SavedPosts />}

@@ -10,10 +10,10 @@ export default function initializeSocketServer() {
 
     io.on("connection", (socket) => {
         // add new User
-        socket.on("new-user-add", (newUserId) => {
+        socket.on("new-user-add", ({ userId, peerId }) => {
             // if user is not added previously
-            if (!activeUsers.some((user) => user.userId === newUserId)) {
-                activeUsers.push({ userId: newUserId, socketId: socket.id });
+            if (!activeUsers.some((user) => user.userId === userId)) {
+                activeUsers.push({ userId, socketId: socket.id, peerId });
                 console.log("New User Connected", activeUsers);
             }
             // send all active users to new user
@@ -41,12 +41,11 @@ export default function initializeSocketServer() {
         });
 
         socket.on("outgoing-video-call", (data) => {
-           
             const user = activeUsers.find((user) => user.userId === data.to);
             if (user) {
                 io.to(user.socketId).emit("incoming-video-call", {
                     from: data.from,
-                    roomId: data.roomId,
+                    roomID: data.roomID,
                     callType: data.callType,
                 });
             }
@@ -55,10 +54,10 @@ export default function initializeSocketServer() {
             const user = activeUsers.find((user) => user.userId === data.to);
             console.log(data, "back data");
             if (user) {
-                console.log("incoming sent cheyth")
+                console.log("incoming sent cheyth");
                 io.to(user.socketId).emit("incoming-voice-call", {
                     from: data.from,
-                    roomId: data.roomId,
+                    roomID: data.roomID,
                     callType: data.callType,
                 });
             }
@@ -84,7 +83,6 @@ export default function initializeSocketServer() {
                 io.to(user.socketId).emit("accept-call");
             }
         });
-
     });
 }
 

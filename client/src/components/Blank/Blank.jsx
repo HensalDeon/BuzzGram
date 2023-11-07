@@ -1,13 +1,9 @@
-import { useEffect } from "react"
+import React from 'react'
 
 function Blank() {
-
-  useEffect(()=>{
-    console.log("knkjnkn")
-  },[])
   return (
     <div>
-      kdjfvndjnv
+      nothing
     </div>
   )
 }

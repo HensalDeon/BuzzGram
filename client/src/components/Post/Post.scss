@@ -54,13 +54,19 @@
     .viewCmt {
         cursor: pointer;
     }
-
 }
 
-.background{
-    &:hover{
+.background {
+    &:hover {
         background: var(--buttonBg);
     }
+}
+.bg-bottom {
+    margin: 3px;
+    padding: 0.5px;
+    background: #c0c0c0;
+    width: 90%;
+    align-self: center;
 }
 
 .Post > img {
@@ -89,7 +95,7 @@
     gap: 1rem;
     align-items: flex-start;
 
-    img{
+    img {
         border-radius: 50%;
         cursor: pointer;
     }
@@ -111,12 +117,12 @@
             color: aliceblue;
             opacity: 1;
         }
-        .dots{
+        .dots {
             opacity: 0;
             // padding-left: 1rem;
         }
 
-        &:hover .dots{
+        &:hover .dots {
             opacity: 0.6;
         }
     }
@@ -125,7 +131,7 @@
         align-self: center;
         padding-left: 2rem;
 
-        img{
+        img {
             max-width: 1rem;
             cursor: pointer;
         }

@@ -3,7 +3,7 @@ import Auth from "./pages/Auth/Auth";
 import AdminAuth from "./pages/Auth/AdminAuth";
 import Home from "./pages/home/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
-import {useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import "./scss/Integrate.scss";
 import "./App.scss";
 import Admin from "./pages/Admin/Admin";
@@ -12,7 +12,6 @@ import Dashboard from "./pages/Admin/Dashboard";
 import UserList from "./components/UserList/UserList";
 import Reports from "./components/Reports/Reports";
 import ForgotPass from "./ForgotPass/ForgotPass";
-
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);
@@ -33,7 +32,7 @@ function App() {
                 <Route path="/auth" element={Authorized ? <Navigate to="../home" /> : <Auth />} />
                 <Route path="/profile/:id" element={Authorized ? <Home location="profile" /> : <Navigate to="/auth" />} />
                 <Route path="/forgot-password" element={Authorized ? <Home location="profile" /> : <ForgotPass />} />
-                <Route path="*" element={<p>Not Found</p>} />
+                <Route path="*" element={<Blank />} />
 
                 {/* Admin routes */}
                 <Route path="/admin/" element={admin ? <Admin /> : <Navigate to="auth" />}>
