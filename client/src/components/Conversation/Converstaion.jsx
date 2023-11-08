@@ -5,6 +5,7 @@ import avatar from "../../img/icon-accounts.svg";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/actions/AuthActions";
+import img from "../../img/icon-flatImageChat.svg"
 function Converstaion({ data, currentUser, online }) {
     const [userData, setUserData] = useState(null);
     const dispatch = useDispatch();
@@ -44,11 +45,7 @@ function Converstaion({ data, currentUser, online }) {
                     <div className="name" style={{ fontSize: "0.8rem" }}>
                         <span>{userData?.username}</span>
                         <span style={{ color: online ? "#51e200" : "darkgrey" }}>{online ? "Online" : "Offline"}</span>
-                        <span
-                            style={{ textOverflow: "ellipsis", maxWidth: "4.3rem", overflow: "hidden", whiteSpace: "nowrap" }}
-                        >
-                            {data?.lastMessage?.text}
-                        </span>
+                        <span className="trunc-text lg-text">{data?.lastMessage?.media ? <span><img style={{width:"1rem"}} src={img} alt="" /> Image</span> : data?.lastMessage?.text}</span>
                     </div>
                 </div>
             </div>

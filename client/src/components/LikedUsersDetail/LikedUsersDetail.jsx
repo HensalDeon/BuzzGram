@@ -73,7 +73,7 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
             <Modal.Body style={{ overflow: "scroll", maxHeight: "14rem" }}>
                 {userDetails.map((user) => {
                     return (
-                        <div key={user._id}>
+                        <div key={user._id} className="d-flex flex-column align-items-center">
                             <motion.div
                                 initial={{ y: -20, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}

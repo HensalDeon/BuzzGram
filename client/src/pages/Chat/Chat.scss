@@ -7,6 +7,12 @@
     @media (max-width: 450px) {
         height: calc(95vh - 3.5rem);
     }
+    .trunc-text {
+        text-overflow: ellipsis;
+        max-width: 4.3rem;
+        overflow: hidden;
+        white-space: nowrap;
+    }
 }
 
 .Left-side-chat {
@@ -91,7 +97,7 @@
     width: 0.8rem;
     height: 0.8rem;
     background: #cecece;
-    top: 0.124rem;
+    top: 0.08rem;
     @media (max-width: 620px) {
         left: 2.11rem;
         top: 0.083rem;
@@ -126,7 +132,7 @@
         margin-right: 10px;
     }
 
-    .icons{
+    .icons {
         width: 2.5rem;
     }
 }

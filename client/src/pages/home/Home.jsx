@@ -15,22 +15,36 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../api/UserRequests";
 import { logout } from "../../redux/actions/AuthActions";
 import socket from "../../utils/socket";
+import bell from "../../img/icon-flatBellIcon.svg";
 import Peer from "peerjs";
 import { useRef } from "react";
+import { getNotifications } from "../../api/NotificationRequests";
+import Notification from "../../components/Notification/Notification";
+import audioTone from "../../audio/pristine-609.mp3";
 const Home = ({ location }) => {
+    const { user } = useSelector((state) => state.authReducer.authData);
+    const dispatch = useDispatch();
+    const audioRef = useRef();
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
-    const dispatch = useDispatch();
-    const { user } = useSelector((state) => state.authReducer.authData);
     const [peer, setPeer] = useState();
+    const [notifications, setNotifications] = useState([]);
     const constraintsRef = useRef(null);
 
     useEffect(() => {
-        (async () => {
-            const { data } = await getUser(user._id);
-            if (data.isblocked) {
-                dispatch(logout());
-            }
+        (() => {
+            getUser(user._id)
+                .then(({ data }) => {
+                    if (data.isblocked) {
+                        dispatch(logout());
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    if (err.response.data.error == "Token has expired") {
+                        dispatch(logout());
+                    }
+                });
         })();
     }, [location, user, dispatch]);
 
@@ -44,6 +58,10 @@ const Home = ({ location }) => {
             dispatch({ type: "SET_PEER_ID", id: id });
             setPeer(peer);
         });
+        socket.emit("new-user-add", { userId: user._id, peerId: user._id });
+        socket.on("get-users", (users) => {
+            dispatch({ type: "SET_ONLINE_USERS", data: users });
+        });
         return () => {
             peer.destroy();
             socket.off("new-user-add");
@@ -51,6 +69,20 @@ const Home = ({ location }) => {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        getNotifications(user._id).then(({ data }) => {
+            console.log(data);
+            setNotifications(data);
+        });
+        socket.on("recieve-notification", (data) => {
+            console.log(data, "recieved notification");
+            audioRef.current.play();
+            getNotifications(user._id).then(({ data }) => {
+                setNotifications(data);
+            });
+        });
+    }, [user]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -65,9 +97,14 @@ const Home = ({ location }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const [showModal, setShowModal] = useState(false);
     return (
         <div className="Home" ref={constraintsRef}>
-            <motion.div initial={{ bottom: "5vw", right: "2vw" }} className="item" drag dragConstraints={constraintsRef} />
+            <Notification notifications={notifications} showModal={showModal} setShowModal={setShowModal} />
+            <motion.div drag dragConstraints={constraintsRef} initial={{ bottom: "5vw", right: "2vw" }} className="item">
+                <span className="badge">{notifications?.length || 0}</span>
+                <motion.img onClick={() => setShowModal(true)} className="w-100" src={bell} />
+            </motion.div>
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
             {location === "chat" && <Chat peer={peer} socket={socket} />}
@@ -82,6 +119,9 @@ const Home = ({ location }) => {
                     </div>
                 </motion.div>
             )}
+            <audio controls ref={audioRef} style={{ display: "none" }}>
+                <source src={audioTone} type="audio/mp3" />
+            </audio>
         </div>
     );
 };

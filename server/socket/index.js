@@ -32,10 +32,8 @@ export default function initializeSocketServer() {
         socket.on("send-message", (data) => {
             const { receiverId } = data;
             const user = activeUsers.find((user) => user.userId === receiverId);
-            console.log("Sending from socket to :", receiverId);
             console.log("Data: ", data);
             if (user) {
-                console.log("recieve message sdent aat");
                 io.to(user.socketId).emit("recieve-message", data);
             }
         });
@@ -81,6 +79,13 @@ export default function initializeSocketServer() {
             const user = activeUsers.find((user) => user.userId === data.id);
             if (user) {
                 io.to(user.socketId).emit("accept-call");
+            }
+        });
+
+        socket.on("get-notification", ({ to, from, text, description }) => {
+            const user = activeUsers.find((user) => user.userId === to);
+            if (user) {
+                io.to(user.socketId).emit("recieve-notification", { from, text, description });
             }
         });
     });

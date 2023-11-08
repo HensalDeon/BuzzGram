@@ -12,6 +12,7 @@ import reportRouter from "./routes/reportRouter.js";
 import adminRouter from "./routes/adminRouter.js";
 import chatRouter from "./routes/chatRouter.js";
 import messageRouter from "./routes/messageRouter.js";
+import notificationRouter from "./routes/notificationRouter.js";
 import initializeSocketServer from "./socket/index.js";
 
 import dotenv from "dotenv";
@@ -40,6 +41,7 @@ app.use("/upload", uploadRouter);
 app.use("/report", reportRouter);
 app.use("/message", messageRouter);
 app.use("/chat", chatRouter);
+app.use("/notification", notificationRouter);
 app.use("/admin", adminRouter);
 
 /** start server when only we have a valid connection*/

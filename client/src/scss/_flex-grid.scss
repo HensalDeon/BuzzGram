@@ -27,7 +27,6 @@
 }
 
 // medium screen
-
 @include tablet {
     @for $i from 1 through 12 {
         $v: math.div($i, 12) * 100;

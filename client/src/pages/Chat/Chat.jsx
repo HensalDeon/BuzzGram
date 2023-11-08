@@ -217,6 +217,7 @@ import { logout } from "../../redux/actions/AuthActions";
 import IncomingVideo from "./IncomingVideo";
 import IncomingVoice from "./IncomingVoice";
 import Call from "./Call";
+import { createNotification } from "../../api/NotificationRequests";
 function Chat({ peer, socket }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const { currentChatUser, videoCall, voiceCall, onlineUsers, incomingVideoCall, incomingVoiceCall } = useSelector(
@@ -227,6 +228,7 @@ function Chat({ peer, socket }) {
     const [chats, setChats] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
     const [sendMessage, setSendMessage] = useState(null);
+    const [notification, setNotification] = useState(null);
     const [receivedMessage, setReceivedMessage] = useState(null);
     const [localStream, setLocalStream] = useState(null);
     const [remoteStream, setRemoteStream] = useState(null);
@@ -303,6 +305,7 @@ function Chat({ peer, socket }) {
     // Connect to Socket.io
     useEffect(() => {
         socket.on("get-users", (users) => {
+            console.log("hyyy");
             dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
 
@@ -334,6 +337,17 @@ function Chat({ peer, socket }) {
 
         socket.on("recieve-message", (data) => {
             setReceivedMessage(data);
+            setChats((prevChats) => {
+                const chatIndex = prevChats.findIndex((chat) => {
+                    return chat._id === data.chatId;
+                });
+                if (chatIndex !== -1) {
+                    const updatedChats = [...prevChats];
+                    updatedChats[chatIndex].lastMessage = data;
+                    return updatedChats;
+                }
+                return prevChats;
+            });
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [user]);
@@ -341,8 +355,30 @@ function Chat({ peer, socket }) {
     // Send Message to socket server
     useEffect(() => {
         if (sendMessage !== null) {
-            console.log("nmber of times");
+            createNotification(notification).then(({ data }) => {
+                socket.emit("get-notification", {
+                    to: data.receiverId || notification.receiverId,
+                    from: {
+                        id: user._id,
+                        profileimage: user.profileimage,
+                        username: user.username,
+                    },
+                    text: data.text || notification.text,
+                    description: data.description || notification.description,
+                });
+            });
             socket.emit("send-message", sendMessage);
+            setChats((prevChats) => {
+                const chatIndex = prevChats.findIndex((chat) => {
+                    return chat._id === sendMessage.chatId;
+                });
+                if (chatIndex !== -1) {
+                    const updatedChats = [...prevChats];
+                    updatedChats[chatIndex].lastMessage = sendMessage;
+                    return updatedChats;
+                }
+                return prevChats;
+            });
         }
     }, [sendMessage]);
 
@@ -481,7 +517,12 @@ function Chat({ peer, socket }) {
                                         dispatch({ type: "CURRENT_CHAT_USER", data: userId });
                                     }}
                                 >
-                                    <Conversation data={chat} currentUser={user._id} online={checkOnlineStatus(chat)} />
+                                    <Conversation
+                                        data={chat}
+                                        currentUser={user._id}
+                                        online={checkOnlineStatus(chat)}
+                                        socket={socket}
+                                    />
                                 </motion.div>
                             ))}
                         </div>
@@ -503,6 +544,7 @@ function Chat({ peer, socket }) {
                         currentUser={user._id}
                         setSendMessage={setSendMessage}
                         receivedMessage={receivedMessage}
+                        setNotification={setNotification}
                         socket={socket}
                     />
                 </motion.div>

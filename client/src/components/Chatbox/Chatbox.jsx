@@ -364,7 +364,6 @@
 
 // export default Chatbox;
 
-
 import { useEffect, useState } from "react";
 import { useRef } from "react";
 import avatar from "../../img/icon-accounts.svg";
@@ -386,7 +385,7 @@ import { uploadImage } from "../../api/UploadRequest";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
+function Chatbox({ chat, currentUser, setSendMessage, receivedMessage, setNotification }) {
     const imageRef = useRef();
     const scroll = useRef();
     const navigate = useNavigate();
@@ -412,7 +411,7 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
             },
         });
     };
-    
+
     const handleVoiceCall = () => {
         console.log("voice call");
         dispatch({
@@ -475,6 +474,13 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
             chatId: chat._id,
         };
         const receiverId = chat.members.find((id) => id !== currentUser);
+        const notification = {
+            senderId: currentUser,
+            receiverId: receiverId,
+            text: "sent you a message",
+            description: newMessage,
+        };
+        setNotification(notification);
         setSendMessage({ ...message, receiverId });
         try {
             const { data } = await addMessage(message);
@@ -552,9 +558,15 @@ function Chatbox({ chat, currentUser, setSendMessage, receivedMessage }) {
                     chatId: chat._id,
                 };
                 const receiverId = chat.members.find((id) => id !== currentUser);
+                const notification = {
+                    senderId: currentUser,
+                    receiverId: receiverId,
+                    text: "sent you a message",
+                    description: "Image",
+                };
+                setNotification(notification);
                 setSendMessage({ ...message, receiverId });
                 try {
-                    console.log("entered 12");
                     const { data } = await addMessage(message);
                     setShareLoading(false);
                     setMessages([...messages, data]);

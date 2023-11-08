@@ -16,6 +16,27 @@
         margin-bottom: 3.6rem;
     }
 }
+.item {
+    width: 50px;
+    height: 50px;
+    z-index: 1000;
+    position: absolute;
+    cursor: pointer;
+
+    .badge {
+        position: absolute;
+        top: 0;
+        right: 0;
+        border-radius: 50%;
+        background: var(--buttonBg);
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
 
 .component-transition {
     transition: opacity 0.3s ease-in-out, transform 1s ease-in-out;
