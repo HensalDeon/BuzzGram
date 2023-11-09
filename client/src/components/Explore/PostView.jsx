@@ -20,6 +20,8 @@ import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLikedUsersDetail } from "../../api/PostsRequests";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
+import { createNotification } from "../../api/NotificationRequests";
+import socket from "../../utils/socket";
 
 // eslint-disable-next-line react/prop-types
 function ExplorePost({ postDtl, updateSavedPosts }) {
@@ -89,6 +91,26 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
     };
 
     const handleLike = () => {
+        if (!liked && user._id !== postDtl?.user?._id) {
+            const notification = {
+                senderId: user._id,
+                receiverId: postDtl?.user?._id,
+                text: "Liked your Post",
+                url: postDtl?.image,
+            };
+            createNotification(notification).then(({ data }) => {
+                socket.emit("get-notification", {
+                    to: notification.receiverId || data?.user?._id,
+                    from: {
+                        id: notification.senderId || user._id,
+                        profileimage: user.profileimage,
+                        username: user.username,
+                    },
+                    text: notification.text,
+                    url: data?.image,
+                });
+            });
+        }
         setLiked((prev) => !prev);
         liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
         dispatch(likePost(postDtl._id, user._id));
@@ -214,6 +236,22 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
             console.log(response);
             if (response.success) {
                 // dispatch(getTimelinePosts(user._id));
+                const notification = {
+                    senderId: user._id,
+                    receiverId: postDtl?.user?._id,
+                    text: "Started following you",
+                };
+                createNotification(notification).then(({ data }) => {
+                    socket.emit("get-notification", {
+                        to: notification.receiverId || data?.user?._id,
+                        from: {
+                            id: notification.senderId || user._id,
+                            profileimage: user.profileimage,
+                            username: user.username,
+                        },
+                        text: notification.text,
+                    });
+                });
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {

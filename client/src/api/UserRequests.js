@@ -3,6 +3,7 @@ import { userAxiosInstance } from "../utils/axiosInstance";
 const API = userAxiosInstance();
 
 export const getUser = (userId) => API.get(`/user/${userId}`);
+export const randomUsers = () => API.get(`/user/`);
 export const updateUser = (id, formData) => API.put(`/user/${id}`, formData);
 export const updateProfilePic = (id, profileUrl) => API.put(`/user/${id}/profile`, { profileimage: profileUrl });
 export const updateCoverPic = (id, coverUrl) => API.put(`/user/${id}/cover`, { coverimage: coverUrl });

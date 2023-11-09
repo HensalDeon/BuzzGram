@@ -10,4 +10,7 @@ router.route("/:userId").get(notificationController.getNotifications);
 /** POST Requests */
 router.route("/").post(notificationController.createNotification);
 
+/** PATCH Requests */
+router.route("/:userId").patch(notificationController.markAsRead);
+
 export default router;

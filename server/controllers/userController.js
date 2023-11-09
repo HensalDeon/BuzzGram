@@ -89,7 +89,6 @@ export const updateUser = async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 };
- 
 
 // Delete user
 export const deleteUser = async (req, res) => {
@@ -170,7 +169,6 @@ export const searchResult = async (req, res) => {
     res.status(200).json(users);
 };
 
-
 export const getFollowersDetail = async (req, res) => {
     try {
         const id = req.params.id;
@@ -195,6 +193,19 @@ export const getFollowingDetail = async (req, res) => {
             .select("following")
             .populate("following", "username fullname profileimage followers");
         res.status(200).json(followings);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal server error." });
+    }
+};
+
+export const randomUsers = async (req, res) => {
+    try {
+        const users = await UserModel.aggregate([
+            { $sample: { size: 4 } },
+            { $project: { username: 1, profileimage: 1, fullname: 1 } },
+        ]).exec();
+        res.status(200).json(users);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: "Internal server error." });

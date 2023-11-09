@@ -24,7 +24,8 @@ import CommentList from "./CommentList";
 import { getLikedUsersDetail } from "../../api/PostsRequests";
 import BeatLoader from "react-spinners/BeatLoader";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
-
+import socket from "../../utils/socket";
+import { createNotification } from "../../api/NotificationRequests";
 const Post = ({ data }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -107,6 +108,26 @@ const Post = ({ data }) => {
     };
 
     const handleLike = () => {
+        if (!liked && user._id !== data?.user?._id) {
+            const notification = {
+                senderId: user._id,
+                receiverId: data?.user?._id,
+                text: "Liked your Post",
+                url: data?.image,
+            };
+            createNotification(notification).then(({ data }) => {
+                socket.emit("get-notification", {
+                    to: notification.receiverId || data?.user?._id,
+                    from: {
+                        id: notification.senderId || user._id,
+                        profileimage: user.profileimage,
+                        username: user.username,
+                    },
+                    text: notification.text,
+                    url: data?.image,
+                });
+            });
+        }
         setLiked((prev) => !prev);
         liked ? setLikes((prev) => prev - 1) : setLikes((prev) => prev + 1);
         dispatch(likePost(data._id, user._id));
@@ -226,7 +247,23 @@ const Post = ({ data }) => {
             const response = await dispatch(followUser(data.user._id, user._id));
             console.log(response);
             if (response.success) {
-                dispatch(getTimelinePosts(user._id));
+                // dispatch(getTimelinePosts(user._id));
+                const notification = {
+                    senderId: user._id,
+                    receiverId: data?.user?._id,
+                    text: "Started following you",
+                };
+                createNotification(notification).then(({ data }) => {
+                    socket.emit("get-notification", {
+                        to: notification.receiverId || data?.user?._id,
+                        from: {
+                            id: notification.senderId || user._id,
+                            profileimage: user.profileimage,
+                            username: user.username,
+                        },
+                        text: notification.text,
+                    });
+                });
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {
@@ -247,7 +284,7 @@ const Post = ({ data }) => {
             const response = await dispatch(unfollowUser(data.user._id, user._id));
             console.log(response);
             if (response.success) {
-                dispatch(getTimelinePosts(user._id));
+                // dispatch(getTimelinePosts(user._id));
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
             } else {

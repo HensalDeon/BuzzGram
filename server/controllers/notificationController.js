@@ -18,15 +18,28 @@ export const getNotifications = async (req, res) => {
     try {
         const userId = req.params.userId;
         if (!userId) return res.status(400).json({ error: "undefined values found" });
-        const notifications = await NotificationModel.find({ receiverId: userId }).populate({
-            path: "senderId",
-            select: "username profileimage",
-            model: UserModel,
-        })
-        .exec()
+        const notifications = await NotificationModel.find({ receiverId: userId, read: false })
+            .populate({
+                path: "senderId",
+                select: "username profileimage",
+                model: UserModel,
+            })
+            .exec();
         res.status(200).json(notifications);
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: "Error getting notifications" });
+    }
+};
+
+export const markAsRead = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        if (!userId) return res.status(400).json({ error: "undefined values found" });
+        await NotificationModel.updateMany({ receiverId: userId, read: false }, { $set: { read: true } });
+        res.status(200).json({ message: "marked as read" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Error updating notifications" });
     }
 };

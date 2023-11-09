@@ -25,11 +25,13 @@ const Home = ({ location }) => {
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
     const audioRef = useRef();
+    const constraintsRef = useRef(null);
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
-    const [peer, setPeer] = useState();
     const [notifications, setNotifications] = useState([]);
-    const constraintsRef = useRef(null);
+    const [peer, setPeer] = useState();
+    const [notiLength, setNotiLength] = useState(0);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         (() => {
@@ -71,18 +73,22 @@ const Home = ({ location }) => {
     }, []);
 
     useEffect(() => {
-        getNotifications(user._id).then(({ data }) => {
-            console.log(data);
-            setNotifications(data);
-        });
+        if (!showModal) {
+            getNotifications(user._id).then(({ data }) => {
+                console.log(data);
+                setNotiLength(data?.length);
+                setNotifications(data);
+            });
+        }
         socket.on("recieve-notification", (data) => {
             console.log(data, "recieved notification");
             audioRef.current.play();
             getNotifications(user._id).then(({ data }) => {
+                setNotiLength(data?.length);
                 setNotifications(data);
             });
         });
-    }, [user]);
+    }, [user, showModal]);
 
     useEffect(() => {
         const handleResize = () => {
@@ -97,14 +103,23 @@ const Home = ({ location }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const [showModal, setShowModal] = useState(false);
     return (
         <div className="Home" ref={constraintsRef}>
-            <Notification notifications={notifications} showModal={showModal} setShowModal={setShowModal} />
-            <motion.div drag dragConstraints={constraintsRef} initial={{ bottom: "5vw", right: "2vw" }} className="item">
-                <span className="badge">{notifications?.length || 0}</span>
+            <audio controls ref={audioRef} style={{ display: "none" }}>
+                <source src={audioTone} type="audio/mp3" />
+            </audio>
+            <Notification
+                notifications={notifications}
+                showModal={showModal}
+                setShowModal={setShowModal}
+                user={user}
+                length={setNotiLength}
+            />
+            <motion.div drag dragConstraints={constraintsRef} initial={{ bottom: "15vh", right: "2vw" }} className="item">
+                <span className="badge">{notiLength || 0}</span>
                 <motion.img onClick={() => setShowModal(true)} className="w-100" src={bell} />
             </motion.div>
+
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
             {location === "chat" && <Chat peer={peer} socket={socket} />}
@@ -113,15 +128,12 @@ const Home = ({ location }) => {
             {location === "saved" && <SavedPosts />}
             {location === "profile" && (
                 <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-                    <div className="d-flex flex-row">
+                    <div className="d-flex flex-row gap-4">
                         <ProfileCard location={location} />
                         {isLargeScreen && <FollowersCard />}
                     </div>
                 </motion.div>
             )}
-            <audio controls ref={audioRef} style={{ display: "none" }}>
-                <source src={audioTone} type="audio/mp3" />
-            </audio>
         </div>
     );
 };

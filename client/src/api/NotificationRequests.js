@@ -5,3 +5,5 @@ const API = userAxiosInstance();
 export const createNotification = (data) => API.post(`/notification/`, data);
 
 export const getNotifications = (userId) => API.get(`/notification/${userId}`);
+
+export const setMarkAsRead = (userId) => API.patch(`/notification/${userId}`);

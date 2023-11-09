@@ -4,7 +4,7 @@ import "../FollowersCard/FollowersCard.scss";
 import follow from "../../img/icon-flatFollow.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRef, useState } from "react";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
@@ -13,6 +13,7 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [follows, setFollows] = useState(currUser?.following);
+    const logedUser = useSelector((state) => state.authReducer.authData.user);
 
     const handleFollow = async (id) => {
         const loadingToastId = toast.loading("Following...");
@@ -68,6 +69,7 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
     //         }
     //     };
     // }, [userDetails]);
+    console.log(currUser._id);
     return (
         <Modal show={usersToShow} onHide={() => setUsersToShow(false)}>
             <Modal.Body style={{ overflow: "scroll", maxHeight: "14rem" }}>
@@ -92,31 +94,32 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
                                         />
                                         <div
                                             className="d-flex flex-column"
-                                            onClick={() => navigate(`/profile/${user._id}`)}
+                                            onClick={() => navigate(`/profile/${user._id}`, setUsersToShow(false))}
                                         >
                                             <span className="text-white text-left">{user?.username}</span>
                                             <span className="text-white align-self-start">{user?.fullname}</span>
                                         </div>
                                     </div>
-                                    {follows.includes(user._id) ? (
-                                        <motion.img
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                                            src={unfollow}
-                                            style={{ width: "2.5rem", cursor: "pointer" }}
-                                            onClick={() => handleUnFollow(user._id)}
-                                        />
-                                    ) : (
-                                        <motion.img
-                                            whileHover={{ scale: 1.2 }}
-                                            whileTap={{ scale: 0.9 }}
-                                            transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                                            src={follow}
-                                            style={{ width: "2.5rem", cursor: "pointer" }}
-                                            onClick={() => handleFollow(user._id)}
-                                        />
-                                    )}
+                                    {user._id !== logedUser._id &&
+                                        (follows.includes(user._id) ? (
+                                            <motion.img
+                                                whileHover={{ scale: 1.2 }}
+                                                whileTap={{ scale: 0.9 }}
+                                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                                src={unfollow}
+                                                style={{ width: "2.5rem", cursor: "pointer" }}
+                                                onClick={() => handleUnFollow(user._id)}
+                                            />
+                                        ) : (
+                                            <motion.img
+                                                whileHover={{ scale: 1.2 }}
+                                                whileTap={{ scale: 0.9 }}
+                                                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                                                src={follow}
+                                                style={{ width: "2.5rem", cursor: "pointer" }}
+                                                onClick={() => handleFollow(user._id)}
+                                            />
+                                        ))}
                                 </div>
                             </motion.div>
                             <div className="bg-bottom"></div>

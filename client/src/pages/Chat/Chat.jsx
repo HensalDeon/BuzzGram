@@ -305,7 +305,6 @@ function Chat({ peer, socket }) {
     // Connect to Socket.io
     useEffect(() => {
         socket.on("get-users", (users) => {
-            console.log("hyyy");
             dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
 

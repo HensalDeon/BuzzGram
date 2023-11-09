@@ -27,6 +27,8 @@ import { uploadImage } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 import { getFollowers, getFollowing } from "../../api/UserRequests";
+import { createNotification } from "../../api/NotificationRequests";
+import socket from "../../utils/socket";
 
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
@@ -36,6 +38,7 @@ const ProfileCard = ({ location }) => {
     const [currUser, setCurrUser] = useState([]);
     const [expanded, setExpanded] = useState(false);
     const [followers, setFollowers] = useState(null);
+    const [following, setFollowing] = useState(null);
     const [showFollowers, setShowFollowers] = useState(false);
     const [followersData, setFollowersData] = useState([]);
     const [showFollowing, setShowFollowing] = useState(false);
@@ -249,6 +252,7 @@ const ProfileCard = ({ location }) => {
                     setLoading(false);
                     setCurrUser(res.data);
                     setFollowers(res.data.user.followers.length);
+                    setFollowing(res.data.user.following.length);
                 })
                 .catch(() => {
                     setLoading(false);
@@ -261,9 +265,26 @@ const ProfileCard = ({ location }) => {
         try {
             const response = await dispatch(followUser(id, user._id));
             if (response.success) {
-                dispatch(getTimelinePosts(user._id));
+                // dispatch(getTimelinePosts(user._id));
+                const notification = {
+                    senderId: user._id,
+                    receiverId: id,
+                    text: "Started following you",
+                };
+                createNotification(notification).then(({ data }) => {
+                    socket.emit("get-notification", {
+                        to: notification.receiverId || data?.user?._id,
+                        from: {
+                            id: notification.senderId || user._id,
+                            profileimage: user.profileimage,
+                            username: user.username,
+                        },
+                        text: notification.text,
+                    });
+                });
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
+                setFollowing((prev) => prev + 1);
                 setFollowers((prev) => prev + 1);
             } else {
                 toast.error(<b>{response.error}</b>);
@@ -286,6 +307,7 @@ const ProfileCard = ({ location }) => {
                 toast.success(<b>{response.message}</b>);
                 setIsFollowed(!isFollowed);
                 setFollowers((prev) => prev - 1);
+                setFollowing((prev) => prev - 1);
             } else {
                 toast.error(<b>{response.error}</b>);
             }
@@ -485,7 +507,7 @@ const ProfileCard = ({ location }) => {
                             </div>
                             <div className="vl"></div>
                             <div className="follow" onClick={handleFollowingView}>
-                                <span>{currUser.user?.following.length}</span>
+                                <span>{following}</span>
                                 <span>Followings</span>
                                 <BeatLoader loading={followingLoading} color="orange" speedMultiplier={1} />
                             </div>

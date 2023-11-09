@@ -13,6 +13,8 @@ import { logout } from "../../redux/actions/AuthActions";
 import { createReport } from "../../redux/actions/ReportActions";
 import { deleteCmt } from "../../redux/actions/CommentActions";
 import { useNavigate } from "react-router-dom";
+import { createNotification } from "../../api/NotificationRequests";
+import socket from "../../utils/socket";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
     const dispatch = useDispatch();
@@ -122,7 +124,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         zIndex: "1066",
     };
 
-    const handleCmtLike = async (commentId) => {
+    const handleCmtLike = async (commentId, cmnt) => {
         const updatedcmt = comments.map((comment) => {
             if (comment._id === commentId) {
                 const updatedLikes = comment.likes.includes(user._id)
@@ -134,12 +136,35 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
         });
 
         setComments(updatedcmt);
-        likeComment(commentId, user._id).catch((error) => {
-            console.log(error);
-            if (error.response.status === 401) {
-                dispatch(logout());
-            }
-        });
+        likeComment(commentId, user._id)
+            .then(() => {
+                if (!cmnt.likes.includes(user._id) && user._id !== data?.user?._id) {
+                    const notification = {
+                        senderId: user._id,
+                        receiverId: data?.user?._id,
+                        text: "Liked your comment",
+                        url: data?.image,
+                    };
+                    createNotification(notification).then(({ data }) => {
+                        socket.emit("get-notification", {
+                            to: notification.receiverId || data?.user?._id,
+                            from: {
+                                id: notification.senderId || user._id,
+                                profileimage: user.profileimage,
+                                username: user.username,
+                            },
+                            text: notification.text,
+                            url: data?.image,
+                        });
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error?.response?.status === 401) {
+                    dispatch(logout());
+                }
+            });
     };
 
     const handleCmtReport = async () => {
@@ -263,7 +288,7 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
                                     <div className="like-count">
                                         <img
                                             src={comment.likes.includes(user._id) ? like : unLike}
-                                            onClick={() => handleCmtLike(comment._id)}
+                                            onClick={() => handleCmtLike(comment._id, comment)}
                                             alt="like"
                                         />
                                         <span className="lg-text" style={{ fontSize: "13px" }}>

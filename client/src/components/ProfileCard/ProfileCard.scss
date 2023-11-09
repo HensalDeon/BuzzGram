@@ -15,10 +15,6 @@ $gray: var(--gray);
 
     margin: 0 0%;
     
-    @media (min-width: 930px) {
-        margin: 0 4%;
-    }
-
     transition: transform 0.3s ease;
 
     &:hover {

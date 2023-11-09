@@ -1,6 +1,4 @@
 export default {
     REACT_APP_SERVER_DOMAIN: "http://localhost:5050",
     NODE_ENV: "production",
-    REACT_APP_PUBLIC_ZEGO_APP_ID: "171e06260055b8eef00ef5b3d19f851cb98317bc23d384ff464ba1a824405ce7",
-    REACT_APP_PUBLIC_ZEGO_SERVER_ID: "47a8633bc1296a2480897b2b6878aba6",
 };
