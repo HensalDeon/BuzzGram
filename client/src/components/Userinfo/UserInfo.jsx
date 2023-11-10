@@ -1,5 +1,5 @@
-import './Userinfo.scss';
 import avatar from '../../img/icon-flatAdmin.svg'
+import './Userinfo.scss';
 const UserInfo = () => {
     return (
         <div className='user-info'>

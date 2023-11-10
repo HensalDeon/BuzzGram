@@ -11,12 +11,6 @@ const AdminSidebarNav = [
         icon: <i className='bx bx-user' ></i>,
         text: 'Users'
     },
-    // {
-    //     link: '/admin/posts',
-    //     section: 'posts',
-    //     icon: <i className='bx bx-cube'></i>,
-    //     text: 'Posts'
-    // },
     {
         link: '/admin/reports',
         section: 'reports',

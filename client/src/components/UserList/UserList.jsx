@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import AdminSearch from "../LogoSearch/AdminSearch";
 import List from "./List";
-
 import "./UserList.scss";
 
 function UserList() {

@@ -1,7 +1,8 @@
 import { UilSearch } from "@iconscout/react-unicons";
-import "./LogoSearch.scss";
-import PropTypes from "prop-types";
 import { useState } from "react";
+import PropTypes from "prop-types";
+import "./LogoSearch.scss";
+
 const AdminSearch = ({ onSearch }) => {
     const [query, setQuery] = useState("");
     const handleInputChange = (e) => {

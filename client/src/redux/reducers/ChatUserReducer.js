@@ -6,7 +6,6 @@ const chatReducer = (
         voiceCall: undefined,
         incomingVideoCall: undefined,
         incomingVoiceCall: undefined,
-        peerId: "",
     },
     action
 ) => {
@@ -33,8 +32,6 @@ const chatReducer = (
                 incomingVideoCall: undefined,
                 incomingVoiceCall: undefined,
             };
-        case "SET_PEER_ID":
-            return { ...state, peerId: action.id };
         default:
             return state;
     }

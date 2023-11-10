@@ -1,19 +1,19 @@
-import Modal from "react-bootstrap/Modal";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { deleteComment, getComments, likeComment, updateComment } from "../../api/CommentRequests";
-import avatar from "../../img/icon-accounts.svg";
-import dots from "../../img/icon-threeDots.svg";
-import like from "../../img/like.png";
-import unLike from "../../img/notlike.png";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import { logout } from "../../redux/actions/AuthActions";
 import { createReport } from "../../redux/actions/ReportActions";
 import { deleteCmt } from "../../redux/actions/CommentActions";
 import { useNavigate } from "react-router-dom";
 import { createNotification } from "../../api/NotificationRequests";
+import Modal from "react-bootstrap/Modal";
+import PropTypes from "prop-types";
+import avatar from "../../img/icon-accounts.svg";
+import dots from "../../img/icon-threeDots.svg";
+import like from "../../img/like.png";
+import unLike from "../../img/notlike.png";
+import PacmanLoader from "react-spinners/PacmanLoader";
+import toast from "react-hot-toast";
 import socket from "../../utils/socket";
 
 const CommentList = ({ showCmt, handleCmtClose, data }) => {
@@ -311,6 +311,8 @@ CommentList.propTypes = {
     handleCmtClose: PropTypes.func.isRequired,
     data: PropTypes.shape({
         _id: PropTypes.string.isRequired,
+        user: PropTypes.object,
+        image: PropTypes.string,
     }),
 };
 

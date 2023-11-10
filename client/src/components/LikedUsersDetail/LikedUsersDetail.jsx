@@ -69,7 +69,6 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
     //         }
     //     };
     // }, [userDetails]);
-    console.log(currUser._id);
     return (
         <Modal show={usersToShow} onHide={() => setUsersToShow(false)}>
             <Modal.Body style={{ overflow: "scroll", maxHeight: "14rem" }}>

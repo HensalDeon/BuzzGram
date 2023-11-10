@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-// import "./Explore.scss";
 import { useDispatch, useSelector } from "react-redux";
-import PacmanLoader from "react-spinners/PacmanLoader";
-
-import PostView from "../Explore/PostView";
 import { getSavedPosts } from "../../api/PostsRequests";
-import toast from "react-hot-toast";
 import { logout } from "../../redux/actions/AuthActions";
+import PacmanLoader from "react-spinners/PacmanLoader";
+import PostView from "../Explore/PostView";
+import toast from "react-hot-toast";
 
 function SavedPosts() {
     const { user } = useSelector((state) => state.authReducer.authData);

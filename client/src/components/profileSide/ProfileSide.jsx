@@ -16,7 +16,6 @@ const ProfileSide = ({ location }) => {
     }, []);
     return (
         <div className="ProfileSide" style={{ animationDelay: "0.5s" }}>
-            {/* <Notifications/> */}
             <LogoSearch />
             <ProfileCard location={location}/>
             <FollowersCard />

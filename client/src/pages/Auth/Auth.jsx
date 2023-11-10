@@ -1,17 +1,17 @@
-import "./Auth.scss";
-import Logo from "../../img/logo.png";
 import { useEffect, useState, useRef } from "react";
-import PropTypes from "prop-types";
 import { useFormik } from "formik";
 import { googleAuth, logIn, signUp } from "../../redux/actions/AuthActions";
 import { sendOtpSignup, verifyOtp } from "../../api/AuthRequests";
 import { useDispatch, useSelector } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
-import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../../utils/firebase";
+import PropTypes from "prop-types";
+import toast, { Toaster } from "react-hot-toast";
+import Logo from "../../img/logo.png";
+import * as Yup from "yup";
+import "./Auth.scss";
 
 const loginValidation = Yup.object().shape({
     username: Yup.string()
@@ -217,6 +217,7 @@ function LogIn({ toggleForm, handleGoogleClick }) {
 
 LogIn.propTypes = {
     toggleForm: PropTypes.func.isRequired,
+    handleGoogleClick: PropTypes.func.isRequired,
 };
 
 function SignUp({ toggleForm, handleGoogleClick }) {
@@ -458,6 +459,7 @@ function SignUp({ toggleForm, handleGoogleClick }) {
 
 SignUp.propTypes = {
     toggleForm: PropTypes.func.isRequired,
+    handleGoogleClick: PropTypes.func.isRequired,
 };
 
 export default Auth;

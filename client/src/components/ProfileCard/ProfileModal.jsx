@@ -1,10 +1,10 @@
-import PropTypes from "prop-types";
-import { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import toast, { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/actions/UserAction";
-// eslint-disable-next-line react/prop-types
+import { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import PropTypes from "prop-types";
+import Modal from "react-bootstrap/Modal";
+
 function ProfileModal({ editOpened, setEditOpened, data, updateCurrUser }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);
@@ -110,5 +110,6 @@ ProfileModal.propTypes = {
         fullname: PropTypes.string,
         bio: PropTypes.string,
     }),
+    updateCurrUser: PropTypes.func.isRequired,
 };
 export default ProfileModal;

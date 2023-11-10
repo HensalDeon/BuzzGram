@@ -1,5 +1,15 @@
 import Cover from "../../img/cover.jpg";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getUserPosts } from "../../api/PostsRequests";
+import { followUser, unfollowUser, uploadCoverPic, uploadProfilePic } from "../../redux/actions/UserAction";
+import { getTimelinePosts } from "../../redux/actions/PostAction";
+import { uploadImage } from "../../redux/actions/UploadAction";
+import { motion } from "framer-motion";
+import { getFollowers, getFollowing } from "../../api/UserRequests";
+import { createNotification } from "../../api/NotificationRequests";
 import defProfile from "../../img/icon-accounts.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import follow from "../../img/icon-flatFollow.svg";
@@ -8,27 +18,17 @@ import editProfile from "../../img/icon-flatEditProfile.svg";
 import avatar from "../../img/icon-accounts.svg";
 import editCover from "../../img/icon-flatEditCoverImg.svg";
 import chat from "../../img/icon-flatChatwith.svg";
-import "./ProfileCard.scss";
-import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getUserPosts } from "../../api/PostsRequests";
+import toast from "react-hot-toast";
 import BeatLoader from "react-spinners/BeatLoader";
 import PostView from "../Explore/PostView";
 import Modal from "react-bootstrap/Modal";
 import ProfileModal from "./ProfileModal";
-import { followUser, unfollowUser, uploadCoverPic, uploadProfilePic } from "../../redux/actions/UserAction";
-import toast from "react-hot-toast";
-import { getTimelinePosts } from "../../redux/actions/PostAction";
 import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css";
-import { uploadImage } from "../../redux/actions/UploadAction";
-import { motion } from "framer-motion";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
-import { getFollowers, getFollowing } from "../../api/UserRequests";
-import { createNotification } from "../../api/NotificationRequests";
 import socket from "../../utils/socket";
+import "cropperjs/dist/cropper.css";
+import "./ProfileCard.scss";
 
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
@@ -62,7 +62,6 @@ const ProfileCard = ({ location }) => {
     const cropperRef = useRef();
 
     const handleImageClick = (type) => {
-        console.log(type);
         if (location === "profile") {
             fileInputRef.current.value = null;
             fileInputRef.current.click();
@@ -141,7 +140,6 @@ const ProfileCard = ({ location }) => {
                     setProfileLoading(true);
                     const response = await dispatch(uploadImage(formData));
                     if (response && response.url) {
-                        // const profileimage = response.url;
                         const imageUploaded = response.url;
 
                         try {

@@ -1,6 +1,6 @@
-import "./MessageList.scss";
-import Profile from "../../img/profileImg.jpg";
 import { Followers } from "../../Data/FollowersData";
+import Profile from "../../img/profileImg.jpg";
+import "./MessageList.scss";
 
 function Notifications() {
   return (

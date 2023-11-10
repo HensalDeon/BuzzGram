@@ -1,19 +1,17 @@
-import avatar from "../../img/icon-accounts.svg";
-import view from "../../img/icon-flatView.svg";
-import resolve from "../../img/icon-flatDone.svg";
-import deleteIco from "../../img/icon-flatDelete.svg";
-import like from "../../img/like.png";
-
-import Modal from "react-bootstrap/Modal";
-import PropTypes from "prop-types";
-import toast from "react-hot-toast";
-
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { deleteReport, getTargetData, updateReport } from "../../api/ReportRequests";
 import { deletePost } from "../../redux/actions/PostAction";
 import { adminDeleteComment } from "../../api/CommentRequests";
 import { deleteCmt } from "../../redux/actions/CommentActions";
+import avatar from "../../img/icon-accounts.svg";
+import view from "../../img/icon-flatView.svg";
+import resolve from "../../img/icon-flatDone.svg";
+import deleteIco from "../../img/icon-flatDelete.svg";
+import like from "../../img/like.png";
+import Modal from "react-bootstrap/Modal";
+import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 
 function ReportList({ report, setTargetLoading, setReports, incPage }) {
     const [expanded, setExpanded] = useState(true);

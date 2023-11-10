@@ -1,11 +1,12 @@
 import "./Posts.scss";
-import Post from "../Post/Post";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { getTimelinePosts } from "../../redux/actions/PostAction";
-import PropagateLoader from "react-spinners/PropagateLoader";
-import debounce from "lodash/debounce";
 import { motion } from "framer-motion";
+import PropagateLoader from "react-spinners/PropagateLoader";
+import Post from "../Post/Post";
+import debounce from "lodash/debounce";
+
 const Posts = () => {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);

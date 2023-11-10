@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import avatar from "../../img/icon-accounts.svg";
 import PropTypes from "prop-types";
-import { motion } from "framer-motion";
+
 function SerachResults({ users }) {
     const navigate = useNavigate();
     const handleUserView = (user) => {

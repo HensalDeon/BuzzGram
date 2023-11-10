@@ -1,14 +1,15 @@
 import { Toaster } from "react-hot-toast";
-import ReportList from "./ReportList";
-import "./Report.scss";
 import { useEffect, useState } from "react";
 import { getReports } from "../../api/ReportRequests";
-import PacmanLoader from "react-spinners/PacmanLoader";
-import PropagateLoader from "react-spinners/PropagateLoader";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { adminLogout } from "../../redux/actions/AuthActions";
+import ReportList from "./ReportList";
+import PacmanLoader from "react-spinners/PacmanLoader";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import debounce from "lodash/debounce";
-import { motion } from "framer-motion";
+import "./Report.scss";
+
 function Reports() {
     const [loading, setLoading] = useState(true);
     const [hasMoreReports, setHasMoreReports] = useState(true);
@@ -83,7 +84,6 @@ function Reports() {
     return (
         <>
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            {/* <div>filter by targetType , filter by reported time</div> */}
             <div className="table-container">
                 {!loading && (
                     <motion.div

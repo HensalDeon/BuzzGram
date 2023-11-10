@@ -1,17 +1,19 @@
-import { motion } from "framer-motion";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
+import { motion } from "framer-motion";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast, { Toaster } from "react-hot-toast";
+import PropTypes from "prop-types";
 import avatar from "../../img/icon-accounts.svg";
-import { useState } from "react";
+
 function Lists({ follower }) {
-    const { user } = useSelector((state) => state.authReducer.authData);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.authReducer.authData);
     const [isFollowed, setIsFollowed] = useState(user?.following.includes(follower?._id));
     const [loading, setLoading] = useState(false);
+    
     const handleFollow = async () => {
         const loadingToastId = toast.loading("Following...");
         setLoading(true);

@@ -1,9 +1,10 @@
 import { useEffect } from "react";
+import { setMarkAsRead } from "../../api/NotificationRequests";
+import { format } from "timeago.js";
 import avatar from "../../img/icon-accounts.svg";
 import Modal from "react-bootstrap/Modal";
-import { format } from "timeago.js";
-import { setMarkAsRead } from "../../api/NotificationRequests";
 import PropTypes from "prop-types";
+
 const Notification = ({ notifications, setShowModal, showModal, user, length }) => {
     const handleClose = () => {
         setShowModal(false);
@@ -14,7 +15,7 @@ const Notification = ({ notifications, setShowModal, showModal, user, length }) 
             setMarkAsRead(user?._id).catch((err) => console.log(err));
             length(0);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showModal]);
     return (
         <Modal show={showModal} onHide={handleClose}>
@@ -44,7 +45,7 @@ const Notification = ({ notifications, setShowModal, showModal, user, length }) 
                                 <img
                                     className="rounded"
                                     src={notification?.url || avatar}
-                                    style={{ width: "3rem",height:"3rem" }}
+                                    style={{ width: "3rem", height: "3rem" }}
                                     alt=""
                                 />
                             )}
@@ -73,7 +74,7 @@ const Notification = ({ notifications, setShowModal, showModal, user, length }) 
                                 <img
                                     className="rounded"
                                     src={notification?.url || avatar}
-                                    style={{ width: "3rem",height:"3rem" }}
+                                    style={{ width: "3rem", height: "3rem" }}
                                     alt=""
                                 />
                             )}

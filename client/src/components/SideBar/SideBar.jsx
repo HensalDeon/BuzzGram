@@ -1,4 +1,8 @@
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/actions/AuthActions";
+import { motion } from "framer-motion";
 import logo from "../../img/logo-side.png";
 import HOME from "../../img/icon-flatHome.svg";
 import CHAT from "../../img/icon-flatChat.svg";
@@ -7,10 +11,7 @@ import PROFILE from "../../img/icon-flatProfile.svg";
 import LOGOUT from "../../img/icon-flatLogout.svg";
 import EXPLORE from "../../img/icon-flatExplore.svg";
 import "./SideBar.scss";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/actions/AuthActions";
-import { motion } from "framer-motion";
+
 export default function SideBar() {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.authReducer.authData);

@@ -1,7 +1,12 @@
-import PostSide from "../../components/PostSide/PostSide";
+import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser } from "../../api/UserRequests";
+import { logout } from "../../redux/actions/AuthActions";
+import { useRef } from "react";
+import { getNotifications } from "../../api/NotificationRequests";
 import { useEffect, useState } from "react";
+import PostSide from "../../components/PostSide/PostSide";
 import ProfileSide from "../../components/profileSide/ProfileSide";
-import "./Home.scss";
 import SideBar from "../../components/SideBar/SideBar";
 import BottomBar from "../../components/BottomBar/BottomBar";
 import PropTypes from "prop-types";
@@ -9,21 +14,17 @@ import ProfileCard from "../../components/ProfileCard/ProfileCard";
 import Explore from "../../components/Explore/Explore";
 import SavedPosts from "../../components/SavedPosts/SavedPosts";
 import FollowersCard from "../../components/FollowersCard/FollowersCard";
-import { motion } from "framer-motion";
 import Chat from "../Chat/Chat";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser } from "../../api/UserRequests";
-import { logout } from "../../redux/actions/AuthActions";
 import socket from "../../utils/socket";
 import bell from "../../img/icon-flatBellIcon.svg";
-import { useRef } from "react";
-import { getNotifications } from "../../api/NotificationRequests";
-import Notification from "../../components/Notification/Notification";
 import audioTone from "../../audio/pristine-609.mp3";
+import Notification from "../../components/Notification/Notification";
+import "./Home.scss";
+
 const Home = ({ location }) => {
-    const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
     const audioRef = useRef();
+    const { user } = useSelector((state) => state.authReducer.authData);
     const constraintsRef = useRef(null);
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
@@ -31,6 +32,7 @@ const Home = ({ location }) => {
     const [notiLength, setNotiLength] = useState(0);
     const [showModal, setShowModal] = useState(false);
 
+    // autharize user before directing to each route
     useEffect(() => {
         (() => {
             getUser(user._id)
@@ -45,17 +47,18 @@ const Home = ({ location }) => {
                         dispatch(logout());
                     }
                 });
-                console.log("helloo");
+            console.log("helloo");
         })();
     }, [location, user, dispatch]);
 
+    // setup socket events
     useEffect(() => {
-        socket.emit("new-user-add", { userId: user._id, peerId: user._id });
+        socket.emit("new-user-add", { userId: user._id });
         socket.on("get-users", (users) => {
             dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
         dispatch({ type: "SET_PEER_ID", id: user._id });
-        socket.emit("new-user-add", { userId: user._id, peerId: user._id });
+        socket.emit("new-user-add", { userId: user._id });
         socket.on("get-users", (users) => {
             dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
@@ -66,6 +69,7 @@ const Home = ({ location }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // setup notifications
     useEffect(() => {
         if (!showModal) {
             getNotifications(user._id).then(({ data }) => {
@@ -83,6 +87,7 @@ const Home = ({ location }) => {
         });
     }, [user, showModal]);
 
+    // setting the components according the viewport
     useEffect(() => {
         const handleResize = () => {
             setIsLargeScreen(window.innerWidth >= 930);

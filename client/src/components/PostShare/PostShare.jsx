@@ -1,14 +1,14 @@
-import Cropper from "react-cropper";
-import "cropperjs/dist/cropper.css";
-import toast, { Toaster } from "react-hot-toast";
 import { useState, useRef } from "react";
-import defProfile from "../../img/icon-accounts.svg";
-import "./PostShare.scss";
 import { UilScenery } from "@iconscout/react-unicons";
 import { UilTimes } from "@iconscout/react-unicons";
 import { useDispatch, useSelector } from "react-redux";
 import { uploadImage, uploadPost } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
+import Cropper from "react-cropper";
+import defProfile from "../../img/icon-accounts.svg";
+import toast, { Toaster } from "react-hot-toast";
+import "cropperjs/dist/cropper.css";
+import "./PostShare.scss";
 const PostShare = () => {
     const { user } = useSelector((state) => state.authReducer.authData);
     const uploading = useSelector((state) => state.postReducer.uploading);

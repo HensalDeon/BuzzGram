@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { adminLogout } from "../../redux/actions/AuthActions";
+import { useDispatch } from "react-redux";
 import logo from "../../img/logo-side.png";
 import AdminSidebarNav from "../../configs/AdminSidebarNav";
 import "./AdminSidebar.scss";
-import { adminLogout } from "../../redux/actions/AuthActions";
-import { useDispatch } from "react-redux";
 
 const AdminSidebar = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
     const location = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [activeIndex, setActiveIndex] = useState(0);
 
+    // setting the active item of the side part
     useEffect(() => {
         const curPath = window.location.pathname.split("/admin/")[1];
         const activeItem = AdminSidebarNav.findIndex((item) => item.section === curPath);
-
         setActiveIndex(activeItem === -1 ? 0 : activeItem);
     }, [location]);
 
+    // handling the sidebar removal
     const closeSidebar = () => {
         document.querySelector(".main__content").style.transform = "scale(1) translateX(0)";
         setTimeout(() => {
@@ -27,6 +28,7 @@ const AdminSidebar = () => {
         }, 500);
     };
 
+    // handling logout
     const handleLogout = async () => {
         await dispatch(adminLogout());
         navigate("/admin/auth");

@@ -16,6 +16,7 @@ function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = useSelector((state) => state.authReducer.adminAuthData);
     const Authorized = user && user?.user?.isblocked !== true;
+    console.log(admin);
 
     return (
         <div className="App">

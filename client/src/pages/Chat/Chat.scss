@@ -14,27 +14,34 @@
         overflow: hidden;
         white-space: nowrap;
     }
-}
 
-@mixin videoStyles {
-    position: absolute;
-    border-radius: 10px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
+    @mixin videoStyles {
+        position: absolute;
+        border-radius: 10px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
 
-.localVideo {
-    @include videoStyles();
-    bottom: 3vh;
-    right: 17vw;
-    width: 150px;
-    height: 150px;
-}
-.remoteVideo {
-    @include videoStyles();
-    width: 70vw;
-    height: 98vh;
-    z-index: -1;
+    .localVideo {
+        @include videoStyles();
+        bottom: 3vh;
+        right: 17vw;
+        width: 150px;
+        height: 150px;
+        z-index: -1;
+    }
+    .remoteVideo {
+        @include videoStyles();
+        width: 70vw;
+        height: 98vh;
+        z-index: -2;
+    }
+
+    .active {
+        border-radius: 50%;
+        background: azure;
+        padding: 4px;
+    }
 }
 
 .Left-side-chat {

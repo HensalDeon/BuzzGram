@@ -147,6 +147,16 @@
         }
         cursor: pointer;
     }
+    .action-icon{
+        width: 4rem;
+        @media (min-width:993px) {
+            width: 3rem;
+        }
+        @media (max-width:992px) {
+            width: 2.5rem;
+        }
+        cursor: pointer;
+    }
 
     .profile-img{
         border-radius: 50%;

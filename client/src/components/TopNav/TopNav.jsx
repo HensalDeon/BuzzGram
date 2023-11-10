@@ -1,5 +1,5 @@
-import './Topnav.scss'
 import UserInfo from '../Userinfo/UserInfo'
+import './Topnav.scss'
 
 const TopNav = () => {
     const openSidebar = () => {

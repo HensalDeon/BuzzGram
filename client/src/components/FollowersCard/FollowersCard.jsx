@@ -1,9 +1,9 @@
-import "./FollowersCard.scss";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { randomUsers } from "../../api/UserRequests";
 import Lists from "./Lists";
+import "./FollowersCard.scss";
 
 const FollowersCard = () => {
     const location = useLocation();

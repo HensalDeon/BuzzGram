@@ -1,7 +1,7 @@
-import "./Admin.scss";
 import { Outlet } from "react-router-dom";
 import AdminSidebar from "../../components/AdminSideBar/AdminSidebar";
 import TopNav from "../../components/TopNav/TopNav";
+import "./Admin.scss";
 
 const Admin = () => {
     return (

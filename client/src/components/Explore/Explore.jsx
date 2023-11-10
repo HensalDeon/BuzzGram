@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import "./Explore.scss";
 import { getAllPosts } from "../../redux/actions/PostAction";
 import { useDispatch, useSelector } from "react-redux";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import PostView from "./PostView";
 import debounce from "lodash/debounce";
+import "./Explore.scss";
 
 function Explore() {
     const { allPosts, loading, hasMorePosts } = useSelector((state) => state.postReducer);

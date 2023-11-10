@@ -1,17 +1,4 @@
-import Modal from "react-bootstrap/Modal";
-import toast, { Toaster } from "react-hot-toast";
 import { createComment } from "../../redux/actions/CommentActions";
-import CommentList from "../Post/CommentList";
-import PropTypes from "prop-types";
-import BeatLoader from "react-spinners/BeatLoader";
-
-import dots from "../../img/dots.png";
-import Share from "../../img/share.png";
-import Heart from "../../img/like.png";
-import NotLike from "../../img/notlike.png";
-import Comment from "../../img/icon-comment.svg";
-import defProfile from "../../img/icon-accounts.svg";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { deletePost, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
@@ -19,11 +6,21 @@ import { createReport } from "../../redux/actions/ReportActions";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getLikedUsersDetail } from "../../api/PostsRequests";
-import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 import { createNotification } from "../../api/NotificationRequests";
+import toast, { Toaster } from "react-hot-toast";
+import Modal from "react-bootstrap/Modal";
+import CommentList from "../Post/CommentList";
+import PropTypes from "prop-types";
+import BeatLoader from "react-spinners/BeatLoader";
+import dots from "../../img/dots.png";
+import Share from "../../img/share.png";
+import Heart from "../../img/like.png";
+import NotLike from "../../img/notlike.png";
+import Comment from "../../img/icon-comment.svg";
+import defProfile from "../../img/icon-accounts.svg";
+import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 import socket from "../../utils/socket";
 
-// eslint-disable-next-line react/prop-types
 function ExplorePost({ postDtl, updateSavedPosts }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const dispatch = useDispatch();
@@ -484,7 +481,7 @@ ExplorePost.propTypes = {
             _id: PropTypes.string.isRequired,
         }),
     }).isRequired,
-    // updateSavedPosts: PropTypes.func.isRequired,
+    updateSavedPosts: PropTypes.func,
 };
 
 export default ExplorePost;

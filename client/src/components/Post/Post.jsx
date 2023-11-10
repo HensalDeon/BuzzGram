@@ -1,19 +1,15 @@
-import "./Post.scss";
-import "./Modal.scss";
-
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-import { deletePost, getTimelinePosts, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
+import { deletePost, likePost, savePost, updatePost } from "../../redux/actions/PostAction";
 import { createReport } from "../../redux/actions/ReportActions";
 import { createComment } from "../../redux/actions/CommentActions";
 import { useNavigate } from "react-router-dom";
+import { createNotification } from "../../api/NotificationRequests";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
-
+import { getLikedUsersDetail } from "../../api/PostsRequests";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
-
 import Share from "../../img/share.png";
 import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
@@ -21,11 +17,12 @@ import Comment from "../../img/icon-comment.svg";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import CommentList from "./CommentList";
-import { getLikedUsersDetail } from "../../api/PostsRequests";
 import BeatLoader from "react-spinners/BeatLoader";
 import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 import socket from "../../utils/socket";
-import { createNotification } from "../../api/NotificationRequests";
+import "./Post.scss";
+import "./Modal.scss";
+
 const Post = ({ data }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

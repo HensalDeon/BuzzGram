@@ -1,11 +1,10 @@
-import "./SummaryBox.scss";
 import Box from "../Box/Box";
 import { buildStyles, CircularProgressbarWithChildren } from "react-circular-progressbar";
 import { colors } from "../../constants";
 import { Line } from "react-chartjs-2";
-import PropTypes from "prop-types";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
-
+import PropTypes from "prop-types";
+import "./SummaryBox.scss";
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const SummaryBox = ({ item }) => {

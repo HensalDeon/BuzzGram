@@ -1,17 +1,18 @@
-import Logo from "../../img/logo.png";
 import "./LogoSearch.scss";
 import { useState } from "react";
-import SerachResults from "./SerachResults";
 import { debounce } from "lodash";
 import { searchUser } from "../../api/UserRequests";
-import BeatLoader from "react-spinners/BeatLoader";
 import { useDispatch } from "react-redux";
 import { logout } from "../../redux/actions/AuthActions";
+import Logo from "../../img/logo.png";
+import SerachResults from "./SerachResults";
+import BeatLoader from "react-spinners/BeatLoader";
+
 const LogoSearch = () => {
+    const dispatch = useDispatch();
     const [query, setQuery] = useState("");
     const [filteredUsers, setFilteredUsers] = useState([]);
-    const dispatch = useDispatch();
-    let [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
     const override = {
         margin: "0 40%",
     };

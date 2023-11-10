@@ -1,6 +1,6 @@
 import { data } from '../../constants'
-import './RevenueList.scss'
 import ProgressBar from '../ProgressBar/ProgressBar'
+import './RevenueList.scss'
 
 const RevenueList = () => {
     return (

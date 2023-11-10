@@ -1,14 +1,15 @@
-/* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
 import accept from "../../img/icon-flatAccept.svg";
 import cancelIcon from "../../img/icon-flatCancel.svg";
 import PulseLoader from "react-spinners/PulseLoader";
-import { useDispatch, useSelector } from "react-redux";
+import PropTypes from "prop-types";
 
 function IncomingVoice({ data, socket }) {
     const dispatch = useDispatch();
     const { incomingVoiceCall } = useSelector((state) => state.chatReducer);
 
+    // accept the call and store it in redux store
     const acceptCall = () => {
         dispatch({
             type: "SET_VOICE_CALL",
@@ -23,6 +24,7 @@ function IncomingVoice({ data, socket }) {
         dispatch({ type: "SET_INCOMING_VOICE_CALL", incomingVoiceCall: undefined });
     };
 
+    // reject the call
     const rejectCall = () => {
         socket.emit("reject-voice-call", { from: incomingVoiceCall.id });
         dispatch({ type: "END_CALL" });
@@ -62,5 +64,13 @@ function IncomingVoice({ data, socket }) {
         </div>
     );
 }
+
+IncomingVoice.propTypes = {
+    data: PropTypes.shape({
+        profileimage: PropTypes.string,
+        username: PropTypes.string,
+    }).isRequired,
+    socket: PropTypes.object,
+};
 
 export default IncomingVoice;

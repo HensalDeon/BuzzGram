@@ -10,10 +10,10 @@ export default function initializeSocketServer() {
 
     io.on("connection", (socket) => {
         // add new User
-        socket.on("new-user-add", ({ userId, peerId }) => {
+        socket.on("new-user-add", ({ userId}) => {
             // if user is not added previously
             if (!activeUsers.some((user) => user.userId === userId)) {
-                activeUsers.push({ userId, socketId: socket.id, peerId });
+                activeUsers.push({ userId, socketId: socket.id});
                 console.log("New User Connected", activeUsers);
             }
             // send all active users to new user

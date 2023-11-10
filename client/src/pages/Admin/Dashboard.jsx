@@ -2,17 +2,13 @@ import Box from "../../components/Box/Box";
 import { Bar } from "react-chartjs-2";
 import DashboardWrapper, {
     DashboardWrapperMain,
-    // DashboardWrapperRight,
 } from "../../components/DashboardWrapper/DashboardWrapper";
 import SummaryBox, { SummaryBoxSpecial } from "../../components/SummaryBox/SummaryBox";
 import { colors } from "../../constants";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend } from "chart.js";
-// import OverallList from "../../components/OverallList/OverallList";
-// import RevenueList from "../../components/RevenueList/RevenueList";
 import { useEffect, useState } from "react";
 import { getDashboardData } from "../../api/AdminRequests";
 import PacmanLoader from "react-spinners/PacmanLoader";
-// import datas from "../../constants/data";
 ChartJS.register(CategoryScale, LinearScale, PointElement, BarElement, Title, Tooltip, Legend);
 
 function Dashboard() {
@@ -68,16 +64,6 @@ function Dashboard() {
                     </div>
                 )}
             </DashboardWrapperMain>
-            {/* <DashboardWrapperRight>
-                <div className="title mb">Overall</div>
-                <div className="mb">
-                    <OverallList />
-                </div>
-                <div className="title mb">Revenue by channel</div>
-                <div className="mb">
-                    <RevenueList />
-                </div>
-            </DashboardWrapperRight> */}
         </DashboardWrapper>
     );
 }

@@ -20,18 +20,23 @@ let localTracks = {
 
 let remoteUsers = {};
 
-const join = async () => {
+const join = async (callType) => {
     client.on("user-published", handleUserPublished);
     client.on("user-unpublished", handleUserUnPublished);
-
-    [options.uid, localTracks.audioTrack, localTracks.videoTrack] = await Promise.all([
-        client.join(options.appId, options.channel, options.token || null),
-        AgoraRTC.createMicrophoneAudioTrack(),
-        AgoraRTC.createCameraVideoTrack(),
-    ]);
-
-    localTracks.videoTrack.play("local-video");
-    await client.publish(Object.values(localTracks));
+    try {
+        [options.uid, localTracks.audioTrack, localTracks.videoTrack] = await Promise.all([
+            client.join(options.appId, options.channel, options.token || null),
+            AgoraRTC.createMicrophoneAudioTrack(),
+            callType === "video" ? AgoraRTC.createCameraVideoTrack() : null,
+        ]);
+        const tracksToPublish = Object.values(localTracks).filter((track) => track !== null);
+        if (callType === "video") {
+            localTracks.videoTrack.play("local-video");
+        }
+        await client.publish(Object.values(tracksToPublish));
+    } catch (error) {
+        console.error("Error joining the channel:", error);
+    }
 };
 
 const subscribe = async (user, mediaType) => {
@@ -66,5 +71,30 @@ const handleUserUnPublished = async (user) => {
     delete remoteUsers[id];
 };
 
-export { join, client, options, subscribe, leave, handleUserPublished, handleUserUnPublished };
+const handleMuteVideo = (isMuted) => {
+    if (isMuted) {
+        localTracks.videoTrack.setEnabled(true);
+    } else {
+        localTracks.videoTrack.setEnabled(false);
+    }
+};
+const handleMuteAudio = (isMuted) => {
+    if (isMuted) {
+        localTracks.audioTrack.setEnabled(true);
+    } else {
+        localTracks.audioTrack.setEnabled(false);
+    }
+};
+
+export {
+    join,
+    client,
+    options,
+    subscribe,
+    leave,
+    handleUserPublished,
+    handleUserUnPublished,
+    handleMuteVideo,
+    handleMuteAudio,
+};
 export { localTracks, remoteUsers };

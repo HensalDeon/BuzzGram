@@ -1,10 +1,11 @@
-import Logo from "../img/logo.png";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useEffect, useRef, useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
 import { forgotPassword, sendOtpRecovery, verifyOtp } from "../api/AuthRequests";
 import { useNavigate } from "react-router-dom";
+import toast, { Toaster } from "react-hot-toast";
+import Logo from "../img/logo.png";
+
 function ForgotPass() {
     const navigate = useNavigate();
     const phoneInputRef = useRef(null);

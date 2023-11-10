@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { blockUnblockUser } from "../../redux/actions/AdminActions";
+import { useDispatch } from "react-redux";
 import avatar from "../../img/icon-accounts.svg";
 import blockUser from "../../img/icon-blockUser.svg";
 import unblock from "../../img/icon-unblock.svg";
 import PropTypes from "prop-types";
-import { blockUnblockUser } from "../../redux/actions/AdminActions";
-import { useDispatch } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
 

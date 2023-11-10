@@ -1,10 +1,10 @@
-import "./Auth.scss";
-import Logo from "../../img/logo.png";
 import { useFormik } from "formik";
 import { adminLogin } from "../../redux/actions/AuthActions";
 import { useDispatch, useSelector } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
+import Logo from "../../img/logo.png";
 import * as Yup from "yup";
+import "./Auth.scss";
 
 const loginValidation = Yup.object().shape({
     adminName: Yup.string()

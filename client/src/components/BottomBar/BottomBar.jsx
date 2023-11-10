@@ -1,13 +1,12 @@
 import { useEffect } from "react";
-import "./BottomBar.scss";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import "./BottomBar.scss";
 
 function BottomBar() {
     const navigate = useNavigate();
     const location = useLocation();
-
     const { user } = useSelector((state) => state.authReducer.authData);
 
     useEffect(() => {
