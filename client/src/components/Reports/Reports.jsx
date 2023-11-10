@@ -64,6 +64,7 @@ function Reports() {
             })
             .catch((err) => {
                 if (err.response.data.error === "Token has expired") {
+                    console.log("👍👍👍👍");
                     dispatch(adminLogout());
                 }
                 console.log(err);

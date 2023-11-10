@@ -10,11 +10,11 @@ import PropTypes from 'prop-types';
 
 function Call({ data, socket }) {
     const dispatch = useDispatch();
-    const callAcceptedRef = useRef(callAccepted);
     const { videoCall, voiceCall } = useSelector((state) => state.chatReducer);
     const [callAccepted, setCallAccepted] = useState(false);
     const [isVideoMuted, setIsVideoMuted] = useState(false);
     const [isAudioMuted, setIsAudioMuted] = useState(false);
+    const callAcceptedRef = useRef(callAccepted);
 
     // check weather call is accepted 
     useEffect(() => {
@@ -30,7 +30,7 @@ function Call({ data, socket }) {
                 if (!callAcceptedRef.current) {
                     endCall();
                 }
-            }, 7000);
+            }, 10000);
         }
         return () => {
             leave();
