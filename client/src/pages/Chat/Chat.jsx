@@ -205,7 +205,7 @@
 
 // export default Chat;
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import ChatBox from "../../components/Chatbox/Chatbox";
 import Conversation from "../../components/Conversation/Converstaion";
 import "./Chat.scss";
@@ -218,22 +218,19 @@ import IncomingVideo from "./IncomingVideo";
 import IncomingVoice from "./IncomingVoice";
 import Call from "./Call";
 import { createNotification } from "../../api/NotificationRequests";
-function Chat({ peer, socket }) {
+import { leave } from "../../utils/agora";
+
+function Chat({ socket }) {
     const { user } = useSelector((state) => state.authReducer.authData);
     const { currentChatUser, videoCall, voiceCall, onlineUsers, incomingVideoCall, incomingVoiceCall } = useSelector(
         (state) => state.chatReducer
     );
     const dispatch = useDispatch();
-
     const [chats, setChats] = useState([]);
     const [currentChat, setCurrentChat] = useState(null);
     const [sendMessage, setSendMessage] = useState(null);
     const [notification, setNotification] = useState(null);
     const [receivedMessage, setReceivedMessage] = useState(null);
-    const [localStream, setLocalStream] = useState(null);
-    const [remoteStream, setRemoteStream] = useState(null);
-    const localVideo = useRef();
-    const remoteVideo = useRef();
 
     // Get the chat in chat section
     useEffect(() => {
@@ -273,35 +270,6 @@ function Chat({ peer, socket }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentChatUser, user._id]);
 
-    const endCall = () => {
-        if (localStream) {
-            const tracks = localStream.getTracks();
-            if (tracks) {
-                tracks.forEach((track) => track.stop());
-            }
-        }
-        if (remoteStream) {
-            const remoteTracks = remoteStream.getTracks();
-            if (remoteTracks) {
-                remoteTracks.forEach((track) => track.stop());
-            }
-        }
-
-        // Reset local and remote streams
-        setLocalStream(null);
-        setRemoteStream(null);
-
-        // Reset video elements
-        if (localVideo.current) {
-            localVideo.current.srcObject = null;
-        }
-        if (remoteVideo.current) {
-            remoteVideo.current.srcObject = null;
-        }
-        // Reset the video call state
-        dispatch({ type: "END_CALL" });
-    };
-
     // Connect to Socket.io
     useEffect(() => {
         socket.on("get-users", (users) => {
@@ -316,7 +284,6 @@ function Chat({ peer, socket }) {
         });
 
         socket.on("incoming-voice-call", ({ from, roomId, callType }) => {
-            console.log("incoming vannu");
             dispatch({
                 type: "SET_INCOMING_VOICE_CALL",
                 incomingVoiceCall: { ...from, roomId, callType },
@@ -324,13 +291,11 @@ function Chat({ peer, socket }) {
         });
 
         socket.on("video-call-rejected", () => {
-            // dispatch({ type: "END_CALL" });
-            console.log("rejected:  ");
-            endCall();
+            leave();
+            dispatch({ type: "END_CALL" });
         });
 
         socket.on("voice-call-rejected", () => {
-            console.log("reject cheyth dispatch");
             dispatch({ type: "END_CALL" });
         });
 
@@ -403,68 +368,11 @@ function Chat({ peer, socket }) {
         return online ? true : false;
     };
 
-    const callPeer = () => {
-        navigator.mediaDevices
-            ?.getUserMedia({
-                video: true,
-                audio: true,
-            })
-            .then((stream) => {
-                console.log(stream, "local stream from calling user");
-                setLocalStream(stream);
-                localVideo.current.srcObject = stream;
-
-                const call_peer = peer.call(videoCall?._id, stream);
-
-                call_peer.on("stream", (remoteStream) => {
-                    console.log(remoteStream, "remote stream from answering user");
-                    setRemoteStream(remoteStream);
-                    remoteVideo.current.srcObject = remoteStream;
-                });
-            });
-    };
-    const answerPeer = () => {
-        navigator.mediaDevices
-            ?.getUserMedia({
-                video: true,
-                audio: true,
-            })
-            .then((stream) => {
-                console.log(stream, "local stream");
-                setLocalStream(stream);
-                localVideo.current.srcObject = stream;
-                console.log(peer, "///");
-                peer.on("call", (call_peer) => {
-                    call_peer.answer(stream);
-
-                    call_peer.on("stream", (remoteStream) => {
-                        console.log(remoteStream, "remote stream");
-                        setRemoteStream(remoteStream);
-                        remoteVideo.current.srcObject = remoteStream;
-                    });
-
-                    call_peer.on("close", () => {
-                        console.log("user left call");
-                    });
-                });
-            });
-    };
-
-    useEffect(() => {
-        if (videoCall?.type == "out-going") {
-            console.log("outgoing call");
-            callPeer();
-        }
-        if (videoCall?.type == "in-coming") {
-            console.log("incoming call");
-            answerPeer();
-        }
-    }, [videoCall]);
-
     // Send Vedio call to socket server
     useEffect(() => {
         if (videoCall && videoCall?.type == "out-going") {
-            socket.current.emit("outgoing-video-call", {
+            console.log("helooo");
+            socket.emit("outgoing-video-call", {
                 to: videoCall?._id,
                 from: {
                     id: user._id,
@@ -480,21 +388,6 @@ function Chat({ peer, socket }) {
 
     return (
         <>
-            {/* <video
-                ref={localVideo}
-                muted
-                autoPlay
-                playsInline
-                controls={false}
-                style={{ position: "absolute", bottom: "0", left: "0", zIndex: 100, width: "100px", height: "100px" }}
-            ></video>
-            <video
-                autoPlay
-                playsInline
-                controls={false}
-                ref={remoteVideo}
-                style={{ position: "absolute", bottom: "0", right: "0", zIndex: 100, width: "100px", height: "100px" }}
-            ></video> */}
             <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -535,7 +428,7 @@ function Chat({ peer, socket }) {
                 >
                     {incomingVideoCall && <IncomingVideo data={incomingVideoCall} socket={socket} />}
                     {incomingVoiceCall && <IncomingVoice data={incomingVoiceCall} socket={socket} />}
-                    {videoCall && <Call data={videoCall} socket={socket} endConnection={endCall} />}
+                    {videoCall && <Call data={videoCall} socket={socket} />}
                     {voiceCall && <Call data={voiceCall} socket={socket} />}
 
                     <ChatBox

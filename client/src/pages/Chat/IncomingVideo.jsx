@@ -82,14 +82,14 @@ function IncomingVideo({ data, socket }) {
                 type: "in-coming",
             },
         });
-        socket.current.emit("accept-incoming-call", {
+        socket.emit("accept-incoming-call", {
             id: incomingVideoCall.id,
         });
         dispatch({ type: "SET_INCOMING_VIDEO_CALL", incomingVideoCall: undefined });
     };
 
     const rejectCall = () => {
-        socket.current.emit("reject-video-call", { from: incomingVideoCall.id });
+        socket.emit("reject-video-call", { from: incomingVideoCall.id });
         dispatch({ type: "END_CALL" });
     };
 

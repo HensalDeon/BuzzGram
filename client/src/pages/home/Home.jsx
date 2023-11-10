@@ -16,7 +16,6 @@ import { getUser } from "../../api/UserRequests";
 import { logout } from "../../redux/actions/AuthActions";
 import socket from "../../utils/socket";
 import bell from "../../img/icon-flatBellIcon.svg";
-import Peer from "peerjs";
 import { useRef } from "react";
 import { getNotifications } from "../../api/NotificationRequests";
 import Notification from "../../components/Notification/Notification";
@@ -29,7 +28,6 @@ const Home = ({ location }) => {
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 930);
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 450);
     const [notifications, setNotifications] = useState([]);
-    const [peer, setPeer] = useState();
     const [notiLength, setNotiLength] = useState(0);
     const [showModal, setShowModal] = useState(false);
 
@@ -47,25 +45,21 @@ const Home = ({ location }) => {
                         dispatch(logout());
                     }
                 });
+                console.log("helloo");
         })();
     }, [location, user, dispatch]);
 
     useEffect(() => {
-        const peer = new Peer(user._id, { iceServers: [{ urls: ["stun:stun.l.google.com:19302"] }] });
-        peer.on("open", (id) => {
-            socket.emit("new-user-add", { userId: user._id, peerId: id });
-            socket.on("get-users", (users) => {
-                dispatch({ type: "SET_ONLINE_USERS", data: users });
-            });
-            dispatch({ type: "SET_PEER_ID", id: id });
-            setPeer(peer);
+        socket.emit("new-user-add", { userId: user._id, peerId: user._id });
+        socket.on("get-users", (users) => {
+            dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
+        dispatch({ type: "SET_PEER_ID", id: user._id });
         socket.emit("new-user-add", { userId: user._id, peerId: user._id });
         socket.on("get-users", (users) => {
             dispatch({ type: "SET_ONLINE_USERS", data: users });
         });
         return () => {
-            peer.destroy();
             socket.off("new-user-add");
             socket.off("get-users");
         };
@@ -75,7 +69,6 @@ const Home = ({ location }) => {
     useEffect(() => {
         if (!showModal) {
             getNotifications(user._id).then(({ data }) => {
-                console.log(data);
                 setNotiLength(data?.length);
                 setNotifications(data);
             });
@@ -115,14 +108,14 @@ const Home = ({ location }) => {
                 user={user}
                 length={setNotiLength}
             />
-            <motion.div drag dragConstraints={constraintsRef} initial={{ bottom: "15vh", right: "2vw" }} className="item">
+            <motion.div drag dragConstraints={constraintsRef} initial={{ top: "3vh", right: "3vh" }} className="item">
                 <span className="badge">{notiLength || 0}</span>
                 <motion.img onClick={() => setShowModal(true)} className="w-100" src={bell} />
             </motion.div>
 
             {isSmallScreen ? <BottomBar /> : <SideBar />}
             {isLargeScreen && location == "home" && <ProfileSide location={location} />}
-            {location === "chat" && <Chat peer={peer} socket={socket} />}
+            {location === "chat" && <Chat socket={socket} />}
             {location === "home" && <PostSide />}
             {location === "explore" && <Explore />}
             {location === "saved" && <SavedPosts />}

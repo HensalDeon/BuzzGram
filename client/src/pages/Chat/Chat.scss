@@ -5,7 +5,8 @@
     height: 95vh;
     gap: 1rem;
     @media (max-width: 450px) {
-        height: calc(95vh - 3.5rem);
+        height: calc(100vh - 9rem);
+        flex-direction: column;
     }
     .trunc-text {
         text-overflow: ellipsis;
@@ -13,6 +14,27 @@
         overflow: hidden;
         white-space: nowrap;
     }
+}
+
+@mixin videoStyles {
+    position: absolute;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.localVideo {
+    @include videoStyles();
+    bottom: 3vh;
+    right: 17vw;
+    width: 150px;
+    height: 150px;
+}
+.remoteVideo {
+    @include videoStyles();
+    width: 70vw;
+    height: 98vh;
+    z-index: -1;
 }
 
 .Left-side-chat {
@@ -52,6 +74,9 @@
 .Chat-list {
     display: flex;
     flex-direction: column;
+    @media (max-width: 450px) {
+        flex-direction: row;
+    }
     .divider {
         border-bottom: 0.1px solid rgb(222, 220, 220);
         margin: 0.2rem 0;

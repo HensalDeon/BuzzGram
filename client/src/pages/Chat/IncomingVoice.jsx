@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { motion } from "framer-motion";
 import accept from "../../img/icon-flatAccept.svg";
 import cancelIcon from "../../img/icon-flatCancel.svg";
@@ -16,14 +17,14 @@ function IncomingVoice({ data, socket }) {
                 type: "in-coming",
             },
         });
-        socket.current.emit("accept-incoming-call", {
+        socket.emit("accept-incoming-call", {
             id: incomingVoiceCall.id,
         });
         dispatch({ type: "SET_INCOMING_VOICE_CALL", incomingVoiceCall: undefined });
     };
 
     const rejectCall = () => {
-        socket.current.emit("reject-voice-call", { from: incomingVoiceCall.id });
+        socket.emit("reject-voice-call", { from: incomingVoiceCall.id });
         dispatch({ type: "END_CALL" });
     };
 
