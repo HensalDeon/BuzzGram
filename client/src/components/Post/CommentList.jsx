@@ -191,7 +191,6 @@ const CommentList = ({ showCmt, handleCmtClose, data }) => {
             setLoading(true);
             getComments(data._id)
                 .then((response) => {
-                    console.log(response);
                     if (response.data) {
                         setLoading(false);
                         setComments(response.data);

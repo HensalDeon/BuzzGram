@@ -36,8 +36,12 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.disable("x-powered-by"); //less hackers know about our stack
 
 /** HTTP GET request */
-app.get(/^(?!\/api).+/, (req, res) => {
-    res.sendFile(path.join(__dirname, "./dist/index.html"));
+// app.get(/^(?!\/api).+/, (req, res) => {
+//     res.sendFile(path.join(__dirname, "./dist/index.html"));
+// });
+
+app.get("/", (req, res) => {
+    res.status(200).json("HOME Page");
 });
 
 const apiRouter = express.Router();
