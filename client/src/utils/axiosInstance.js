@@ -1,9 +1,8 @@
 import axios from "axios";
-import env from "../../env";
 
 export const userAxiosInstance = () => {
     const instance = axios.create({
-        baseURL: env.REACT_APP_SERVER_DOMAIN,
+        baseURL: import.meta.env.VITE_REACT_APP_SERVER_DOMAIN,
     });
 
     instance.interceptors.request.use((req) => {
@@ -20,7 +19,7 @@ export const userAxiosInstance = () => {
 
 export const adminAxiosInstance = () => {
     const instance = axios.create({
-        baseURL: env.REACT_APP_SERVER_DOMAIN,
+        baseURL: import.meta.env.VITE_REACT_APP_SERVER_DOMAIN,
     });
 
     instance.interceptors.request.use((req) => {

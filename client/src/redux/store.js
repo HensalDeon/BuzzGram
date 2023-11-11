@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 import thunk from 'redux-thunk';
 import { reducers } from '../redux/reducers';
-import env from '../../env';
 function saveToLocalStorage(store) {
   try {
     const serializedStore = JSON.stringify(store.getState());
@@ -28,7 +27,7 @@ const store = configureStore({
   reducer: reducers,
   preloadedState: persistedState,
   middleware: [thunk],
-  devTools: env.NODE_ENV !== "production",
+  devTools: import.meta.env.VITE_NODE_ENV !== "production",
 });
 
 store.subscribe(() => saveToLocalStorage(store));

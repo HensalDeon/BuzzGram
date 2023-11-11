@@ -47,7 +47,6 @@ const Home = ({ location }) => {
                         dispatch(logout());
                     }
                 });
-            console.log("helloo");
         })();
     }, [location, user, dispatch]);
 

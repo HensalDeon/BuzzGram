@@ -195,7 +195,7 @@ function Chat({ socket }) {
             interval = setInterval(() => {
                 audioRef.current.currentTime = 0;
                 audioRef.current.play();
-            }, 10000);
+            }, 8000);
         } else {
             clearInterval(interval);
             audioRef.current.pause();
