@@ -2,7 +2,9 @@
 
 # dependencies
 client/node_modules
+client/dist
 server/node_modules
+server/dist
 server/config.js
 server/.env
 .env
@@ -14,6 +16,7 @@ server/.env
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store

@@ -17,6 +17,8 @@ const Notification = ({ notifications, setShowModal, showModal, user, length }) 
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showModal]);
+
+    
     return (
         <Modal show={showModal} onHide={handleClose}>
             <Modal.Body style={{ overflow: "scroll", maxHeight: "14rem" }}>

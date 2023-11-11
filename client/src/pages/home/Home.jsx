@@ -102,7 +102,7 @@ const Home = ({ location }) => {
 
     return (
         <div className="Home" ref={constraintsRef}>
-            <audio controls ref={audioRef} style={{ display: "none" }}>
+            <audio ref={audioRef} style={{ display: "none" }}>
                 <source src={audioTone} type="audio/mp3" />
             </audio>
             <Notification

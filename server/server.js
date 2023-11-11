@@ -3,6 +3,7 @@ import cors from "cors";
 import morgan from "morgan";
 import connect from "./database/connection.js";
 import bodyParser from "body-parser";
+import path from "path";
 
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
@@ -17,10 +18,16 @@ import initializeSocketServer from "./socket/index.js";
 
 import dotenv from "dotenv";
 dotenv.config();
+
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 
 /** middlewears */
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "./dist")));
 app.use(cors());
 app.use(morgan("tiny"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
@@ -29,20 +36,25 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.disable("x-powered-by"); //less hackers know about our stack
 
 /** HTTP GET request */
-app.get("/", (req, res) => {
-    res.status(201).json("Home GET request");
+app.get(/^(?!\/api).+/, (req, res) => {
+    res.sendFile(path.join(__dirname, "./dist/index.html"));
 });
 
-/** api routes */
-app.use("/auth", authRouter);
-app.use("/user", userRouter);
-app.use("/posts", postRouter);
-app.use("/upload", uploadRouter);
-app.use("/report", reportRouter);
-app.use("/message", messageRouter);
-app.use("/chat", chatRouter);
-app.use("/notification", notificationRouter);
-app.use("/admin", adminRouter);
+const apiRouter = express.Router();
+
+// Define your API routes
+apiRouter.use("/auth", authRouter);
+apiRouter.use("/user", userRouter);
+apiRouter.use("/posts", postRouter);
+apiRouter.use("/upload", uploadRouter);
+apiRouter.use("/report", reportRouter);
+apiRouter.use("/message", messageRouter);
+apiRouter.use("/chat", chatRouter);
+apiRouter.use("/notification", notificationRouter);
+apiRouter.use("/admin", adminRouter);
+
+// Set the common prefix for all API routes
+app.use("/api", apiRouter);
 
 /** start server when only we have a valid connection*/
 connect()

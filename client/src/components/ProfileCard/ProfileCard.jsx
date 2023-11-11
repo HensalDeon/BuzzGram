@@ -327,6 +327,7 @@ const ProfileCard = ({ location }) => {
             },
         }));
     };
+    console.log(currUser,"//");
     const handleChatClick = () => {
         dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
         navigate("/chat");
