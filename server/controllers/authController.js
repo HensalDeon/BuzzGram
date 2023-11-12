@@ -35,9 +35,8 @@ export const googleAuthentication = async (req, res) => {
     try {
         const { email } = req.body;
         const user = await UserModel.findOne({ email });
-        console.log(user);
-        const token = createAccessToken(user);
         if (user) {
+            const token = createAccessToken(user);
             if (user.isblocked) {
                 return res.status(400).send({ error: "User is blocked." });
             }
@@ -62,10 +61,10 @@ export const googleAuthentication = async (req, res) => {
                 username,
                 email,
                 password: hashedPass,
-                phone,
                 profileimage,
             });
             const user = await newUser.save();
+            const token = createAccessToken(user);
             user.visited++;
             await user.save();
             return res.status(200).json({ user, token });

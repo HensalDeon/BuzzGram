@@ -74,7 +74,7 @@ const Auth = () => {
             const { _tokenResponse } = await signInWithPopup(auth, provider);
             console.log(_tokenResponse);
             const values = {
-                username: ` ${_tokenResponse.firstName}_${_tokenResponse.lastName}`,
+                username: `${_tokenResponse.firstName}_${_tokenResponse.lastName}`,
                 fullname: _tokenResponse.displayName,
                 password: _tokenResponse.idToken,
                 email: _tokenResponse.email,
