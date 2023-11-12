@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+  <g>
+    <linearGradient id="a">
+      <stop stop-opacity="1" stop-color="#15232b" offset="0"></stop>
+      <stop stop-opacity="1" stop-color="#b04bfe" offset="1"></stop>
+    </linearGradient>
+    <linearGradient xlink:href="#a" id="b" x1="9" x2="9" y1="5.88" y2="22.005" gradientUnits="userSpaceOnUse"></linearGradient>
+    <linearGradient xlink:href="#a" id="c" x1="15.154" x2="15.154" y1="2" y2="18.12" gradientUnits="userSpaceOnUse"></linearGradient>
+    <path fill="url(#b)" d="M12.89 5.88H5.11A3.12 3.12 0 0 0 2 8.99v11.36c0 1.45 1.04 2.07 2.31 1.36l3.93-2.19c.42-.23 1.1-.23 1.51 0l3.93 2.19c1.28.7 2.32.09 2.32-1.36V8.99c0-1.71-1.4-3.11-3.11-3.11z" opacity="1" data-original="url(#b)" class=""></path>
+    <path fill="url(#c)" d="M22 5.11v11.36c0 1.45-1.04 2.06-2.31 1.36l-1.93-1.08a.509.509 0 0 1-.26-.44V8.99c0-2.54-2.07-4.61-4.61-4.61H8.82c-.37 0-.63-.39-.46-.71C8.88 2.68 9.92 2 11.11 2h7.78C20.6 2 22 3.4 22 5.11z" opacity="1" data-original="url(#c)" class=""></path>
+  </g>
+</svg>
