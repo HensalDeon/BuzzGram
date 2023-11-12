@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const socket = io("ws://localhost:8800");
+const socket = io("https://buzzgram.online");
 
 export default socket;
