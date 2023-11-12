@@ -30,7 +30,7 @@ function Call({ data, socket }) {
                 if (!callAcceptedRef.current) {
                     endCall();
                 }
-            }, 10000);
+            }, 17000);
         }
         return () => {
             leave();
