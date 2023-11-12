@@ -2,7 +2,7 @@
 
 # dependencies
 client/node_modules
-client/dist
+# client/dist
 server/node_modules
 server/dist
 server/config.js

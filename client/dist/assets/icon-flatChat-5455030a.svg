@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+  <g>
+    <linearGradient id="a" x1="256" x2="256" y1="481" y2="31" gradientUnits="userSpaceOnUse">
+      <stop stop-opacity="1" stop-color="#a93aff" offset="0"></stop>
+      <stop stop-opacity="1" stop-color="#3c1e3c" offset="1"></stop>
+    </linearGradient>
+    <linearGradient id="b" x1="256" x2="256" y1="301" y2="211" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffbef9"></stop>
+      <stop offset="1" stop-color="#fff1ff"></stop>
+    </linearGradient>
+    <path fill="url(#a)" d="M287 31h-62C100.928 31 0 131.928 0 256c0 55.093 19.658 107.139 55.664 148.154l-51.27 51.24a15.038 15.038 0 0 0-3.252 16.348A15.008 15.008 0 0 0 15 481h272c124.072 0 225-100.928 225-225S411.072 31 287 31z" opacity="1" data-original="url(#a)" class=""></path>
+    <path fill="url(#b)" d="M136 211c-24.814 0-45 20.186-45 45s20.186 45 45 45 45-20.186 45-45-20.186-45-45-45zm120 0c-24.814 0-45 20.186-45 45s20.186 45 45 45 45-20.186 45-45-20.186-45-45-45zm120 0c-24.814 0-45 20.186-45 45s20.186 45 45 45 45-20.186 45-45-20.186-45-45-45z" opacity="1" data-original="url(#b)"></path>
+  </g>
+</svg>
