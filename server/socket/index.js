@@ -4,7 +4,7 @@ let activeUsers = [];
 export default function initializeSocketServer() {
     const io = new Server(8800, {
         cors: {
-            origin: ["http://localhost:5173","http://localhost:5050"],
+            origin: ["http://localhost:5173","http://localhost:5050","http://buzzgram.online", "https://buzzgram.online"],
         },
     });
 

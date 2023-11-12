@@ -27,8 +27,12 @@ const app = express();
 
 /** middlewears */
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "./dist")));
-app.use(cors());
+app.use(express.static(path.join(__dirname, "../client/dist")));
+app.use(
+    cors({
+        origin: ["http://localhost:5173", "http://localhost:5050", "http://buzzgram.online", "https://buzzgram.online"],
+    })
+);
 app.use(morgan("tiny"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -36,13 +40,13 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.disable("x-powered-by"); //less hackers know about our stack
 
 /** HTTP GET request */
-// app.get(/^(?!\/api).+/, (req, res) => {
-//     res.sendFile(path.join(__dirname, "./dist/index.html"));
-// });
-
-app.get("/", (req, res) => {
-    res.status(200).json("HOME Page");
+app.get(/^(?!\/api).+/, (req, res) => {
+    res.sendFile(path.join(__dirname,"../client/dist/index.html"));
 });
+
+// app.get("/", (req, res) => {
+//     res.status(200).json("HOME Page");
+// });
 
 const apiRouter = express.Router();
 
@@ -65,7 +69,7 @@ connect()
     .then(() => {
         try {
             app.listen(process.env.PORT, () => {
-                console.log(`Server connected to http://localhost:${process.env.PORT}`);
+                console.log(`Server connected to port: ${process.env.PORT}`);
                 initializeSocketServer();
             });
         } catch (error) {
