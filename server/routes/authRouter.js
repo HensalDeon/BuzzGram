@@ -11,7 +11,8 @@ router.route("/admin-login").post(authController.adminLogin); //login admin
 router.route("/otp-signup").post(authController.signupOtpGenerate); //Otp generation for signup
 router.route("/otp-recovery").post(authController.sendOtpRecovery); //Otp generation for recovery
 router.route("/verify-otp").post(authController.otpVerification); //Otp verification
+
+/** PUT Requests */
 router.route("/forgot-password").put(authController.forgotPassword); //password updation
-router.route("/generate-token/:userId").get(authController.generateToken);
 
 export default router;

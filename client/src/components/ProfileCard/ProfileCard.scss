@@ -14,7 +14,7 @@ $gray: var(--gray);
     height: 100vh;
 
     margin: 0 0%;
-    
+
     transition: transform 0.3s ease;
 
     &:hover {
@@ -66,10 +66,21 @@ $gray: var(--gray);
             position: relative;
             cursor: pointer;
         }
+        .logoutBtn {
+            width: 1.8rem;
+            top: 1rem;
+            left: 1rem;
+            position: absolute;
+            cursor: pointer;
+            &:hover {
+                scale: 1.1;
+                transition: 500ms ease;
+            }
+        }
         .editCover-icon {
             width: 1.8rem;
-            top: 1.3rem;
-            right: 1.2rem;
+            top: 5.3rem;
+            right: 1.3rem;
             position: absolute;
             cursor: pointer;
         }

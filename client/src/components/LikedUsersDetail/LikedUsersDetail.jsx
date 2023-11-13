@@ -5,7 +5,7 @@ import follow from "../../img/icon-flatFollow.svg";
 import unfollow from "../../img/icon-flatUnfollow.svg";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -125,6 +125,7 @@ function LikedUsersDetail({ usersToShow, userDetails, setUsersToShow, currUser }
                         </div>
                     );
                 })}
+                {userDetails.length == 0 && <span className="lg-text">Nothing...!</span>}
             </Modal.Body>
         </Modal>
     );

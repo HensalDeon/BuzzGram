@@ -16,7 +16,6 @@ function App() {
     const user = useSelector((state) => state.authReducer.authData);
     const admin = localStorage.getItem("admin");
     const Authorized = user && user?.user?.isblocked !== true;
-    console.log(admin);
 
     return (
         <div className="App">

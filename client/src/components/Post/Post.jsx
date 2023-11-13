@@ -10,10 +10,10 @@ import { getLikedUsersDetail } from "../../api/PostsRequests";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
 import toast from "react-hot-toast";
-import Share from "../../img/share.png";
 import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
 import Comment from "../../img/icon-comment.svg";
+import ViewCmt from "../../img/icon-flatViewComment.svg";
 import dots from "../../img/dots.png";
 import defProfile from "../../img/icon-accounts.svg";
 import CommentList from "./CommentList";
@@ -404,7 +404,7 @@ const Post = ({ data }) => {
             <img src={data.image} alt="" />
             <div className="postReact">
                 <img src={liked ? Heart : NotLike} alt="" style={{ cursor: "pointer" }} onClick={handleLike} />
-                <img src={Share} alt="" />
+                <img style={{ width: "1.8rem" }} src={ViewCmt} alt="comment" onClick={handleViewComments} />
             </div>
             <span
                 onClick={handleLikesView}

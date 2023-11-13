@@ -13,7 +13,7 @@ import CommentList from "../Post/CommentList";
 import PropTypes from "prop-types";
 import BeatLoader from "react-spinners/BeatLoader";
 import dots from "../../img/dots.png";
-import Share from "../../img/share.png";
+import ViewCmt from "../../img/icon-flatViewComment.svg";
 import Heart from "../../img/like.png";
 import NotLike from "../../img/notlike.png";
 import Comment from "../../img/icon-comment.svg";
@@ -425,7 +425,7 @@ function ExplorePost({ postDtl, updateSavedPosts }) {
                                     style={{ cursor: "pointer" }}
                                     onClick={handleLike}
                                 />
-                                <img src={Share} alt="" />
+                                <img style={{ width: "1.8rem" }} src={ViewCmt} alt="comment" onClick={handleViewComments} />
                             </div>
                             <span onClick={handleLikesView} style={{ color: "var(--gray)", fontSize: "12px" }}>
                                 {likes} likes

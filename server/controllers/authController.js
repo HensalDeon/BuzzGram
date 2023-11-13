@@ -205,24 +205,6 @@ export const otpVerification = async (req, res) => {
     }
 };
 
-export const generateToken = (req, res) => {
-    try {
-        const appId = parseInt(process.env.REACT_APP_PUBLIC_ZEGO_APP_ID);
-        const serverSecret = process.env.REACT_APP_PUBLIC_ZEGO_SERVER_ID;
-        const userId = req.params.userId;
-        const effectiveTime = 3600;
-        const payload = "";
-        if (appId && serverSecret && userId) {
-            const token = generateToken04(appId, userId, serverSecret, effectiveTime, payload);
-            return res.status(200).json({ token });
-        }
-        res.status(400).json({ error: "userId, appId and server secret is required!" });
-    } catch (error) {
-        console.error("Error generating token:", error);
-        return res.status(500).json({ error: "Internal server error" });
-    }
-};
-
 export const createAccessToken = (user) => {
     return jwt.sign({ username: user.username, id: user._id }, process.env.JWT_SECRET, { expiresIn: "5h" });
 };

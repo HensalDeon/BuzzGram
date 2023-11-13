@@ -11,13 +11,14 @@ import { motion } from "framer-motion";
 import { getFollowers, getFollowing } from "../../api/UserRequests";
 import { createNotification } from "../../api/NotificationRequests";
 import defProfile from "../../img/icon-accounts.svg";
-import unfollow from "../../img/icon-flatUnfollow.svg";
-import follow from "../../img/icon-flatFollow.svg";
+// import unfollow from "../../img/icon-flatUnfollow.svg";
+// import follow from "../../img/icon-flatFollow.svg";
+import lgOut from "../../img/icon-flatPhLgOut.svg";
 import editIcon from "../../img/icon-flatEdit.svg";
 import editProfile from "../../img/icon-flatEditProfile.svg";
 import avatar from "../../img/icon-accounts.svg";
 import editCover from "../../img/icon-flatEditCoverImg.svg";
-import chat from "../../img/icon-flatChatwith.svg";
+// import chat from "../../img/icon-flatChatwith.svg";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import BeatLoader from "react-spinners/BeatLoader";
@@ -29,6 +30,7 @@ import LikedUsersDetail from "../LikedUsersDetail/LikedUsersDetail";
 import socket from "../../utils/socket";
 import "cropperjs/dist/cropper.css";
 import "./ProfileCard.scss";
+import { logout } from "../../redux/actions/AuthActions";
 
 const ProfileCard = ({ location }) => {
     const dispatch = useDispatch();
@@ -352,6 +354,7 @@ const ProfileCard = ({ location }) => {
                                 className="editCover-icon"
                                 alt="coverEdit"
                             />
+                            <img className="logoutBtn" onClick={() => dispatch(logout())} src={lgOut} alt="logout" />
                         </span>
                     )}
                     <img
@@ -446,7 +449,7 @@ const ProfileCard = ({ location }) => {
                                 <span style={location === "profile" ? { fontSize: "20px", padding: "0 14px" } : {}}>
                                     {currUser.user?.username}
                                 </span>
-                                {user._id !== currUser.user._id && (
+                                {/* {user._id !== currUser.user._id && (
                                     <>
                                         <img
                                             title="chat"
@@ -478,7 +481,7 @@ const ProfileCard = ({ location }) => {
                                             />
                                         )}
                                     </>
-                                )}
+                                )} */}
                                 {user._id == currUser.user._id && location === "profile" && (
                                     <img
                                         onClick={handleEditProfile}
@@ -488,6 +491,22 @@ const ProfileCard = ({ location }) => {
                                     />
                                 )}
                             </span>
+                            {user._id !== currUser.user._id && (
+                                <span className="d-flex gap-3">
+                                    {isFollowed ? (
+                                        <button className="button px-2 py-1" onClick={handleShow}>
+                                            Unfollow
+                                        </button>
+                                    ) : (
+                                        <button className="button px-2 py-1" onClick={handleFollow}>
+                                            Follow
+                                        </button>
+                                    )}
+                                    <button className="button px-2 py-1" onClick={handleChatClick}>
+                                        Message
+                                    </button>
+                                </span>
+                            )}
                             <span>{currUser.user?.fullname}</span>
                             <span className={bioClassName} onClick={toggleExpand}>
                                 {currUser.user?.bio || "Write about yourself😊"}
