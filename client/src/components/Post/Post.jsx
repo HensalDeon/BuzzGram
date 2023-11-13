@@ -6,6 +6,7 @@ import { createComment } from "../../redux/actions/CommentActions";
 import { useNavigate } from "react-router-dom";
 import { createNotification } from "../../api/NotificationRequests";
 import { followUser, unfollowUser } from "../../redux/actions/UserAction";
+import { motion } from "framer-motion";
 import { getLikedUsersDetail } from "../../api/PostsRequests";
 import PropTypes from "prop-types";
 import Modal from "react-bootstrap/Modal";
@@ -403,8 +404,24 @@ const Post = ({ data }) => {
             </div>
             <img src={data.image} alt="" />
             <div className="postReact">
-                <img src={liked ? Heart : NotLike} alt="" style={{ cursor: "pointer" }} onClick={handleLike} />
-                <img style={{ width: "1.8rem" }} src={ViewCmt} alt="comment" onClick={handleViewComments} />
+                <motion.img
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    src={liked ? Heart : NotLike}
+                    alt=""
+                    style={{ cursor: "pointer" }}
+                    onClick={handleLike}
+                />
+                <motion.img
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                    style={{ width: "1.8rem" }}
+                    src={ViewCmt}
+                    alt="comment"
+                    onClick={handleViewComments}
+                />
             </div>
             <span
                 onClick={handleLikesView}
