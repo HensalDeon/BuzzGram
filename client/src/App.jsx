@@ -14,7 +14,7 @@ import Reports from "./components/Reports/Reports";
 import ForgotPass from "./ForgotPass/ForgotPass";
 function App() {
     const user = useSelector((state) => state.authReducer.authData);
-    const admin = localStorage.getItem("admin");
+    const admin = useSelector((state) => state.authReducer.adminAuthData);
     const Authorized = user && user?.user?.isblocked !== true;
 
     return (
