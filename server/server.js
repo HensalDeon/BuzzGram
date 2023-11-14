@@ -48,7 +48,7 @@ app.get(/^(?!\/api).+/, (req, res) => {
 //     res.status(200).json("HOME Page");
 // });
 
-const apiRouter = express.Router();
+const apiRouter = express.Router(); 
 
 // Define your API routes
 apiRouter.use("/auth", authRouter);

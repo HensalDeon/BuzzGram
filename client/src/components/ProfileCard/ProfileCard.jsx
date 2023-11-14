@@ -329,6 +329,7 @@ const ProfileCard = ({ location }) => {
             },
         }));
     };
+    
     const handleChatClick = () => {
         dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
         navigate("/chat");
@@ -354,7 +355,9 @@ const ProfileCard = ({ location }) => {
                                 className="editCover-icon"
                                 alt="coverEdit"
                             />
-                            <img className="logoutBtn" onClick={() => dispatch(logout())} src={lgOut} alt="logout" />
+                            {window.innerWidth < 450 && (
+                                <img className="logoutBtn" onClick={() => dispatch(logout())} src={lgOut} alt="logout" />
+                            )}
                         </span>
                     )}
                     <img
