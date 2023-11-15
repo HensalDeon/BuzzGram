@@ -41,14 +41,14 @@ app.disable("x-powered-by"); //less hackers know about our stack
 
 /** HTTP GET request */
 app.get(/^(?!\/api).+/, (req, res) => {
-    res.sendFile(path.join(__dirname,"../client/dist/index.html"));
+    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 // app.get("/", (req, res) => {
 //     res.status(200).json("HOME Page");
 // });
 
-const apiRouter = express.Router(); 
+const apiRouter = express.Router();
 
 // Define your API routes
 apiRouter.use("/auth", authRouter);
