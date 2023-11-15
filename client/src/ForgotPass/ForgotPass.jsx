@@ -41,20 +41,22 @@ function ForgotPass() {
         if (phoneValue.length !== 10) {
             return;
         }
+        const loadingToast = toast.loading(<b>Sending...!</b>);
         try {
-            const loadingToast = toast.loading(<b>Sending...!</b>);
             const res = await sendOtpRecovery({ phone: phoneInputRef.current.value });
             console.log(res.data);
-            toast.dismiss(loadingToast);
             if (res.status == 200) {
+                toast.dismiss(loadingToast);
                 toast.success(<b>{res.data.message}</b>);
                 setOtpSent(true);
                 setSecondsLeft(30);
                 setResendTimer(true);
             } else {
+                toast.dismiss(loadingToast);
                 toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
+            toast.dismiss(loadingToast);
             toast.error(<b>{error.response?.data.error ? error.response?.data.error : "Something went wrong!"}</b>);
             console.log(error);
         }

@@ -134,9 +134,9 @@ function LogIn({ toggleForm, handleGoogleClick }) {
             values = await Object.assign(values);
             try {
                 const result = await dispatch(logIn(values));
-                if (result.success) {
-                    return toast.success(<b>Login Successfull..!</b>);
-                }
+                // if (result.success) {
+                //     return toast.success(<b>Login Successfull..!</b>);
+                // }
                 if (result.error === "User is blocked.") {
                     return toast.error(<b>User is blocked! Contact admin for assistance!</b>);
                 } else {
@@ -148,7 +148,6 @@ function LogIn({ toggleForm, handleGoogleClick }) {
             }
         },
     });
-
     return (
         <motion.div
             initial={{ x: -20, opacity: 0 }}
@@ -252,9 +251,11 @@ function SignUp({ toggleForm, handleGoogleClick }) {
         if (phoneValue.length !== 10) {
             return;
         }
+        const loadingToast = toast.loading(<b>Sending...!</b>);
         try {
             const res = await sendOtpSignup({ phone: phoneInputRef.current.value });
             console.log(res.data);
+            toast.dismiss(loadingToast);
             if (res.status == 200) {
                 toast.success(<b>{res.data.message}</b>);
                 setOtpSent(true);
@@ -264,6 +265,7 @@ function SignUp({ toggleForm, handleGoogleClick }) {
                 toast.error(<b>{res.data.error}</b>);
             }
         } catch (error) {
+            toast.dismiss(loadingToast);
             toast.error(<b>{error.response?.data.error ? error.response?.data.error : "Something went wrong!"}</b>);
             console.log(error);
         }
