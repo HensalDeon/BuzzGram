@@ -134,9 +134,9 @@ function LogIn({ toggleForm, handleGoogleClick }) {
             values = await Object.assign(values);
             try {
                 const result = await dispatch(logIn(values));
-                // if (result.success) {
-                //     return toast.success(<b>Login Successfull..!</b>);
-                // }
+                if (result.success) {
+                    return;
+                }
                 if (result.error === "User is blocked.") {
                     return toast.error(<b>User is blocked! Contact admin for assistance!</b>);
                 } else {
