@@ -10,6 +10,7 @@ import { uploadImage } from "../../redux/actions/UploadAction";
 import { motion } from "framer-motion";
 import { getFollowers, getFollowing } from "../../api/UserRequests";
 import { createNotification } from "../../api/NotificationRequests";
+import { Tilt } from "react-tilt";
 import defProfile from "../../img/icon-accounts.svg";
 // import unfollow from "../../img/icon-flatUnfollow.svg";
 // import follow from "../../img/icon-flatFollow.svg";
@@ -329,7 +330,7 @@ const ProfileCard = ({ location }) => {
             },
         }));
     };
-    
+
     const handleChatClick = () => {
         dispatch({ type: "CURRENT_CHAT_USER", data: currUser?.user?._id });
         navigate("/chat");
@@ -341,46 +342,101 @@ const ProfileCard = ({ location }) => {
             style={location === "profile" ? { overflowY: "auto", boxShadow: " rgb(208,86,155,0.3) 0px 0px 100px" } : {}}
         >
             <motion.div initial={{ y: -20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.5 }}>
-                <div className="ProfileImages">
-                    <img
-                        className={location === "profile" ? "profileCover" : ""}
-                        src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
-                        alt="cover image"
-                    />
-                    {location === "profile" && currUser?.user?._id === user._id && (
-                        <span>
-                            <img
-                                onClick={() => handleImageClick("cover")}
-                                src={editCover}
-                                className="editCover-icon"
-                                alt="coverEdit"
-                            />
-                            {window.innerWidth < 450 && (
-                                <img className="logoutBtn" onClick={() => dispatch(logout())} src={lgOut} alt="logout" />
-                            )}
-                        </span>
-                    )}
-                    <img
-                        className={location === "profile" ? "profileImg" : ""}
-                        src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
-                        alt="profile image"
-                    />
-                    {location === "profile" && currUser?.user?._id === user._id && (
+                {location == "profile" ? (
+                    <div className="ProfileImages">
                         <img
-                            onClick={() => handleImageClick("profile")}
-                            className="editProfile-icon"
-                            src={editProfile}
-                            alt="porfileEdit"
+                            className={location === "profile" ? "profileCover" : ""}
+                            src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
+                            alt="cover image"
                         />
-                    )}
-                    <input
-                        type="file"
-                        accept="image/*"
-                        style={{ display: "none" }}
-                        ref={fileInputRef}
-                        onChange={handleProfileImageChange}
-                    />
-                </div>
+                        {location === "profile" && currUser?.user?._id === user._id && (
+                            <span>
+                                <img
+                                    onClick={() => handleImageClick("cover")}
+                                    src={editCover}
+                                    className="editCover-icon"
+                                    alt="coverEdit"
+                                />
+                                {window.innerWidth < 450 && (
+                                    <img
+                                        className="logoutBtn"
+                                        onClick={() => dispatch(logout())}
+                                        src={lgOut}
+                                        alt="logout"
+                                    />
+                                )}
+                            </span>
+                        )}
+
+                        <img
+                            className={location === "profile" ? "profileImg" : ""}
+                            src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
+                            alt="profile image"
+                        />
+                        {location === "profile" && currUser?.user?._id === user._id && (
+                            <img
+                                onClick={() => handleImageClick("profile")}
+                                className="editProfile-icon"
+                                src={editProfile}
+                                alt="porfileEdit"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: "none" }}
+                            ref={fileInputRef}
+                            onChange={handleProfileImageChange}
+                        />
+                    </div>
+                ) : (
+                    <Tilt className="ProfileImages">
+                        <img
+                            className={location === "profile" ? "profileCover" : ""}
+                            src={!loading ? coverImage || currUser?.user?.coverimage || Cover : Cover}
+                            alt="cover image"
+                        />
+                        {location === "profile" && currUser?.user?._id === user._id && (
+                            <span>
+                                <img
+                                    onClick={() => handleImageClick("cover")}
+                                    src={editCover}
+                                    className="editCover-icon"
+                                    alt="coverEdit"
+                                />
+                                {window.innerWidth < 450 && (
+                                    <img
+                                        className="logoutBtn"
+                                        onClick={() => dispatch(logout())}
+                                        src={lgOut}
+                                        alt="logout"
+                                    />
+                                )}
+                            </span>
+                        )}
+
+                        <img
+                            className={location === "profile" ? "profileImg" : ""}
+                            src={!loading ? image || currUser?.user?.profileimage || defProfile : defProfile}
+                            alt="profile image"
+                        />
+                        {location === "profile" && currUser?.user?._id === user._id && (
+                            <img
+                                onClick={() => handleImageClick("profile")}
+                                className="editProfile-icon"
+                                src={editProfile}
+                                alt="porfileEdit"
+                            />
+                        )}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: "none" }}
+                            ref={fileInputRef}
+                            onChange={handleProfileImageChange}
+                        />
+                    </Tilt>
+                )}
             </motion.div>
 
             <Modal show={showProfile} onHide={handleProfileClose} backdrop="static" keyboard={false}>

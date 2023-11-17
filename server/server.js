@@ -33,6 +33,7 @@ app.use(
         origin: ["http://localhost:5173", "http://localhost:5050", "http://buzzgram.online", "https://buzzgram.online"],
     })
 );
+
 app.use(morgan("tiny"));
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
@@ -40,13 +41,13 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.disable("x-powered-by"); //less hackers know about our stack
 
 /** HTTP GET request */
-app.get(/^(?!\/api).+/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
-
-// app.get("/", (req, res) => {
-//     res.status(200).json("HOME Page");
+// app.get(/^(?!\/api).+/, (req, res) => {
+//     res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 // });
+
+app.get("/", (req, res) => {
+    res.status(200).json("HOME Page");
+});
 
 const apiRouter = express.Router();
 

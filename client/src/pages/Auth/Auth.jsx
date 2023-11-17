@@ -11,6 +11,7 @@ import PropTypes from "prop-types";
 import toast, { Toaster } from "react-hot-toast";
 import Logo from "../../img/logo.png";
 import * as Yup from "yup";
+import { Tilt } from "react-tilt";
 import "./Auth.scss";
 
 const loginValidation = Yup.object().shape({
@@ -102,13 +103,21 @@ const Auth = () => {
     return (
         <div className="Auth">
             <Toaster position="top-center" reverseOrder={false}></Toaster>
-            <div className="a-left" onClick={() => navigate("/auth")}>
+            <Tilt
+                options={{
+                    max: 45,
+                    scale: 1,
+                    speed: 450,
+                }}
+                className="a-left"
+                onClick={() => navigate("/auth")}
+            >
                 <img src={Logo} alt="" />
                 <div className="Webname">
                     <h1>BuzzGram</h1>
                     <h6>Explore the ideas throughout the world</h6>
                 </div>
-            </div>
+            </Tilt>
 
             {showLogin ? (
                 <LogIn toggleForm={toggleForm} handleGoogleClick={handleGoogleClick} />
